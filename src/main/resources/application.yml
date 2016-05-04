@@ -1,5 +1,23 @@
+datasource:
+    name: mysql
+    continue-on-error: false
+    max-active: 100
+    max-idle: 60
+    min-idle: 30
+    initial-size: 50
+    validation-query: select 1
+    test-on-borrow: true
+    test-on-return: true
+    time-between-eviction-runs-millis: 10000
+    min-evictable-idle-time-millis: 60000
+    max-wait: 10000
+    jmx-enabled: false
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/account?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: "system"
 server:
-    port: 8083
+    port: 8080
 #    tomcat:
 #        uriEncoding: UTF-8
 #        maxHttpHeaderSize: 16384

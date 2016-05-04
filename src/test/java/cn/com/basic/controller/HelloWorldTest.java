@@ -15,9 +15,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class HelloWorldTest extends BaseTest {
 
     @Test
-    public void testHelloWorld() throws Exception {
+    public void testHelloWorld1() throws Exception {
         mockMvc.perform(get("/hi/first")
-                .param("first", "hi baby"))
+                .param("name", "hi baby"))
+                .andExpect(status().isOk())
+                .andDo(new ResultHandler() {
+                    @Override
+                    public void handle(MvcResult result) throws Exception {
+                        String content = result.getResponse().getContentAsString();
+                        logger.info("testHelloWorld : {}" ,content);
+                    }
+                });
+    }
+    @Test
+    public void testHelloWorld2() throws Exception {
+        mockMvc.perform(get("/hi/second")
+                .param("id", "1"))
                 .andExpect(status().isOk())
                 .andDo(new ResultHandler() {
                     @Override
