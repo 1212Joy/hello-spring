@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.basic.dao.HelloWorldDao">
+    <resultMap id="HelloWorldDto" type="cn.com.basic.dto.HelloWorldDto" autoMapping="true">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+
+    </resultMap>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            INSERT INTO hello(
+                name
+            )
+            VALUES (
+                #{name}
+            )
+        ]]>
+    </insert>
+
+    <select id="query" resultMap="HelloWorldDto">
+        <![CDATA[
+            SELECT
+               *
+            FROM hello
+            WHERE id = #{id}
+        ]]>
+    </select>
+</mapper>
