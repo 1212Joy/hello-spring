@@ -13,6 +13,7 @@
         <mybatis.version>3.2.8</mybatis.version>
         <mybatis-spring.version>1.2.2</mybatis-spring.version>
         <mysql.version>5.1.31</mysql.version>
+        <quartz.version>2.2.0</quartz.version>
     </properties>
 
     <dependencies>
@@ -48,6 +49,12 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
+        </dependency>
+        <!-- quartz -->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>${quartz.version}</version>
         </dependency>
 
     </dependencies>

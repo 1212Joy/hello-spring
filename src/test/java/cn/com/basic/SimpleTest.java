@@ -16,5 +16,9 @@ public class SimpleTest {
         System.out.println("随机生成： "+a);
     }
 
-
+    @Test
+    public void parseJsonString() throws Exception {
+        String job_key  = String.format("job_%s","aaa");
+        System.out.println("数值为: "+job_key);
+    }
 }
