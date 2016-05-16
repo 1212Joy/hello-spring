@@ -20,17 +20,12 @@ import java.util.Date;
 public class HelloWorldController {
     @Autowired
     private HelloWorldService helloWorldService;
-    @Autowired
-    private DynamicJobService dynamicJobService;
+
 
     @RequestMapping(value = "/first", method = RequestMethod.GET)
     public String helloWorld1(HelloWorldDto helloWorldDto)  {
         helloWorldService.add(helloWorldDto);
         return helloWorldDto.getName();
     }
-    @RequestMapping(value = "/second", method = RequestMethod.GET)
-    public void  helloWorld2(Integer id)  throws Exception {
-        Date bizExpiryTime= DateBuilder.futureDate(10, DateBuilder.IntervalUnit.SECOND);//5 means 5 min
-        dynamicJobService.runJob(DynamicJob.class,"test",bizExpiryTime,1);
-    }
+
 }

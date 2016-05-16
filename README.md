@@ -1,8 +1,7 @@
 # hello-spring
 [Basic - Hello World ] Just a project for spring
 #
-##
-添加动态任务quartz
+##添加动态任务quartz
 
 ## v1.0.1-SNAPSHOT
 1.Add MyBatis
