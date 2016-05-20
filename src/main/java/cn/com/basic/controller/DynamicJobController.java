@@ -6,12 +6,14 @@ import org.quartz.DateBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
 /**
  * Created by zhaijiayi on 2016/5/10.
  */
+@RestController
 public class DynamicJobController {
     @Autowired
     private DynamicJobService dynamicJobService;
