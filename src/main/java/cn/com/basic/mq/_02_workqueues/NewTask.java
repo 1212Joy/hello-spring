@@ -1,9 +1,8 @@
-package cn.com.basic.mq.workqueues;
+package cn.com.basic.mq._02_workqueues;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.MessageProperties;
 
 /**
  * Created by zhaijiayi on 2016/5/17.
@@ -17,23 +16,30 @@ public class NewTask {
         this.message = message;
     }
     public void sendExcute() throws  Exception{
-            ConnectionFactory factory = new ConnectionFactory();
-            factory.setHost("localhost");
-            Connection connection = factory.newConnection();
-            Channel channel = connection.createChannel();
-
-            channel.queueDeclare(queueName,true, false, false, null);
-
-            String formatMessage = getMessage(message);
-
-            channel.basicPublish( "", queueName,
-                    MessageProperties.PERSISTENT_TEXT_PLAIN,
-                    formatMessage.getBytes());
-            System.out.println(" [x] Sent '" + formatMessage + "'");
-
-            channel.close();
-            connection.close();
+        //创建连接和频道
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost("localhost");
+        Connection connection = factory.newConnection();
+        Channel channel = connection.createChannel();
+        //声明队列
+        channel.queueDeclare(queueName, false, false, false, null);
+        //发送10条消息，依次在消息后面附加1-10个点
+        for (int i = 0; i < 10; i++)
+        {
+            String dots = "";
+            for (int j = 0; j <= i; j++)
+            {
+                dots += ".";
+            }
+            String message = "helloworld" + dots+dots.length();
+            channel.basicPublish("", queueName, null, message.getBytes());
+            System.out.println(" [x] Sent '" + message + "'");
         }
+        //关闭频道和资源
+        channel.close();
+        connection.close();
+
+    }
 
     private static String getMessage(String[] strings){
         if (strings.length < 1)

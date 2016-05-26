@@ -25,4 +25,11 @@
             WHERE id = #{id}
         ]]>
     </select>
+    <select id="getAll" resultMap="HelloWorldDto">
+        <![CDATA[
+            SELECT
+               *
+            FROM hello
+        ]]>
+    </select>
 </mapper>

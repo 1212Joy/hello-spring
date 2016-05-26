@@ -4,8 +4,10 @@ package cn.com.basic.dto;
  * Created by zhaijiayi on 2016/5/3.
  */
 public class HelloWorldDto {
-    private Integer id;
+
     private String name;
+    private Integer id;
+    private String sex;
 
     public Integer getId() {
         return id;
@@ -21,5 +23,13 @@ public class HelloWorldDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }

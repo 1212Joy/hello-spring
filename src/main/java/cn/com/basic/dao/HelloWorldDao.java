@@ -2,6 +2,8 @@ package cn.com.basic.dao;
 
 import cn.com.basic.dto.HelloWorldDto;
 
+import java.util.List;
+
 /**
  * Created by zhaijiayi on 2016/5/3.
  */
@@ -14,4 +16,6 @@ public interface HelloWorldDao {
     void update(HelloWorldDto helloWorldDto);
     //query
     HelloWorldDto query(Integer id);
+
+    List<HelloWorldDto> getAll();
 }

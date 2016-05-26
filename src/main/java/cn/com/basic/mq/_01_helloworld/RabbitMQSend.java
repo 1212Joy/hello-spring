@@ -1,4 +1,4 @@
-package cn.com.basic.mq.helloworld;
+package cn.com.basic.mq._01_helloworld;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -26,7 +26,7 @@ public class RabbitMQSend {
         channel.queueDeclare(queueName, false, false, false, null);
         // 在RabbitMQ中，消息是不能直接发送到队列，它需要发送到交换器（exchange）中。
         // 第一参数空表示使用默认exchange，第二参数表示发送到的queue，第三参数是发送的消息是（字节数组）
-        channel.basicPublish("", queueName, null, message.getBytes());
+        channel.basicPublish("hi", queueName, null, message.getBytes());
         System.out.println(" [x] Sent '" + message + "'");
         channel.close();//关闭管道
         connection.close();//关闭连接
