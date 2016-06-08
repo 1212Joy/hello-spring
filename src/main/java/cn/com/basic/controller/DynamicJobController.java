@@ -17,9 +17,11 @@ import java.util.Date;
 public class DynamicJobController {
     @Autowired
     private DynamicJobService dynamicJobService;
+    @Autowired
+    private DynamicJob dynamicJob;
     @RequestMapping(value = "/dynamicJob", method = RequestMethod.GET)
     public void  dynamicJob()  throws Exception {
         Date bizExpiryTime= DateBuilder.futureDate(10, DateBuilder.IntervalUnit.SECOND);//5 means 5 min
-        dynamicJobService.runJob(DynamicJob.class,"test",bizExpiryTime,1);
+        dynamicJobService.runJob(dynamicJob,"test",bizExpiryTime,1);
     }
 }

@@ -14,7 +14,7 @@ public class DynamicJobServiceTest {
     public void testRunJob() throws Exception {
         DynamicJobService dynamicJobService = new DynamicJobService() ;
         Date bizExpiryTime= DateBuilder.futureDate(10, DateBuilder.IntervalUnit.SECOND);//5 means 5 min
-        dynamicJobService.runJob(TestJob.class,"test",bizExpiryTime,1);
+      //  dynamicJobService.runJob(TestJob.class,"test",bizExpiryTime,1);
     }
 
 

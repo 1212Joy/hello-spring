@@ -1,5 +1,6 @@
 package cn.com.basic.config;
 
+import cn.com.basic.service.HelloWorldService;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -54,6 +55,11 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
         return dataSourceTransactionManager;
     }
 
+    @Bean
+    public HelloWorldService aaa() {
+
+        return new HelloWorldService ();
+    }
 
 
 }

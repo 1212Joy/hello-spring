@@ -1,4 +1,4 @@
-package cn.com.basic.mq._03_bindings_exchanges;
+package cn.com.basic.mq._03_fanout_exchanges;
 
 /**
  * Created by zhaijiayi on 2016/5/24.

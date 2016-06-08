@@ -1,8 +1,6 @@
-package cn.com.basic.mq._03_bindings_exchanges;
+package cn.com.basic.mq._03_fanout_exchanges;
 
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by zhaijiayi on 2016/5/24.

@@ -40,6 +40,8 @@ public class POIexportExcel {
      */
     public String excute() {
         // TODO Auto-generated method stub
+        String excelTitle = new String("姓名%身份%性别");
+        String arrayTitleName[] = excelTitle.split("%");
         int row = 0;
         try {
 
@@ -47,6 +49,7 @@ public class POIexportExcel {
             HSSFWorkbook book = new HSSFWorkbook();
             // 在Excel工作簿中建一工作表，其名为缺省值 ，可以指定也可以不指定
             HSSFSheet sheet = book.createSheet("goods");
+
             //将需要导出的数据库表中的数据存入 List 中
             List<HelloWorldDto> helloWorldDtolist = helloWorldDao.getAll();
             for (HelloWorldDto h : helloWorldDtolist) {
@@ -57,15 +60,21 @@ public class POIexportExcel {
                 if (row == 0) {
                     //创建sheet表中的行
                     HSSFRow top = sheet.createRow(row);
-                    HSSFRow reco = sheet.createRow(row + 1);
+                    //输出表头
+                    for (int tem = 0; tem < arrayTitleName.length; tem++) {
+                        HSSFCell topc = top.createCell(tem, HSSFCell.CELL_TYPE_STRING);
+                        topc.setCellValue(arrayTitleName[tem]);
+                    }
+                  //  HSSFRow reco1 = sheet.createRow(row + 1);
+                    HSSFRow reco2 = sheet.createRow(row + 1);
                     //第0行输出字段名同时第一行输出第一条记录值
                     for (int tem = 0; tem < field.length; tem++) {
                         field[tem].setAccessible(true);
                         //建立单无格
-                        HSSFCell topc = top.createCell(tem, HSSFCell.CELL_TYPE_STRING);
-                        topc.setCellValue(field[tem].getName());
-                        HSSFCell recoc = reco.createCell(tem, HSSFCell.CELL_TYPE_STRING);
-                        recoc.setCellValue(field[tem].get(h) == null ? "" : field[tem].get(h)
+                      /*  HSSFCell recoc1 = reco1.createCell(tem, HSSFCell.CELL_TYPE_STRING);
+                        recoc1.setCellValue(field[tem].getName());*/
+                        HSSFCell recoc2 = reco2.createCell(tem, HSSFCell.CELL_TYPE_STRING);
+                        recoc2.setCellValue(field[tem].get(h) == null ? "" : field[tem].get(h)
                                 .toString());
                     }
                     row += 2;
@@ -88,11 +97,12 @@ public class POIexportExcel {
                     row++;
                 }
             }
+        //   sheet.removeRow(sheet.getRow(1));
             // 新建一输出文件流
             String path = "E:\\";
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
             String timeString = sdf.format(Calendar.getInstance().getTime());
-            String fileName = "poiGoods_" + timeString + ".xls";
+            String fileName = "POI表格测试_" + timeString + ".xls";
             FileOutputStream output = new FileOutputStream(path + fileName);
             // 把相应的Excel 工作簿写入到文件中
             book.write(output);
@@ -101,7 +111,7 @@ public class POIexportExcel {
             // 操作结束，关闭文件
             output.close();
 
-            System.out.println("文件生成成功！");
+            System.out.println("文件生成成功！"+path + fileName);
             return path + fileName;
         } catch (ClassNotFoundException e) {
             System.out.println("未找到指定的类！");

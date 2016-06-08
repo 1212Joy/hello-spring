@@ -1,5 +1,6 @@
 package cn.com.basic;
 
+import cn.com.basic.dto.HelloWorldDto;
 import cn.com.basic.mq._01_helloworld.RabbitMQRecv;
 import cn.com.basic.mq._01_helloworld.RabbitMQSend;
 import cn.com.basic.mq._02_workqueues.NewTask;
@@ -87,8 +88,12 @@ public class SimpleTest {
     }
     @Test
     public void splitString(){
-        String s = new String("公司%记账日期%业务日期%会计期间%凭证字%凭证号%分录号%摘要%科目%币种%汇率%方向%原币金额%数量\t单价%借方金额%贷方金额%制单人%过账人%审核人%附件数量%过账标记%机制凭证模块%删除标记%凭证序号%单位%参考信息%是否有现金流量%\t现金流量标记%业务编号%结算方式%结算号%辅助账摘要%核算项目1%编码1%名称1%核算项目2%编码2%名称2%核算项目3%编码3%名称3%核算项目4%编码4%名称4%核算项目5%编码5%名称5%核算项目6%编码6%名称6%核算项目7%编码7%名称7%核算项目8%\t编码8%名称8%发票号%换票证号%客户%费用类别%收款人%物料%账务组织%供应商%辅助账业务日期%到期日");
-        String a[] = s.split("%");
+        String profit = "科目%交易行为%金额（元）%交易时间%交易状态%贷款申请编号%理财标的标号%用户账户%";
+        String tradAction = new String("公司%记账日期%业务日期%会计期间%凭证字%凭证号%分录号%摘要%科目%币种%汇率%方向%原币金额%数量%单价%借方金额%贷方金额%制单人%过账人%审核人%附件数量%过账标记%机制凭证模块%删除标记%凭证序号%单位%参考信息%是否有现金流量%%现金流量标记%业务编号%结算方式%结算号%辅助账摘要%核算项目1%编码1%名称1%核算项目2%编码2%名称2%核算项目3%编码3%名称3%核算项目4%编码4%名称4%核算项目5%编码5%名称5%核算项目6%编码6%名称6%核算项目7%编码7%名称7%核算项目8%%编码8%名称8%发票号%换票证号%客户%费用类别%收款人%物料%账务组织%供应商%辅助账业务日期%到期日");
+        String apply = "";
+        String aaa = "218737%1338%韦东%中国民生银行%广东省-深圳市-市民中心支行%622622063650505%110.58 %110.58 %100.00 %2015/3/9 10:58:21%";
+
+        String a[] = aaa.split("%");
         System.out.println(a.length);
             for(String tem:a){
                 System.out.println(tem.trim());
@@ -96,7 +101,7 @@ public class SimpleTest {
     }
     @Test
     public  void testExcel() {
-       String excelTitle = new String("公司%记账日期%业务日期%会计期间%凭证字%凭证号%分录号%摘要%科目%币种%汇率%方向%原币金额%数量%单价%借方金额%贷方金额%制单人%过账人%审核人%附件数量%过账标记%机制凭证模块%删除标记%凭证序号%单位%参考信息%是否有现金流量%\t现金流量标记%业务编号%结算方式%结算号%辅助账摘要%核算项目1%编码1%名称1%核算项目2%编码2%名称2%核算项目3%编码3%名称3%核算项目4%编码4%名称4%核算项目5%编码5%名称5%核算项目6%编码6%名称6%核算项目7%编码7%名称7%核算项目8%编码8%名称8%发票号%换票证号%客户%费用类别%收款人%物料%账务组织%供应商%辅助账业务日期%到期日");
+       String excelTitle = new String("标识%");
         String arrayTitleName[] = excelTitle.split("%");
         int row = 0;
         try {
@@ -147,6 +152,19 @@ public class SimpleTest {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         logger.info(simpleDateFormat.format(nowtime));
       simpleDateFormat.format(nowtime);
+
+    }
+    @Test
+    public void testSetMethodDefaultValue(){
+        HelloWorldDto helloWorldDto = new HelloWorldDto("girl");
+        helloWorldDto.setSex("aaaa");
+        logger.info(formatTime(new Date(),"yyyy/MM/dd"));
+
+    }
+
+    public static String formatTime(Date time,String type) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(type);
+        return simpleDateFormat.format(time);
 
     }
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());

@@ -4,7 +4,7 @@
     <resultMap id="HelloWorldDto" type="cn.com.basic.dto.HelloWorldDto" autoMapping="true">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
-
+        <result column="name" property="sex"/>
     </resultMap>
     <insert id="add" useGeneratedKeys="true" keyProperty="id">
         <![CDATA[
@@ -28,7 +28,7 @@
     <select id="getAll" resultMap="HelloWorldDto">
         <![CDATA[
             SELECT
-               *
+               id ,name,  CONCAT("客户---",CAST(id AS CHAR), "---",name) as sex
             FROM hello
         ]]>
     </select>
