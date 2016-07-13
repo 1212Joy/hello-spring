@@ -1,24 +1,27 @@
 package cn.com.basic;
 
+import cn.com.basic.utils.JsonUtils;
+import cn.com.basic.dto.BusinessReceiptsDTO;
 import cn.com.basic.dto.HelloWorldDto;
+import cn.com.basic.dto.PlatformRecordReservedField;
 import cn.com.basic.mq._01_helloworld.RabbitMQRecv;
 import cn.com.basic.mq._01_helloworld.RabbitMQSend;
 import cn.com.basic.mq._02_workqueues.NewTask;
 import cn.com.basic.mq._02_workqueues.Work;
-import org.apache.commons.lang3.RandomUtils;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by zhaijiayi on 2016/3/10.
@@ -108,6 +111,9 @@ public class SimpleTest {
 
             // 创建Execl工作薄
             HSSFWorkbook book = new HSSFWorkbook();
+            HSSFName name =  book.createName();
+            name.setNameName("设计任务即可");
+            logger.info("name::: "+name.getNameName());
             // 在Excel工作簿中建一工作表，其名为缺省值 ，可以指定也可以不指定
             HSSFSheet sheet = book.createSheet();
             //创建sheet表中的行
@@ -123,13 +129,13 @@ public class SimpleTest {
                 HSSFCell recoc = reco.createCell(2,HSSFCell.CELL_TYPE_STRING);
                 recoc.setCellValue("hahaha");
             }
-
-
-            // 新建一输出文件流
+            String fileName = book.getNameName(0)+".xls";//"poiGoods_"+timeString+".xls";
+            System.out.println("文件生成成功！"+fileName);
+           /* // 新建一输出文件流
             String path = "E:\\";
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSS");
             String timeString = sdf.format(Calendar.getInstance().getTime());
-            String fileName = "poiGoods_"+timeString+".xls";
+            String fileName = work.getNameName()+".xls";//"poiGoods_"+timeString+".xls";
             FileOutputStream output = new FileOutputStream(path+fileName);
             // 把相应的Excel 工作簿写入到文件中
             book.write(output);
@@ -138,8 +144,8 @@ public class SimpleTest {
             // 操作结束，关闭文件
             output.close();
 
-            System.out.println("文件生成成功！"+fileName);
-        }catch (IOException e) {
+            System.out.println("文件生成成功！"+fileName);*/
+        }catch (Exception e) {
             // TODO Auto-generated catch block
             System.out.println("写入文件失败！");
             e.printStackTrace();
@@ -161,11 +167,260 @@ public class SimpleTest {
         logger.info(formatTime(new Date(),"yyyy/MM/dd"));
 
     }
+    @Test
+    public void testHashMap(){
+       Map <String,HelloWorldDto>aa = new HashMap();
+        HelloWorldDto helloWorldDto = new HelloWorldDto("girl");
+        helloWorldDto.setName("aaaa");
+        aa.put("1",helloWorldDto);
+        HelloWorldDto helloWorldDto11 = aa.get("1");
+        helloWorldDto11.setName("bbb");
+        System.out.print(aa.get("1").getName());
+    }
+
+    @Test
+    public void testExcelPOI(){
+        HelloWorldDto helloWorldDto = new HelloWorldDto("girl");
+        helloWorldDto.setSex("aaaa");
+        logger.info(formatTime(new Date(),"yyyy/MM/dd"));
+
+    }
+    @Test
+    public void testJsonToListObj() throws Exception{
+        String jsonString = "[{\"invest\":0,\"marketingOffsetExpenses\":0,\"marketingInterestExpenses\":0,\"investorReceipts\":0,\"bizDate\":\"201601\"},{\"invest\":0,\"marketingOffsetExpenses\":0,\"marketingInterestExpenses\":0,\"investorReceipts\":0,\"bizDate\":\"201602\"},{\"invest\":26536601.00,\"marketingOffsetExpenses\":0.00,\"marketingInterestExpenses\":0.00,\"investorReceipts\":2014470.21,\"bizDate\":\"201603\"},{\"invest\":33841247.00,\"marketingOffsetExpenses\":74500.40,\"marketingInterestExpenses\":0.00,\"investorReceipts\":3988632.44,\"bizDate\":\"201604\"},{\"invest\":19030941.00,\"marketingOffsetExpenses\":60.00,\"marketingInterestExpenses\":1285.36,\"investorReceipts\":266860.63,\"bizDate\":\"201605\"},{\"invest\":943500.00,\"marketingOffsetExpenses\":30.00,\"marketingInterestExpenses\":2404.47,\"investorReceipts\":31661.84,\"bizDate\":\"201606\"}]";
+        JavaType javaType = getCollectionType(ArrayList.class, BusinessReceiptsDTO.class);
+            List<BusinessReceiptsDTO> lst =  (List<BusinessReceiptsDTO>)mapper.readValue(jsonString, javaType);
+        logger.info("wanch!");
+         }
+
+
+
+    @Test
+    public void testGetType(){
+        Double aaa = new Double(1.22);
+        Double bbb = new Double(1.55);
+        //+
+        //-
+        //*
+        // /   %
+        List xList = new ArrayList();
+        xList.add("ssss");
+        xList.add(aaa ==null?new Double(0):aaa.doubleValue());
+        xList.add( new BigDecimal(1.22));//.doubleValue()   class java.lang.Double
+
+        for(int i=0;i<xList.size();i++){
+            System.out.println(xList.get(i));
+            /*        System.out.println(  xList.get(i).getClass().toString());
+            if("class java.math.BigDecimal".equals(xList.get(i).getClass().toString())){
+                System.out.println(((BigDecimal)xList.get(i)).doubleValue() );
+
+            };*/
+        }
+
+    }
 
     public static String formatTime(Date time,String type) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(type);
         return simpleDateFormat.format(time);
 
     }
+    @Test
+    public void testExcute3() throws Exception {
+        //Workbook book = poiExportExcel.excute3();
+        //生成表格
+        HSSFWorkbook book = new HSSFWorkbook();
+        HSSFSheet sheet = book.createSheet("业务收益表");
+        sheet.autoSizeColumn(1, true);
+        //样式
+        HSSFCellStyle style1 = book.createCellStyle();    //表头： 18 加粗 下划线 居中显示
+        HSSFCellStyle style2 = book.createCellStyle();   //加粗
+        HSSFCellStyle style3 = book.createCellStyle();   //加粗  背景蓝色  居中显示
+        HSSFFont font1 = book.createFont();
+        HSSFFont font2 = book.createFont();
+        font1.setUnderline(HSSFFont.U_SINGLE); //下划线
+        font1.setFontHeightInPoints((short) 18); //字体大小
+        font1.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);//粗体显示
+        style1.setFont(font1);
+        style1.setAlignment(HSSFCellStyle.ALIGN_CENTER); //居中
+
+        font2.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);//粗体显示
+        style2.setFont(font2);
+
+        style3.setFont(font2);
+        style3.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        style3.setFillForegroundColor(HSSFColor.BLUE_GREY.index);// 设置背景色
+        style3.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+
+
+
+
+
+        //输出表头
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 8));
+        HSSFRow row1 =  sheet.createRow(0);
+        HSSFCell row1Cell1 = row1.createCell(0);
+        row1Cell1 .setCellValue("业务收益表");//第一行  0,5 ： 业务收益表
+        row1Cell1.setCellStyle(style1);
+        HSSFRow row2 =  sheet.createRow(1);//第二行  0,end ： 编制单位:茂业金服
+        HSSFCell row2Cell1 =  row2 .createCell(0);
+        row2Cell1.setCellValue("编制单位:茂业金服");
+        row2Cell1.setCellStyle(style2);
+
+
+        HSSFRow row3 = sheet.createRow(2);//第三行
+        row3.setRowStyle(style2);
+        for(int i=1;i<12;i++){
+            sheet.addMergedRegion(new CellRangeAddress(2, 3, i, i));
+        }
+        //B34 ~ K34  一、业务收入	居间服务费收入	取现费手续费收入	账户管理费收入	充值费收入	转让费收入	提前还款罚息收入	逾期滞纳金收入	催收管理费收入	会员费（每年）收入	二、业务支出
+        String row3Context = "一、业务收入;居间服务费收入;取现费手续费收入;账户管理费收入;充值费收入;转让费收入;提前还款罚息收入;逾期滞纳金收入;催收管理费收入;会员费（每年）收入;二、业务支出";
+        fillCellValue(1,row3Context,row3,style2);
+        sheet.addMergedRegion(new CellRangeAddress(2, 3, 18, 18));  //S34 三、业务利润
+        row3.createCell(18).setCellValue("三、业务利润");
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 12, 15));        //M3~P3  第三方支出
+        row3.createCell(12).setCellValue("第三方支出");
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 16, 17));             //Q3~R3  平台支出
+        row3.createCell(16).setCellValue("平台支出");
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 19, 24));                 //T3~Y3  投资人
+        row3.createCell(19).setCellValue("投资人");
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 25, 29));       //Z3~AD3 借款方
+        row3.createCell(25).setCellValue("借款方");
+        int cellArray[] = {1,11,18,12,16,19,25};
+        fillCellStyle(row3,cellArray,style3);
+        HSSFRow row4 = sheet.createRow(3);//第四行
+        HSSFCell row4Cell1 =  row4.createCell(0, HSSFCell.CELL_TYPE_STRING);
+        row4Cell1 .setCellValue("日期");//A4
+        row4Cell1.setCellStyle(style2);
+
+        //M4~R4 充值费支出	取现费支出	认证费支出	其他支出	营销费用支出	营销费用支出
+        String row4Context1 = "充值费支出;取现费支出;认证费支出;其他支出;营销费用支出;营销费用支出";
+        fillCellValue(12,row4Context1,row4,style2);
+        //T4~AD4 充值	投资	支出	收入	总收入	毛利率	借款金额	费用支出	利息支出	总支出	成本率
+        String row4Context2 = "充值;投资;支出;收入;总收入;毛利率;借款金额;费用支出;利息支出;总支出;成本率";
+        fillCellValue(19,row4Context2,row4,style2);
+      /*  //循环数据
+        List<ArrayList> formatList = new ArrayList();
+        int row = 4;
+        for (List record : formatList) {
+            HSSFRow reco = sheet.createRow(row);
+            for (int tem = 0; tem < record.size(); tem++) {
+                 reco.createCell(tem, HSSFCell.CELL_TYPE_NUMERIC).setCellValue((Double)record.get(tem) );
+            }
+            row++;
+        }*/
+
+        //最后三行
+        int allRows = sheet.getLastRowNum();
+        HSSFRow lastRow3 = sheet.createRow(allRows+1);  //合计金额
+        lastRow3.createCell(0).setCellValue("合计金额");
+        lastRow3.setRowStyle(style2);
+        HSSFRow lastRow2 = sheet.createRow(allRows+2);  //投资百分比
+        lastRow2.createCell(0).setCellValue("投资百分比");
+        lastRow2.setRowStyle(style2);
+        HSSFRow lastRow1 = sheet.createRow(allRows+3);  //茂业百分比
+        lastRow1.createCell(0).setCellValue("茂业百分比");
+        lastRow1.setRowStyle(style2);
+
+
+        String path = "E:\\";
+        String fileName = "aaaaaa_"   + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".xls";
+        FileOutputStream output = new FileOutputStream(path + fileName);
+        // 把相应的Excel 工作簿写入到文件中
+        book.write(output);
+        //即清空缓冲区数据
+        output.flush();
+        // 操作结束，关闭文件
+        output.close();
+        System.out.println("文件生成成功！"+path + fileName);
+
+
+    }
+    private void fillCellValue(int starCellIndex,String values,HSSFRow row, HSSFCellStyle style) {
+        String arrayTitleName[] = values.split(";");
+        for (int i = 0; i < arrayTitleName.length; i++) {
+            HSSFCell cell = row.createCell(starCellIndex + i);
+            cell.setCellValue(arrayTitleName[i]);
+            if(style!=null)
+            cell.setCellStyle(style);
+        }
+    }
+    //设定 某一行指定列样式
+    private void fillCellStyle(HSSFRow row,int cellArray[], HSSFCellStyle style) {
+        for(int i =0;i<cellArray.length;i++){
+            row.getCell(cellArray[i]).setCellStyle(style);
+        }
+    }
+
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Test
+    public  void simpleTest() {
+  //    System.out.print(sub(null,new BigDecimal(4)));
+        System.out.print(indexToColumn(26));
+    }
+    public static String percentCaculate(BigDecimal a1, BigDecimal a2) {
+        if(a2 ==null|| a2.compareTo(BigDecimal.ZERO)==0){
+            return "0%";
+        }
+        a1 = a1==null?BigDecimal.ZERO:a1;
+        a1.setScale(7, BigDecimal.ROUND_HALF_UP);
+        BigDecimal r = a1.divide(a2, 4, BigDecimal.ROUND_HALF_EVEN).setScale(4, BigDecimal.ROUND_HALF_UP);
+        NumberFormat percent = NumberFormat.getPercentInstance();
+        percent.setMaximumFractionDigits(2);
+        return percent.format(r.doubleValue());
+    }
+    public static double sub(BigDecimal a1, BigDecimal a2) {
+        a1 = a1==null?BigDecimal.ZERO:a1;
+        a2 = a2==null?BigDecimal.ZERO:a2;
+     return a1.subtract(a2).doubleValue();
+    }
+
+    /**
+     * 用于将excel表格中列索引转成列号字母，从A对应1开始
+     *
+     * @param index
+     *            列索引
+     * @return 列号
+     */
+    private static String indexToColumn(int index) {
+        index = index+1; //1 - A
+        if (index <= 0) {
+            try {
+                throw new Exception("Invalid parameter");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        index--;
+        String column = "";
+        do {   if (column.length() > 0) {
+            index--;
+        }
+            column = ((char) (index % 26 + (int) 'A')) + column;
+            index = (int) ((index - index % 26) / 26);
+        } while (index > 0);
+        return column;
+    }
+    @Test
+    public void jsonTest() throws Exception {
+        //*Obj -> JSON String ("" or null 无值)
+        PlatformRecordReservedField platformRecordReservedField = new PlatformRecordReservedField();
+        platformRecordReservedField.setUserInfoID("444");
+        platformRecordReservedField.setUserRealName(null);
+        String reservedFieldJson = JsonUtils.toJson(platformRecordReservedField);
+
+        //*Json String 转成对象
+        PlatformRecordReservedField convertObj = JsonUtils.toBean(reservedFieldJson, PlatformRecordReservedField.class);
+
+
+        // *Json String 转成对象 lsit
+        List<PlatformRecordReservedField> businessReceiptsList3 = JsonUtils.toBeanList(reservedFieldJson,ArrayList.class, PlatformRecordReservedField.class);
+        System.out.print(businessReceiptsList3.size());
+    }
+    //将jason 转换成对象list
+    public static final ObjectMapper mapper = new ObjectMapper();
+    public static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
+        return mapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
+    }
+
 }

@@ -1,6 +1,7 @@
 package cn.com.basic.dao;
 
 import cn.com.basic.dto.HelloWorldDto;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface HelloWorldDao {
     HelloWorldDto query(Integer id);
 
     List<HelloWorldDto> getAll();
+
+    List<HelloWorldDto> queryList(@Param("item") List<Integer> ids);
 }

@@ -29,7 +29,7 @@ public class ExportExcelController {
     @RequestMapping(value = "/export/excel", method = RequestMethod.GET)
     public void excute1(String name,HttpServletResponse response) {
         try {
-            String filePath = pOIexportExcel.excute();
+            String filePath = pOIexportExcel.excute1();
             if(filePath.equals("")){
                 throw new IllegalArgumentException("导出表格发生错误，请重新导出");
             }

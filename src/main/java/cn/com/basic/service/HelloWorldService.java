@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by zhaijiayi on 2016/5/3.
  */
@@ -27,6 +30,17 @@ public class HelloWorldService {
     public  HelloWorldDto query(Integer id){
 
        return  helloWorldDao.query(id);
+    }
+
+    @Transactional(readOnly=true,propagation=Propagation.SUPPORTS)
+    public List<HelloWorldDto>  queryList(String  ids){
+        String[] idArray = ids.split(",");
+        List<Integer> idList = new ArrayList<Integer>();
+        for(int i=0;i<idArray.length;i++){
+            idList.add(Integer.parseInt(idArray[i]));
+        }
+
+        return  helloWorldDao.queryList(idList);
     }
 }
 

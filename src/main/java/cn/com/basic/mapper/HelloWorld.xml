@@ -32,4 +32,12 @@
             FROM hello
         ]]>
     </select>
+    <select id="queryList" resultMap="HelloWorldDto">
+        SELECT
+        *
+        FROM hello WHERE id IN
+        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
 </mapper>
