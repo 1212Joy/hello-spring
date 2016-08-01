@@ -313,10 +313,23 @@ public class SimpleTest {
         int allRows = sheet.getLastRowNum();
         HSSFRow lastRow3 = sheet.createRow(allRows+1);  //合计金额
         lastRow3.createCell(0).setCellValue("合计金额");
-        lastRow3.setRowStyle(style2);
+        HSSFCell testCell1 = lastRow3.createCell(1);
+        HSSFCell testCell2 = lastRow3.createCell(2);
+        HSSFCell testCell3 =  lastRow3.createCell(3, HSSFCell.CELL_TYPE_FORMULA);
+        testCell1.setCellValue(0.2);
+        testCell2.setCellValue(0.3);
+        testCell3.setCellFormula("SUM("+"B5"+":"+"C5"+")");//合计金额     =SUM(B6:D6)
         HSSFRow lastRow2 = sheet.createRow(allRows+2);  //投资百分比
         lastRow2.createCell(0).setCellValue("投资百分比");
         lastRow2.setRowStyle(style2);
+
+        HSSFCellStyle cellStylePervent = book.createCellStyle();
+        cellStylePervent.setDataFormat(HSSFDataFormat.getBuiltinFormat("0.00%"));
+
+        HSSFCell testCell11 = lastRow2.createCell(1, HSSFCell.CELL_TYPE_FORMULA);
+        testCell11.setCellFormula( "B5"+"/"+"$D$5");//合计金额     =SUM(B6:D6)
+        testCell11.setCellStyle(cellStylePervent);
+
         HSSFRow lastRow1 = sheet.createRow(allRows+3);  //茂业百分比
         lastRow1.createCell(0).setCellValue("茂业百分比");
         lastRow1.setRowStyle(style2);
