@@ -160,7 +160,7 @@ public class SimpleTest {
       simpleDateFormat.format(nowtime);
 
     }
-    @Test
+   /* @Test
     public void testSetMethodDefaultValue(){
         HelloWorldDto helloWorldDto = new HelloWorldDto("girl");
         helloWorldDto.setSex("aaaa");
@@ -184,7 +184,7 @@ public class SimpleTest {
         helloWorldDto.setSex("aaaa");
         logger.info(formatTime(new Date(),"yyyy/MM/dd"));
 
-    }
+    }*/
     @Test
     public void testJsonToListObj() throws Exception{
         String jsonString = "[{\"invest\":0,\"marketingOffsetExpenses\":0,\"marketingInterestExpenses\":0,\"investorReceipts\":0,\"bizDate\":\"201601\"},{\"invest\":0,\"marketingOffsetExpenses\":0,\"marketingInterestExpenses\":0,\"investorReceipts\":0,\"bizDate\":\"201602\"},{\"invest\":26536601.00,\"marketingOffsetExpenses\":0.00,\"marketingInterestExpenses\":0.00,\"investorReceipts\":2014470.21,\"bizDate\":\"201603\"},{\"invest\":33841247.00,\"marketingOffsetExpenses\":74500.40,\"marketingInterestExpenses\":0.00,\"investorReceipts\":3988632.44,\"bizDate\":\"201604\"},{\"invest\":19030941.00,\"marketingOffsetExpenses\":60.00,\"marketingInterestExpenses\":1285.36,\"investorReceipts\":266860.63,\"bizDate\":\"201605\"},{\"invest\":943500.00,\"marketingOffsetExpenses\":30.00,\"marketingInterestExpenses\":2404.47,\"investorReceipts\":31661.84,\"bizDate\":\"201606\"}]";
@@ -434,6 +434,30 @@ public class SimpleTest {
     public static final ObjectMapper mapper = new ObjectMapper();
     public static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
         return mapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
+    }
+
+    //java 8 test for Lambda
+    @Test
+    public void lambdaTest() throws Exception {
+        String[] atp = {"Rafael Nadal", "Novak Djokovic",
+                "Stanislas Wawrinka",
+                "David Ferrer","Roger Federer",
+                "Andy Murray","Tomas Berdych",
+                "Juan Martin Del Potro"};
+        List<String> players =  Arrays.asList(atp);
+
+    // 以前的循环方式
+         /*   for (String player : players) {
+                System.out.print(player + "; ");
+            }*/
+
+    // 使用 lambda 表达式以及函数操作(functional operation)
+        System.out.println("***lambda 表达式以及函数操作****");
+            players.forEach((player) -> System.out.print(player + "; "));
+
+    // 在 Java 8 中使用双冒号操作符(double colon operator)
+        System.out.println("***lambda 使用双冒号操作符****");
+            players.forEach(System.out::println);
     }
 
 }

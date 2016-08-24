@@ -4,6 +4,7 @@ import cn.com.basic.dto.HelloWorldDto;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhaijiayi on 2016/5/3.
@@ -20,5 +21,7 @@ public interface HelloWorldDao {
 
     List<HelloWorldDto> getAll();
 
-    List<HelloWorldDto> queryList(@Param("item") List<Integer> ids);
+ //   List<HelloWorldDto> queryList(@Param("item") List<Integer> ids);
+
+    List<HelloWorldDto> queryList(Map<String, Object> params);
 }

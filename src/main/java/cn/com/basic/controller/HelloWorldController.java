@@ -19,14 +19,15 @@ public class HelloWorldController {
     private HelloWorldService helloWorldService;
 
 
-    @RequestMapping(value = "/first", method = RequestMethod.GET)
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String helloWorld1(HelloWorldDto helloWorldDto)  {
         helloWorldService.add(helloWorldDto);
         return helloWorldDto.getName();
     }
     @RequestMapping(value = "/queryByList", method = RequestMethod.GET)
-    public List<HelloWorldDto> queryByList(String  ids)  {
-        return helloWorldService.queryList(ids);
+    public List<HelloWorldDto> queryByList()  {
+
+        return helloWorldService.queryList();
     }
 
 }
