@@ -191,6 +191,7 @@ public class SimpleTest {
         JavaType javaType = getCollectionType(ArrayList.class, BusinessReceiptsDTO.class);
             List<BusinessReceiptsDTO> lst =  (List<BusinessReceiptsDTO>)mapper.readValue(jsonString, javaType);
         logger.info("wanch!");
+
          }
 
 

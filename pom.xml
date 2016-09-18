@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.com.basic</groupId>
-    <artifactId>hello-spring</artifactId>
+    <artifactId>hello-springTest</artifactId>
     <version>1.0.1-SNAPSHOT</version>
 
     <properties>
