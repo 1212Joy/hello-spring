@@ -208,7 +208,6 @@ public class SimpleTest {
         xList.add("ssss");
         xList.add(aaa ==null?new Double(0):aaa.doubleValue());
         xList.add( new BigDecimal(1.22));//.doubleValue()   class java.lang.Double
-
         for(int i=0;i<xList.size();i++){
             System.out.println(xList.get(i));
             /*        System.out.println(  xList.get(i).getClass().toString());
