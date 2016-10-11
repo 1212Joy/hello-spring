@@ -1,12 +1,11 @@
 package cn.com.basic.controller;
 
-import cn.com.basic.poi.POIexportExcel;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
+import cn.com.basic.excel.ModeExportExcel;
+import cn.com.basic.excel.POIexportExcel;
+import cn.com.basic.excel.export.Excel;
+import cn.com.basic.excel.export.ExportUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,8 +22,9 @@ import java.io.IOException;
 @RestController
 public class ExportExcelController {
     @Autowired
-    POIexportExcel pOIexportExcel ;
-
+    private POIexportExcel pOIexportExcel ;
+    @Autowired
+    private ModeExportExcel modeExportExcel ;
 
     @RequestMapping(value = "/export/excel", method = RequestMethod.GET)
     public void excute1(String name,HttpServletResponse response) {
@@ -66,6 +66,17 @@ public class ExportExcelController {
         } catch (IOException e) {
             throw new IllegalArgumentException("导出表格发生错误，请重新导出");
         }
+    }
+
+    @RequestMapping(value = "/export/excel3", method = RequestMethod.GET)
+    public void  excute3(HttpServletResponse response) {
+        Excel excel = null;
+        try {
+            excel = modeExportExcel.exportExcelByMode();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ExportUtils.writeExcel(excel, response);
     }
     private static String toUtf8String(String s){
         StringBuffer sb = new StringBuffer();

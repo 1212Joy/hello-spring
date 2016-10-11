@@ -1,15 +1,12 @@
-package cn.com.basic.poi;
+package cn.com.basic.excel;
 
 import cn.com.basic.BaseTest;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.FileOutputStream;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by zhaijiayi on 2016/5/25.

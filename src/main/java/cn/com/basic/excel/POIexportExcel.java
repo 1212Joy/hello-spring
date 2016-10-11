@@ -1,4 +1,4 @@
-package cn.com.basic.poi;
+package cn.com.basic.excel;
 
 /**
  * Created by zhaijiayi on 2016/5/25.
