@@ -2,11 +2,17 @@ package cn.com.basic.excel;
 
 import cn.com.basic.BaseTest;
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.Iterator;
 
 /**
  * Created by zhaijiayi on 2016/5/25.
@@ -104,6 +110,26 @@ public class POIexportExcelTest extends BaseTest {
             row.createCell(starCellIndex+i).setCellValue(arrayTitleName[i]);
         }
 
+
+    }
+
+    @Test
+    public void testReadExcel() throws Exception {
+        String path = "F:\\temp\\roles.xlsx"; //带读取表格路径
+        InputStream inputStream = new FileInputStream(path);
+        XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+        int numberOfSheets = workbook.getNumberOfSheets();
+        for (int i = 1; i < numberOfSheets; i++) {
+            XSSFSheet sheet = workbook.getSheetAt(i);   //获取sheet
+            Iterator<Row> rowIterator = sheet.rowIterator();    //获取row
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                String url = row.getCell(1).getStringCellValue();   //获取row
+            }
+
+
+
+        }
 
     }
 }
