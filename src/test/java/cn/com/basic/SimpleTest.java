@@ -459,5 +459,4 @@ public class SimpleTest {
         System.out.println("***lambda 使用双冒号操作符****");
             players.forEach(System.out::println);
     }
-
 }
