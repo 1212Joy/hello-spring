@@ -24,4 +24,8 @@ public interface HelloWorldDao {
  //   List<HelloWorldDto> queryList(@Param("item") List<Integer> ids);
 
     List<HelloWorldDto> queryList(Map<String, Object> params);
+
+    Integer updateList(List<HelloWorldDto> params);
+
+    Integer update(List<HelloWorldDto> params);
 }

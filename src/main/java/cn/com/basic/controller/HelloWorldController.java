@@ -24,10 +24,10 @@ public class HelloWorldController {
         helloWorldService.add(helloWorldDto);
         return helloWorldDto.getName();
     }
-    @RequestMapping(value = "/queryByList", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/queryByList", method = RequestMethod.GET)
     public List<HelloWorldDto> queryByList()  {
 
         return helloWorldService.queryList();
-    }
+    }*/
 
 }

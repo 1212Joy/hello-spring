@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
+import java.text.Collator;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -459,4 +460,36 @@ public class SimpleTest {
         System.out.println("***lambda 使用双冒号操作符****");
             players.forEach(System.out::println);
     }
+
+    @Test
+    public void characterTest() throws Exception {
+        Comparator<Object> com= Collator.getInstance(java.util.Locale.CHINA);
+        String[] newArray={"中山","汕头","广州","安庆","阳江","南京","武汉","北京","安阳","北方"};
+        Arrays.sort(newArray,com);
+        for(String i:newArray){
+            System.out.print(i+"  ");
+        }
+
+
+    }
+
+   /* public Map sort(List list){
+        Map map=new HashMap();
+        ArrayList arraylist=new ArrayList();
+        String[] alphatableb =
+                {
+                        "A", "B", "C", "D", "E", "F", "G", "H", "I",
+                        "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+                };
+        for(String a:alphatableb){
+            for(int i=0;i<list.size();i++){//为了排序都返回大写字母
+                if(a.equals(String2AlphaFirst(list.get(i).toString(),"b"))){
+                    arraylist.add(list.get(i).toString());
+                }
+            }
+            map.put(a,arraylist);
+            arraylist=new ArrayList();
+        }
+        return map;
+    }*/
 }

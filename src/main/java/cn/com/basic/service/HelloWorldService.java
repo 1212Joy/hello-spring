@@ -34,6 +34,10 @@ public class HelloWorldService {
        return  helloWorldDao.query(id);
     }
 
+    /**
+     * @param params
+     * @return
+     */
   /*  @Transactional(readOnly=true,propagation=Propagation.SUPPORTS)
     public List<HelloWorldDto>  queryList(String  ids){
         String[] idArray = ids.split(",");
@@ -45,14 +49,25 @@ public class HelloWorldService {
         return  helloWorldDao.queryList(idList);
     }*/
     @Transactional(readOnly=true,propagation=Propagation.SUPPORTS)
-    public List<HelloWorldDto>  queryList(){
-        Map<String, Object> params = new HashMap();
-        List<Integer> idList = new ArrayList<Integer>();
-        idList.add(1);
-        idList.add(2);
-        params.put("ids", idList);
-        params.put("name", "aaa");
+    public List<HelloWorldDto>  queryList(Map<String, Object> params){
+
         return  helloWorldDao.queryList(params);
+    }
+
+    @Transactional(value = ApplicationConfiguration.TRANSACTION_MANAGER, propagation = Propagation.REQUIRED,
+            isolation = Isolation.READ_COMMITTED, readOnly = false, rollbackFor = Exception.class)
+    public Integer updateList(List<HelloWorldDto> list){
+
+        return  helloWorldDao.updateList(list);
+    }
+
+    @Transactional(value = ApplicationConfiguration.TRANSACTION_MANAGER, propagation = Propagation.REQUIRED,
+            isolation = Isolation.READ_COMMITTED, readOnly = false, rollbackFor = Exception.class)
+    public void updateListTem(List<HelloWorldDto> list){
+        list.forEach(helloWorldDto -> {
+            helloWorldDao.update(helloWorldDto);
+        });
+
     }
 }
 
