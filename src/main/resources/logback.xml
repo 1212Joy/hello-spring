@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%clr(%date){blue} - %clr([%thread]){magenta} - %clr([%-5level]){cyan} - %clr([%class.%method\(line:%line\)]){cyan} - %clr(%msg%n)
+            </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.mybatis" level="INFO" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="org.apache.ibatis" level="DEBUG" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="org.apache.axiom" level="INFO" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="org.apache.axis2" level="INFO" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="org.apache.ibatis.io" level="INFO" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="org.springframework" level="INFO" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="org.hibernate" level="INFO" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="org.apache.commons" level="INFO" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="org.apache.http" level="INFO" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="com.netflix" level="INFO" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="springfox.documentation" level="INFO" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="org.apache.zookeeper" level="WARN" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="org.apache.curator" level="WARN" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="freemarker" level="WARN" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+
+    <root>
+        <appender-ref ref="stdout"/>
+    </root>
+</configuration>

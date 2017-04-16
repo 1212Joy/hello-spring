@@ -6,6 +6,6 @@ package cn.com.basic.thread;
 public class MyRunnable implements Runnable {
     @Override
     public void run() {
-        System.out.print("hello my runnable is running!");
+        System.out.println(Thread.currentThread().getName()+ " : hello my runnable is running!");
     }
 }

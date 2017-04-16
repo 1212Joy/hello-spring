@@ -7,6 +7,6 @@ public class MyThread extends Thread{
 
     @Override
     public void run() {
-       System.out.print("hello my thread is running!");
+       System.out.println("hello my thread is running!");
     }
 }

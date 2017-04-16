@@ -1,6 +1,6 @@
 package cn.com.basic;
 
-import cn.com.basic.utils.JsonUtils;
+
 import cn.com.basic.dto.BusinessReceiptsDTO;
 import cn.com.basic.dto.HelloWorldDto;
 import cn.com.basic.dto.PlatformRecordReservedField;
@@ -421,15 +421,15 @@ public class SimpleTest {
         PlatformRecordReservedField platformRecordReservedField = new PlatformRecordReservedField();
         platformRecordReservedField.setUserInfoID("444");
         platformRecordReservedField.setUserRealName(null);
-        String reservedFieldJson = JsonUtils.toJson(platformRecordReservedField);
+//        String reservedFieldJson = JsonUtils.toJson(platformRecordReservedField);
 
-        //*Json String 转成对象
-        PlatformRecordReservedField convertObj = JsonUtils.toBean(reservedFieldJson, PlatformRecordReservedField.class);
-
-
-        // *Json String 转成对象 lsit
-        List<PlatformRecordReservedField> businessReceiptsList3 = JsonUtils.toBeanList(reservedFieldJson,ArrayList.class, PlatformRecordReservedField.class);
-        System.out.print(businessReceiptsList3.size());
+//        //*Json String 转成对象
+//        PlatformRecordReservedField convertObj = JsonUtils.toBean(reservedFieldJson, PlatformRecordReservedField.class);
+//
+//
+//        // *Json String 转成对象 lsit
+//        List<PlatformRecordReservedField> businessReceiptsList3 = JsonUtils.toBeanList(reservedFieldJson,ArrayList.class, PlatformRecordReservedField.class);
+//        System.out.print(businessReceiptsList3.size());
     }
     //将jason 转换成对象list
     public static final ObjectMapper mapper = new ObjectMapper();
