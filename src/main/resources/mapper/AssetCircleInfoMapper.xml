@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.fero.asset.dao.AssetCircleInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.com.fero.asset.vo.AssetCircleInfo">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="circle_id" property="circleId" jdbcType="INTEGER"/>
+    <result column="asset_count" property="assetCount" jdbcType="INTEGER"/>
+    <result column="last_asset_circle_id" property="lastAssetCircleId" jdbcType="INTEGER"/>
+    <result column="last_asset_id" property="lastAssetId" jdbcType="INTEGER"/>
+    <result column="last_asset_name" property="lastAssetName" jdbcType="VARCHAR"/>
+    <result column="last_top_asset_circle_id" property="lastTopAssetCircleId" jdbcType="INTEGER"/>
+    <result column="last_top_asset_id" property="lastTopAssetId" jdbcType="INTEGER"/>
+    <result column="last_top_asset_name" property="lastTopAssetName" jdbcType="VARCHAR"/>
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
+    <result column="version" property="version" jdbcType="INTEGER"/>
+  </resultMap>
+
+  <resultMap id="MyAssetCircleInfo" type="cn.com.fero.asset.dto.MyAssetCircleInfo">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <association property="assetCircleInfo" resultMap="BaseResultMap"/>
+    <association property="circle" resultMap="cn.com.fero.passport.dao.CircleDao.BaseResultMap"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, circle_id, asset_count, last_asset_circle_id, last_asset_id, last_asset_name,
+    last_top_asset_circle_id, last_top_asset_id, last_top_asset_name, created_at, updated_at,
+    created_by, updated_by, version
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    from asset_circle_info
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from asset_circle_info
+    where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="cn.com.fero.asset.vo.AssetCircleInfo" useGeneratedKeys="true" keyProperty="id">
+    insert into asset_circle_info (circle_id, asset_count, last_asset_circle_id, last_asset_id, last_asset_name,
+    last_top_asset_circle_id, last_top_asset_id, last_top_asset_name, created_at,
+    updated_at, created_by, updated_by, version)
+    values (#{circleId}, #{assetCount}, #{lastAssetCircleId}, #{lastAssetId}, #{lastAssetName},
+    #{lastTopAssetCircleId}, #{lastTopAssetId}, #{lastTopAssetName}, #{createdAt},
+    #{updatedAt}, #{createdBy}, #{updatedBy}, #{version})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.com.fero.asset.vo.AssetCircleInfo">
+    update asset_circle_info
+    set circle_id = #{circleId},
+      asset_count = #{assetCount},
+      last_asset_circle_id = #{lastAssetCircleId},
+      last_asset_id = #{lastAssetId},
+    last_asset_name = #{lastAssetName},
+      last_top_asset_circle_id = #{lastTopAssetCircleId},
+      last_top_asset_id = #{lastTopAssetId},
+    last_top_asset_name = #{lastTopAssetName},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      created_by = #{createdBy},
+      updated_by = #{updatedBy},
+      version = #{version} + 1
+    where id = #{id} and version = #{version}
+  </update>
+
+    <select id="selectByCircleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from asset_circle_info
+        where circle_id = #{circleId}
+    </select>
+
+    <select id="getMyAssetCircleList" resultMap="MyAssetCircleInfo">
+        SELECT circle.*, b.*
+        FROM circle
+        RIGHT JOIN circle_account a on circle.id = a.circle_id
+        LEFT JOIN asset_circle_info b on circle.id = b.circle_id
+        <where>
+          a.account_id = #{accountId} and circle.manage_status = 'enabled'
+          <if test="key != null and key != '' ">
+            AND circle.name LIKE CONCAT (CONCAT('%',#{key}),'%') ESCAPE '/'
+          </if>
+        </where>
+        ORDER BY b.updated_at DESC, circle.created_at DESC
+        <if test="size != null">
+          limit #{size}
+        </if>
+    </select>
+
+
+  <select id="getOtherAssetCircleList" resultMap="MyAssetCircleInfo">
+    SELECT circle.*, b.*
+    FROM circle
+    LEFT JOIN asset_circle_info b on circle.id = b.circle_id
+    <where>
+      circle.manage_status = 'enabled'
+      AND circle.id  not in (select circle_id from circle_account where account_id = #{accountId})
+      <if test="key != null and key != '' ">
+        AND circle.name LIKE CONCAT (CONCAT('%',#{key}),'%') ESCAPE '/'
+      </if>
+    </where>
+    ORDER BY circle.priority DESC, circle.created_at DESC
+    <if test="size != null">
+      limit #{size}
+    </if>
+  </select>
+
+  <select id="getAllAssetCircleList" resultMap="MyAssetCircleInfo">
+    SELECT circle.*, b.*
+    FROM circle
+    LEFT JOIN asset_circle_info b on circle.id = b.circle_id
+    <where>
+      circle.manage_status = 'enabled'
+      <if test="key != null and key != '' ">
+        AND circle.name LIKE CONCAT (CONCAT('%',#{key}),'%') ESCAPE '/'
+      </if>
+    </where>
+    ORDER BY circle.priority DESC, circle.created_at DESC
+    <if test="size != null">
+      limit #{size}
+    </if>
+  </select>
+
+  <select id="selectByLastAssetId" resultType="cn.com.fero.asset.vo.AssetCircleInfo">
+    select
+    <include refid="Base_Column_List"/>
+    from asset_circle_info
+    where last_asset_id = #{assetId}
+  </select>
+
+</mapper>

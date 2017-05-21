@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.fero.asset.dao.AssetViewHistoryMapper">
+
+    <!--用户浏览历史记录-->
+    <insert id="addViewHistory" parameterType="cn.com.fero.asset.dto.AssetViewHistory" useGeneratedKeys="true" keyProperty="id">
+        insert into asset_view_history (asset_id, account_id, created_at)
+        values (#{assetId}, #{accountId}, #{createdAt})
+    </insert>
+</mapper>

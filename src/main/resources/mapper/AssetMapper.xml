@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.fero.asset.dao.AssetMapper">
+  <resultMap id="BaseResultMap" type="cn.com.fero.asset.vo.Asset">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="account_id" property="accountId" jdbcType="INTEGER"/>
+    <result column="type" property="type" jdbcType="VARCHAR"/>
+    <result column="type_name" property="typeName" jdbcType="VARCHAR"/>
+    <result column="sub_type" property="subType" jdbcType="VARCHAR"/>
+    <result column="sub_type_name" property="subTypeName" jdbcType="VARCHAR"/>
+    <result column="circle" property="circle" jdbcType="VARCHAR"/>
+    <result column="circle_id" property="circleId" jdbcType="INTEGER"/>
+    <result column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="price" property="price" jdbcType="DECIMAL"/>
+    <result column="price_type" property="priceType" jdbcType="VARCHAR"/>
+    <result column="province" property="province" jdbcType="VARCHAR"/>
+    <result column="province_code" property="provinceCode" jdbcType="VARCHAR"/>
+    <result column="city" property="city" jdbcType="VARCHAR"/>
+    <result column="city_code" property="cityCode" jdbcType="VARCHAR"/>
+    <result column="start_date" property="startDate" jdbcType="TIMESTAMP"/>
+    <result column="end_date" property="endDate" jdbcType="TIMESTAMP"/>
+    <result column="description" property="description" jdbcType="VARCHAR"/>
+    <result column="status" property="status" jdbcType="VARCHAR"/>
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
+    <result column="version" property="version" jdbcType="INTEGER"/>
+  </resultMap>
+
+  <resultMap id="MyAssetMap" type="cn.com.fero.asset.dto.MyAsset">
+    <id column="id" property="assetId" jdbcType="INTEGER"/>
+    <result column="action_type" property="actionType" jdbcType="VARCHAR"/>
+    <result column="star_count" property="starCount" jdbcType="INTEGER"/>
+    <association property="info" resultMap="BaseResultMap"/>
+  </resultMap>
+
+  <resultMap id="CircleAssetMap" type="cn.com.fero.asset.dto.CircleAsset" extends="BaseResultMap">
+    <result column="top" property="top" jdbcType="BIT"/>
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, account_id, type, type_name, sub_type, sub_type_name, circle, circle_id, name, price, price_type,
+    province, province_code, city, city_code, start_date, end_date, description, status,
+    created_at, updated_at, created_by, updated_by, version
+  </sql>
+
+  <sql id="Base_Join_Column_List">
+    asset.id, asset.account_id, asset.type, asset.type_name, asset.sub_type, asset.sub_type_name, asset.circle, asset.circle_id, asset.name, asset.price, asset.price_type,
+    asset.province, asset.province_code, asset.city, asset.city_code, asset.start_date, asset.end_date, asset.description, asset.status,
+    asset.created_at, asset.updated_at, asset.created_by, asset.updated_by, asset.version
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    from asset
+    where id = #{id}
+  </select>
+
+  <select id="selectByPrimaryKeys" resultMap="BaseResultMap" parameterType="Arraylist">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM asset
+    WHERE id IN
+    <foreach collection="list" item="item" open="(" separator="," close=")" index="index">
+      #{item}
+    </foreach>
+  </select>
+
+  <select id="selectByAccount" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    from asset
+    where account_id = #{accountId}
+  </select>
+
+  <select id="publishAndStar" resultMap="MyAssetMap">
+    select asset.*,t.action_type,asset_star_count.count as star_count from asset
+    RIGHT JOIN
+    (SELECT id ,updated_at, 'publish' as action_type FROM `asset` where account_id = #{accountId} and status = '01'
+    UNION ALL
+    SELECT asset_star.asset_id as id, asset_star.updated_at, 'star' as action_type FROM `asset_star`
+    left join asset on asset_star.asset_id = asset.id
+    where asset_star.account_id = #{accountId} and asset.status = '01'
+    order by updated_at desc
+    ) t ON asset.id =t.id
+    LEFT JOIN asset_star_count ON asset.id = asset_star_count.asset_id
+  </select>
+
+  <select id="getPublish" resultMap="MyAssetMap">
+    select asset.*,t.action_type,asset_star_count.count as star_count from asset
+    RIGHT JOIN
+    (SELECT id ,updated_at, 'publish' as action_type FROM `asset`
+    where account_id = #{accountId} and status = '01' and circle_id is null
+    order by updated_at desc
+    ) t ON asset.id =t.id
+    LEFT JOIN asset_star_count ON asset.id = asset_star_count.asset_id
+  </select>
+
+  <select id="query" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from asset
+    <where>
+      <if test="status != null and status != ''">
+        and status = #{status}
+      </if>
+      <if test="type != null and type != '' ">
+        and type = #{type}
+      </if>
+      <if test="subType != null and subType != '' ">
+        and sub_type = #{subType}
+      </if>
+      <if test="name != null and name != '' ">
+        AND name LIKE CONCAT (CONCAT('%',#{name}),'%') ESCAPE '/'
+      </if>
+      <if test="cityCode != null and cityCode != '' ">
+        and city_code = #{cityCode}
+      </if>
+      <if test="provinceCode != null and provinceCode != '' ">
+        and province_code = #{provinceCode}
+      </if>
+      <if test="createdAtStart != null ">
+        AND created_at &gt;= #{createdAtStart}
+      </if>
+      <if test="createdAtEnd != null">
+        AND created_at &lt;= #{createdAtEnd}
+      </if>
+    </where>
+    ORDER BY created_at DESC
+  </select>
+
+  <select id="listByStar" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Join_Column_List"></include>
+    FROM asset
+    LEFT JOIN asset_star_count b ON asset.id = b.asset_id
+    <where>
+      circle_id is null AND status = '01'
+      <if test="priceStart != null ">
+        AND asset.price &gt;= #{priceStart}
+      </if>
+      <if test="priceEnd != null">
+        AND asset.price &lt;= #{priceEnd}
+      </if>
+      <if test="subType != null">
+        AND asset.sub_type = #{subType}
+      </if>
+    </where>
+    ORDER BY b.count DESC
+  </select>
+
+  <select id="listByDate" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"></include>
+    FROM asset
+    <where>
+      circle_id is null AND status = '01'
+      <if test="priceStart != null ">
+        AND price &gt;= #{priceStart}
+      </if>
+      <if test="priceEnd != null">
+        AND price &lt;= #{priceEnd}
+      </if>
+      <if test="subType != null">
+        AND sub_type = #{subType}
+      </if>
+    </where>
+    ORDER BY created_at DESC
+  </select>
+
+  <select id="availableCount" resultType="long">
+    SELECT count(0) FROM asset WHERE status = '01'
+  </select>
+
+  <update id="updateStatus">
+    update asset
+    set status = #{status}, updated_at = now()
+    where id = #{id}
+  </update>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from asset
+    where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="cn.com.fero.asset.vo.Asset" useGeneratedKeys="true" keyProperty="id">
+    insert into asset (account_id, type, type_name, sub_type, sub_type_name, circle, circle_id,
+    name, price, price_type, province, province_code, city, city_code,
+    start_date, end_date, description, status, created_at, updated_at,
+    created_by, updated_by, version)
+    values (#{accountId}, #{type}, #{typeName}, #{subType}, #{subTypeName}, #{circle}, #{circleId},
+    #{name}, #{price}, #{priceType}, #{province}, #{provinceCode}, #{city}, #{cityCode},
+    #{startDate}, #{endDate}, #{description}, #{status}, #{createdAt}, #{updatedAt},
+    #{createdBy}, #{updatedBy}, #{version})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.com.fero.asset.vo.Asset">
+    update asset
+    set account_id = #{accountId},
+      type = #{type},
+    type_name = #{typeName},
+    sub_type = #{subType},
+    sub_type_name = #{subTypeName},
+      circle = #{circle},
+      circle_id = #{circleId},
+      name = #{name},
+      price = #{price},
+      price_type = #{priceType},
+    province = #{province},
+    province_code = #{provinceCode},
+    city = #{city},
+    city_code = #{cityCode},
+      start_date = #{startDate},
+      end_date = #{endDate},
+      description = #{description},
+      status = #{status},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      created_by = #{createdBy},
+      updated_by = #{updatedBy},
+      version = #{version}
+    where id = #{id}
+  </update>
+
+  <select id="queryCircle" resultMap="CircleAssetMap">
+    SELECT
+    <include refid="Base_Join_Column_List"></include>,
+    v.top
+    FROM asset
+    RIGHT JOIN asset_circle v on asset.id = v.asset_id
+    <where>
+      v.circle_id = #{circleId} and asset.status = '01'
+      <if test="type != null and type != '' ">
+        and type = #{type}
+      </if>
+      <if test="subType != null and subType != '' ">
+        and sub_type = #{subType}
+      </if>
+    </where>
+    order by v.top desc, v.created_at desc
+  </select>
+
+  <select id="indexList" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/>
+    FROM asset
+    WHERE circle_id is null and status = '01'
+  </select>
+
+</mapper>

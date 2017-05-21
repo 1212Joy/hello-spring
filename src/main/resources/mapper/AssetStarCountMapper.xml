@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.fero.asset.dao.AssetStarCountMapper">
+    <resultMap id="BaseResultMap" type="cn.com.fero.asset.vo.AssetStarCount">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="asset_id" property="assetId" jdbcType="INTEGER"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+        <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, asset_id, count, created_at, updated_at, created_by, updated_by, version
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from asset_star_count
+        where id = #{id}
+    </select>
+
+    <select id="selectByAssetId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from asset_star_count
+        where asset_id = #{assetId}
+    </select>
+
+    <update id="increase">
+    UPDATE asset_star_count
+    SET count = #{count} + 1, version = #{version} + 1, updated_at = now()
+    WHERE version = #{version} and id = #{id}
+  </update>
+
+    <update id="decrease">
+    UPDATE asset_star_count
+    SET count = #{count} - 1, version = #{version} + 1, updated_at = now()
+    WHERE version = #{version} and id = #{id}
+  </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from asset_star_count
+    where id = #{id}
+  </delete>
+    <insert id="insert" parameterType="cn.com.fero.asset.vo.AssetStarCount" useGeneratedKeys="true" keyProperty="id">
+    insert into asset_star_count (asset_id, count, created_at, updated_at, created_by, updated_by, 
+      version)
+    values (#{assetId}, #{count}, #{createdAt}, #{updatedAt}, #{createdBy}, #{updatedBy}, 
+      #{version})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.com.fero.asset.vo.AssetStarCount">
+    update asset_star_count
+    set asset_id = #{assetId},
+      count = #{count},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      created_by = #{createdBy},
+      updated_by = #{updatedBy},
+      version = #{version}
+    where id = #{id}
+  </update>
+
+    <delete id="deleteByAssetId" parameterType="java.lang.Integer">
+        delete from asset_star_count
+        where asset_id = #{assetId}
+    </delete>
+</mapper>

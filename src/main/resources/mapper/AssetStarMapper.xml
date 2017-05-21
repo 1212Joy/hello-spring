@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.fero.asset.dao.AssetStarMapper">
+    <resultMap id="BaseResultMap" type="cn.com.fero.asset.vo.AssetStar">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="asset_id" property="assetId" jdbcType="INTEGER"/>
+        <result column="account_id" property="accountId" jdbcType="INTEGER"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+        <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="CountInfoMap" type="cn.com.fero.asset.dto.CountInfo">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, asset_id, account_id, created_at, updated_at, created_by, updated_by, version
+    </sql>
+
+    <select id="listByStarsCount" resultMap="CountInfoMap" parameterType="long">
+        SELECT
+            asset_id AS id,
+            count(0) AS count
+        FROM
+            asset_star
+        LEFT JOIN asset on asset_star.asset_id = asset.id
+		where asset.id is not null
+        GROUP BY
+            asset_id
+        ORDER BY
+            count DESC
+        LIMIT #{limitSize}
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from asset_star
+        where id = #{id}
+    </select>
+
+    <select id="selectByAssetId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from asset_star
+        where asset_id = #{assetId} and account_id = #{accountId}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from asset_star
+    where id = #{id}
+  </delete>
+    <insert id="insert" parameterType="cn.com.fero.asset.vo.AssetStar" useGeneratedKeys="true" keyProperty="id">
+        insert into asset_star (asset_id, account_id, created_at, updated_at, created_by, updated_by,
+      version)
+        values (#{assetId}, #{accountId}, #{createdAt}, #{updatedAt}, #{createdBy}, #{updatedBy},
+      #{version})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.com.fero.asset.vo.AssetStar">
+    update asset_star
+    set asset_id = #{assetId},
+        account_id = #{accountId},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      created_by = #{createdBy},
+      updated_by = #{updatedBy},
+      version = #{version}
+    where id = #{id}
+  </update>
+
+    <delete id="deleteByAssetId" parameterType="java.lang.Integer">
+        delete from asset_star
+        where asset_id = #{assetId}
+    </delete>
+</mapper>

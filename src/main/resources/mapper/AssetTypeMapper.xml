@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.fero.asset.dao.AssetTypeMapper" >
+  <resultMap id="BaseResultMap" type="cn.com.fero.asset.vo.AssetType" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
+    <result column="enable" property="enable" jdbcType="BIT" />
+    <result column="visible" property="visible" jdbcType="BIT" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, path, remark, priority, enable, visible, created_at, updated_at, created_by,
+    updated_by, version
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from asset_type
+    where id = #{id}
+  </select>
+
+  <select id="query" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from asset_type
+    <where>
+      <if test="enable != null ">
+        and enable = #{enable}
+      </if>
+      <if test="visible != null ">
+        and visible = #{visible}
+      </if>
+      <if test="name != null and name != '' ">
+        AND name LIKE CONCAT (CONCAT('%',#{name}),'%') ESCAPE '/'
+      </if>
+    </where>
+    order by priority desc
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from asset_type
+    where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="cn.com.fero.asset.vo.AssetType" useGeneratedKeys="true" keyProperty="id" >
+    insert into asset_type (name, path, remark, priority, enable, visible, created_at,
+      updated_at, created_by, updated_by, version)
+    values (#{name}, #{path}, #{remark}, #{priority}, #{enable}, #{visible}, #{createdAt},
+      #{updatedAt}, #{createdBy}, #{updatedBy}, #{version})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.com.fero.asset.vo.AssetType" >
+    update asset_type
+    set name = #{name},
+      path = #{path},
+      remark = #{remark},
+      priority = #{priority},
+      enable = #{enable},
+      visible = #{visible},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      created_by = #{createdBy},
+      updated_by = #{updatedBy},
+      version = #{version}
+    where id = #{id}
+  </update>
+</mapper>

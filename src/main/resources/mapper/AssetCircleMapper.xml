@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.fero.asset.dao.AssetCircleMapper">
+  <resultMap id="BaseResultMap" type="cn.com.fero.asset.vo.AssetCircle">
+    <id column="id" property="id" jdbcType="INTEGER"/>
+    <result column="account_id" property="accountId" jdbcType="INTEGER"/>
+    <result column="circle_id" property="circleId" jdbcType="INTEGER"/>
+    <result column="asset_id" property="assetId" jdbcType="INTEGER"/>
+    <result column="top" property="top" jdbcType="BIT"/>
+    <result column="share" property="share" jdbcType="BIT"/>
+    <result column="enable" property="enable" jdbcType="BIT"/>
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR"/>
+    <result column="version" property="version" jdbcType="INTEGER"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, account_id, circle_id, asset_id, top, share,enable, created_at, updated_at, created_by,
+    updated_by, version
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    from asset_circle
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from asset_circle
+    where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="cn.com.fero.asset.vo.AssetCircle" useGeneratedKeys="true" keyProperty="id">
+    insert into asset_circle (account_id, circle_id, asset_id, top, share, enable, created_at, updated_at,
+      created_by, updated_by, version)
+    values (#{accountId}, #{circleId}, #{assetId}, #{top}, #{share}, #{enable}, #{createdAt}, #{updatedAt},
+      #{createdBy}, #{updatedBy}, #{version})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="cn.com.fero.asset.vo.AssetCircle">
+    update asset_circle
+    set account_id = #{accountId},
+      circle_id = #{circleId},
+      asset_id = #{assetId},
+      top = #{top},
+      share = #{share},
+    enable = #{enable},
+      created_at = #{createdAt},
+      updated_at = #{updatedAt},
+      created_by = #{createdBy},
+      updated_by = #{updatedBy},
+      version = #{version}
+    where id = #{id}
+  </update>
+
+  <select id="selectByKeys" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    from asset_circle
+    where asset_id = #{assetId} and circle_id = #{circleId}
+  </select>
+
+  <select id="selectByAssetId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List"/>
+    from asset_circle
+    where asset_id = #{assetId}
+  </select>
+
+  <select id="topAssetInfoCount" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+    select
+    count(1)
+    from asset_circle
+    where circle_id = #{circleId} AND top = 1
+  </select>
+
+  <delete id="delCircleAssetInfo" parameterType="java.lang.Integer">
+    delete from asset_circle
+    where asset_id = #{assetId} AND circle_id = #{circleId}
+  </delete>
+
+</mapper>

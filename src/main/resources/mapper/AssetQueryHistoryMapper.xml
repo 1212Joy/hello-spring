@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.com.fero.asset.dao.AssetQueryHistoryMapper">
+    <resultMap id="BaseResultMap" type="cn.com.fero.asset.vo.AssetQueryHistory">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="query_key" property="queryKey" jdbcType="VARCHAR"/>
+        <result column="account_id" property="accountId" jdbcType="INTEGER"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="KeyCountMap" type="cn.com.fero.asset.dto.KeyCountInfo">
+        <result column="key" property="key" jdbcType="VARCHAR"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, query_key, account_id, created_at
+  </sql>
+
+    <select id="listByCount" resultMap="KeyCountMap">
+        SELECT query_key as `key`, COUNT(0) AS count
+        FROM asset_query_history
+        GROUP BY `key`
+        ORDER BY count DESC
+        LIMIT 10
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from asset_query_history
+        where id = #{id}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from asset_query_history
+    where id = #{id}
+  </delete>
+    <insert id="insert" parameterType="cn.com.fero.asset.vo.AssetQueryHistory" useGeneratedKeys="true" keyProperty="id">
+    insert into asset_query_history (query_key, account_id, created_at)
+    values (#{queryKey}, #{accountId}, #{createdAt})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.com.fero.asset.vo.AssetQueryHistory">
+    update asset_query_history
+    set query_key = #{queryKey},
+      account_id = #{accountId},
+      created_at = #{createdAt}
+    where id = #{id}
+  </update>
+</mapper>
