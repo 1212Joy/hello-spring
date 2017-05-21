@@ -1,0 +1,863 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.fero.backend.payment.dao.PlatformAccountsRecordDAO">
+    <resultMap id="PlatformAccountsRecord" type="cn.com.fero.commons.entity.accounts.PlatformAccountsRecord"
+               autoMapping="true">
+        <id column="id" property="id"/>
+        <result column="real_account_type" property="realAccountType"/>
+        <result column="bank_account_id" property="bankAccountId"/>
+        <result column="bank_card_num" property="bankCardNum"/>
+        <result column="sub_account_table_name" property="subAccountTableName"/>
+        <result column="platform_sub_account_id" property="platformSubAccountId"/>
+        <result column="transfer_amount" property="transferAmount"/>
+        <result column="trade_action" property="tradeAction"/>
+        <result column="trade_sub_action" property="tradeSubAction"/>
+        <result column="trade_type" property="tradeType"/>
+        <result column="action_ref" property="actionRef"/>
+        <result column="trade_ref" property="tradeRef"/>
+        <result column="trade_time" property="tradeTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="result_code" property="resultCode"/>
+        <result column="result_info" property="resultInfo"/>
+        <result column="channel" property="channel"/>
+        <result column="is_real_account_transfer" property="isRealAccountTransfer"/>
+        <result column="is_sub_account_update" property="isSubAccountUpdate"/>
+        <result column="status" property="status"/>
+        <result column="remark" property="remark"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="version" property="version"/>
+        <result column="reserved_field" property="reservedField"/>
+        <result column="sub_account_type" property="subAccountType"/>
+    </resultMap>
+
+    <resultMap id="PlatformAccountsRecordDTO" type="cn.com.fero.backend.payment.dto.PlatformAccountsRecordDTO"
+               autoMapping="true">
+        <id column="id" property="id"/>
+        <result column="real_account_type" property="realAccountType"/>
+        <result column="bank_account_id" property="bankAccountId"/>
+        <result column="bank_card_num" property="bankCardNum"/>
+        <result column="sub_account_table_name" property="subAccountTableName"/>
+        <result column="platform_sub_account_id" property="platformSubAccountId"/>
+        <result column="transfer_amount" property="transferAmount"/>
+        <result column="trade_action" property="tradeAction"/>
+        <result column="trade_sub_action" property="tradeSubAction"/>
+        <result column="trade_type" property="tradeType"/>
+        <result column="action_ref" property="actionRef"/>
+        <result column="trade_ref" property="tradeRef"/>
+        <result column="trade_time" property="tradeTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="result_code" property="resultCode"/>
+        <result column="result_info" property="resultInfo"/>
+        <result column="channel" property="channel"/>
+        <result column="is_real_account_transfer" property="isRealAccountTransfer"/>
+        <result column="status" property="status"/>
+        <result column="remark" property="remark"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="version" property="version"/>
+        <result column="reserved_field" property="reservedField"/>
+        <result column="real_name" property="realName"/>
+        <result column="yearMonth" property="yearMonth"/>
+        <result column="totalAmount" property="totalAmount"/>
+    </resultMap>
+
+    <resultMap id="WithdrawAudit" type="cn.com.fero.backend.payment.vo.WithdrawAudit"
+               autoMapping="true">
+        <id column="id" property="id"/>
+        <result column="real_account_type" property="realAccountType"/>
+        <result column="bank_account_id" property="bankAccountId"/>
+        <result column="bank_card_num" property="bankCardNum"/>
+        <result column="sub_account_table_name" property="subAccountTableName"/>
+        <result column="platform_sub_account_id" property="platformSubAccountId"/>
+        <result column="transfer_amount" property="transferAmount"/>
+        <result column="trade_action" property="tradeAction"/>
+        <result column="trade_type" property="tradeType"/>
+        <result column="trade_ref" property="tradeRef"/>
+        <result column="trade_time" property="tradeTime"/>
+        <result column="result_code" property="resultCode"/>
+        <result column="result_info" property="resultInfo"/>
+        <result column="channel" property="channel"/>
+        <result column="is_real_account_transfer" property="isRealAccountTransfer"/>
+        <result column="status" property="status"/>
+        <result column="remark" property="remark"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="version" property="version"/>
+        <result column="reserved_field" property="reservedField"/>
+        <result column="apply_name" property="applyName"/>
+        <result column="total_amount" property="totalAmount"/>
+        <result column="duein_amount" property="dueinAmount"/>
+        <result column="withdraw_frozen_amount" property="withdrawFrozenAmount"/>
+    </resultMap>
+
+    <resultMap id="ThirdSummary" type="cn.com.fero.backend.payment.dto.ThirdSummaryDto"
+               autoMapping="true">
+        <result column="type" property="type"/>
+        <result column="trade_time" property="tradeTime"/>
+        <result column="transfer_amount" property="transferAmount"/>
+    </resultMap>
+
+    <resultMap id="AccountIncomeStatisticDTO" type="cn.com.fero.backend.payment.dto.AccountIncomeStatisticDTO"
+               autoMapping="true">
+        <result column="trade_type" property="tradeType"/>
+        <result column="transfer_amount" property="transferAmount"/>
+    </resultMap>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+
+            INSERT INTO platform_accounts_records(
+                real_account_type,bank_account_id, bank_card_num, sub_account_table_name, platform_sub_account_id, transfer_amount,
+                trade_action, trade_type, trade_ref, trade_time, result_code, result_info, channel,
+                is_real_account_transfer,is_sub_account_update, status, remark, created_by, version, reserved_field, action_ref,sub_account_type
+            )
+            VALUES (
+               #{realAccountType}, #{bankAccountId}, #{bankCardNum},#{subAccountTableName},#{platformSubAccountId}, #{transferAmount},
+               #{tradeAction}, #{tradeType}, #{tradeRef}, #{tradeTime}, #{resultCode}, #{resultInfo}, #{channel},
+               #{isRealAccountTransfer},#{isSubAccountUpdate}, #{status}, #{remark}, #{createdBy}, #{version}, #{reservedField}, #{actionRef},#{subAccountType}
+            )
+
+        ]]>
+    </insert>
+
+    <update id="update">
+        <![CDATA[
+            UPDATE  platform_accounts_records
+            SET
+                real_account_type=#{realAccountType}, bank_account_id = #{bankAccountId},bank_card_num=#{bankCardNum},sub_account_table_name=#{subAccountTableName},platform_sub_account_id=#{platformSubAccountId}, transfer_amount = #{transferAmount}, trade_action = #{tradeAction}, trade_type = #{tradeType}, trade_ref = #{tradeRef},
+                trade_time = #{tradeTime}, result_code = #{resultCode}, result_info = #{resultInfo},channel=#{channel}, is_real_account_transfer=#{isRealAccountTransfer},is_sub_account_update=#{isSubAccountUpdate}, status = #{status},
+                remark = #{remark}, created_by = #{createdBy}, version = #{version} + 1, reserved_field = #{reservedField}, action_ref = #{actionRef}
+            WHERE
+                id = #{id} AND version = #{version}
+        ]]>
+    </update>
+
+    <select id="getAll" resultMap="PlatformAccountsRecord">
+        <![CDATA[
+
+            SELECT
+                id, real_account_type, bank_account_id, bank_card_num, sub_account_table_name, platform_sub_account_id, transfer_amount,
+                trade_action, trade_type, trade_ref, trade_time, result_code, result_info, channel,
+                is_real_account_transfer, status, remark, created_by, version, reserved_field, action_ref
+            FROM
+                platform_accounts_records
+            WHERE
+                1=1
+        ]]>
+        <if test="startDate != null">
+            AND trade_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND trade_time &lt;= #{endDate}
+        </if>
+    </select>
+
+    <select id="getById" resultMap="PlatformAccountsRecord">
+        <![CDATA[
+
+            SELECT
+                id, real_account_type, bank_account_id, bank_card_num, sub_account_table_name, platform_sub_account_id, transfer_amount,
+                trade_action, trade_type, trade_ref, trade_time, result_code, result_info, channel,
+                is_real_account_transfer, status, remark, created_by, version, reserved_field, action_ref
+            FROM
+                platform_accounts_records
+            WHERE
+                id = #{id}
+
+        ]]>
+    </select>
+
+    <select id="getByTradeRef" resultMap="PlatformAccountsRecord">
+        <![CDATA[
+
+            SELECT
+                id, real_account_type, bank_account_id, bank_card_num, sub_account_table_name, platform_sub_account_id, transfer_amount,
+                trade_action, trade_type, trade_ref, trade_time, result_code, result_info, channel,
+                is_real_account_transfer, status, remark, created_by, version, reserved_field, action_ref
+            FROM
+                platform_accounts_records
+            WHERE
+                trade_ref = #{tradeRef}
+
+        ]]>
+    </select>
+
+    <select id="getByActionRef" resultMap="PlatformAccountsRecord">
+        <![CDATA[
+
+
+
+            SELECT
+                id, real_account_type, bank_account_id, bank_card_num, sub_account_table_name, platform_sub_account_id, transfer_amount,
+                trade_action, trade_type, trade_ref, trade_time, result_code, result_info, channel,
+                is_real_account_transfer, status, remark, created_by, version, reserved_field, action_ref
+            FROM
+                platform_accounts_records
+            WHERE
+                action_ref = #{actionRef}
+
+
+
+        ]]>
+    </select>
+
+    <select id="getOneByActionRef" resultMap="PlatformAccountsRecord">
+        <![CDATA[
+            SELECT
+                id, real_account_type, bank_account_id, bank_card_num, sub_account_table_name, platform_sub_account_id, transfer_amount,
+                trade_action, trade_type, trade_ref, trade_time, result_code, result_info, channel,
+                is_real_account_transfer, status, remark, created_by, version, reserved_field, action_ref
+            FROM
+                platform_accounts_records
+            WHERE
+                action_ref = #{actionRef}
+        ]]>
+        <if test="resultCode != null">
+            AND result_code = #{resultCode}
+        </if>
+        <if test="subAccountTableName != null">
+            AND sub_account_table_name = #{subAccountTableName}
+        </if>
+    </select>
+
+    <select id="getByCriteria" resultMap="PlatformAccountsRecord">
+        <![CDATA[
+            SELECT
+                id, real_account_type, bank_account_id, bank_card_num, sub_account_table_name, platform_sub_account_id, transfer_amount,
+                trade_action, trade_type, trade_ref, trade_time, result_code, result_info, channel,
+                is_real_account_transfer, status, remark, created_by, version, reserved_field, action_ref
+            FROM
+                platform_accounts_records
+            WHERE
+                1=1
+        ]]>
+        <if test="realAccountType != null">
+            AND real_account_type = #{realAccountType}
+        </if>
+        <if test="subAccountTableName != null">
+            AND sub_account_table_name = #{subAccountTableName}
+        </if>
+        <if test="platformSubAccountId != null">
+            AND platform_sub_account_id = #{platformSubAccountId}
+        </if>
+        <if test="tradeAction != null">
+            AND trade_action = #{tradeAction}
+        </if>
+        <if test="tradeType != null">
+            AND trade_type = #{tradeType}
+        </if>
+        <if test="resultCode != null">
+            AND result_code = #{resultCode}
+        </if>
+        <if test="tradeTime != null">
+            AND trade_time = #{tradeTime}
+        </if>
+        <if test="startDate != null">
+            AND trade_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND trade_time &lt;= #{endDate}
+        </if>
+        ORDER BY trade_time DESC
+    </select>
+
+    <select id="getUserAccountsDetails" resultMap="PlatformAccountsRecordDTO">
+        <![CDATA[
+            SELECT
+                par.id, par.real_account_type, par.bank_account_id, par.bank_card_num, par.sub_account_table_name, par.platform_sub_account_id, par.transfer_amount,
+                par.trade_action,par.trade_type, par.trade_ref, par.trade_time, par.result_code, par.result_info, par.channel,
+                par.is_real_account_transfer, par.status, par.remark, par.created_by, par.version, par.reserved_field, par.action_ref,ua.real_name
+            FROM
+                platform_accounts_records par
+            LEFT JOIN
+                user_accounts ua ON par.platform_sub_account_id = ua.id
+            WHERE
+               sub_account_table_name = #{subAccountTableName}   AND result_code = #{resultCode}
+        ]]>
+        <if test="startDate != null">
+            AND trade_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND trade_time &lt;= #{endDate}
+        </if>
+        ORDER BY trade_time DESC
+    </select>
+
+    <select id="getPersonRecord" resultMap="PlatformAccountsRecord">
+        <![CDATA[
+            SELECT
+                id, real_account_type, bank_account_id, bank_card_num, sub_account_table_name, platform_sub_account_id, transfer_amount,
+                trade_action, trade_type, trade_ref, trade_time, result_code, result_info, channel,
+                is_real_account_transfer, status, remark, created_by, version, reserved_field, action_ref
+            FROM
+                platform_accounts_records
+            WHERE sub_account_table_name = #{subAccountTableName} AND platform_sub_account_id = #{platformSubAccountId}
+        ]]>
+        <if test="startDate != null">
+            AND trade_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND trade_time &lt;= #{endDate}
+        </if>
+        <if test="tradeType != null">
+            AND trade_type = #{tradeType}
+        </if>
+        <if test="resultCode != null">
+            AND result_code = #{resultCode}
+        </if>
+        <![CDATA[
+          AND result_code <> '4444'
+        ORDER BY id DESC
+        ]]>
+    </select>
+
+    <select id="getWithdrawAudit" resultMap="WithdrawAudit">
+        <![CDATA[
+            SELECT
+                r.id, r.real_account_type, r.bank_account_id, r.bank_card_num, r.sub_account_table_name, r.platform_sub_account_id, r.transfer_amount,
+                r.trade_action, r.trade_type, r.trade_ref, r.trade_time, r.result_code, r.result_info, r.channel, r.is_real_account_transfer, r.status,
+                r.remark, r.created_by, r.version, r.reserved_field, u.real_name AS apply_name, u.total_amount AS total_amount, u.duein_amount AS duein_amount,
+                u.withdraw_frozen_amount AS withdraw_frozen_amount
+            FROM
+                platform_accounts_records r INNER JOIN user_accounts u ON r.platform_sub_account_id = u.id
+            WHERE r.sub_account_table_name = 'user_accounts' AND r.trade_type = '102'
+        ]]>
+        <if test="startDate != null">
+            AND r.trade_time &gt;= #{startDate}
+        </if>
+
+        <if test="endDate != null">
+            AND r.trade_time &lt;= #{endDate}
+        </if>
+        <if test="tradeRef != null and tradeRef != '' ">
+            AND r.trade_ref LIKE CONCAT (CONCAT('%',#{tradeRef}),'%') ESCAPE '/'
+        </if>
+        <if test="applyName != null and applyName != '' ">
+            AND u.real_name LIKE CONCAT (CONCAT('%',#{applyName}),'%') ESCAPE '/'
+        </if>
+        <if test="resultCode != null">
+            AND r.result_code = #{resultCode}
+        </if>
+        <![CDATA[
+          AND r.result_code <> '4444'
+        ORDER BY r.trade_time ASC
+        ]]>
+    </select>
+
+    <select id="getAuditWithdrawCount" resultType="java.lang.Integer">
+        <![CDATA[
+            SELECT
+              COUNT(id)
+            FROM
+              platform_accounts_records
+            WHERE
+              sub_account_table_name = 'user_accounts' AND trade_type = '102' AND result_code = #{resultCode}
+        ]]>
+    </select>
+
+    <select id="getByDate" resultMap="PlatformAccountsRecord">
+        <![CDATA[
+
+            SELECT
+                id, real_account_type, bank_account_id, bank_card_num, sub_account_table_name, platform_sub_account_id, transfer_amount,
+                trade_action, trade_type, trade_ref, trade_time, result_code, result_info, channel,
+                is_real_account_transfer, status, remark, created_by, version, reserved_field, action_ref
+            FROM
+                platform_accounts_records
+            WHERE
+                is_real_account_transfer =1
+            AND
+                real_account_type = #{realAccountType}
+            AND
+                result_code='0000'
+            AND
+                trade_time BETWEEN #{startDate} and #{endDate}
+            ORDER BY trade_time DESC
+
+        ]]>
+    </select>
+
+    <select id="getAccountIncomeAmount" resultType="java.math.BigDecimal">
+        <![CDATA[
+            SELECT SUM(transfer_amount) as income_amount
+            FROM platform_accounts_records
+            WHERE transfer_amount > 0
+            AND result_code='0000'
+        ]]>
+        <if test="subAccountTableName != null">
+            AND sub_account_table_name = #{subAccountTableName}
+        </if>
+        <if test="subAccountId != null">
+            AND platform_sub_account_id = #{subAccountId}
+        </if>
+        <if test="realAccountType != null">
+            AND real_account_type = #{realAccountType}
+        </if>;
+    </select>
+
+    <select id="getAccountPayoutAmount" resultType="java.math.BigDecimal">
+        <![CDATA[
+            SELECT SUM(transfer_amount) as income_amount
+            FROM platform_accounts_records
+            WHERE transfer_amount < 0
+            AND result_code='0000'
+             ]]>
+        <if test="subAccountTableName != null">
+            AND sub_account_table_name = #{subAccountTableName}
+        </if>
+        <if test="subAccountId != null">
+            AND platform_sub_account_id = #{subAccountId}
+        </if>
+        <if test="realAccountType != null">
+            AND real_account_type = #{realAccountType}
+        </if>;
+    </select>
+
+    <select id="getRealAccountIncomeAmount" resultType="java.math.BigDecimal">
+        <![CDATA[
+
+            SELECT
+                SUM(transfer_amount) as income_amount
+            FROM
+                platform_accounts_records
+            WHERE
+                is_real_account_transfer = 1
+            AND
+                transfer_amount > 0
+            AND
+                real_account_type = #{realAccountType}
+            AND
+				result_code='0000'
+		]]>
+            <if test="startDate != null">
+                AND
+                trade_time BETWEEN #{startDate} AND #{endDate}
+            </if>
+    </select>
+
+    <select id="getRealAccountPayoutAmount" resultType="java.math.BigDecimal">
+        <![CDATA[
+
+            SELECT
+                SUM(transfer_amount) as income_amount
+            FROM
+                platform_accounts_records
+            WHERE
+                is_real_account_transfer = 1
+            AND
+                transfer_amount < 0
+            AND
+                real_account_type = #{realAccountType}
+            AND
+				result_code='0000'
+         ]]>
+            <if test="startDate != null">
+                AND
+                trade_time BETWEEN #{startDate} AND #{endDate}
+            </if>
+    </select>
+
+    <select id="getRecordsAmountSum" resultType="java.math.BigDecimal">
+        <![CDATA[
+            SELECT
+                 SUM(transfer_amount)
+            FROM
+                platform_accounts_records
+            WHERE sub_account_table_name = #{subAccountTableName} AND platform_sub_account_id = #{platformSubAccountId}
+            AND trade_type = #{tradeType}  AND result_code = #{resultCode}
+        ]]>
+        <if test="startDate != null">
+            AND trade_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND trade_time &lt;= #{endDate}
+        </if>
+    </select>
+
+    <select id="getAccountIncomeStatistic" resultMap="AccountIncomeStatisticDTO">
+        <![CDATA[
+            select trade_type, SUM(transfer_amount) as transfer_amount
+            from platform_accounts_records
+            where result_code='0000'
+            and transfer_amount>0
+            ]]>
+            <if test="subAccountTableName != null">
+                AND sub_account_table_name = #{subAccountTableName}
+            </if>
+            <if test="realAccountType != null">
+                AND real_account_type = #{realAccountType}
+            </if>
+            GROUP BY trade_type;
+    </select>
+
+    <select id="getAccountPayoutStatistic" resultMap="AccountIncomeStatisticDTO">
+        <![CDATA[
+            select trade_type, SUM(transfer_amount) as transfer_amount
+            from platform_accounts_records
+            where result_code='0000'
+            and transfer_amount<0
+            ]]>
+        <if test="subAccountTableName != null">
+            AND sub_account_table_name = #{subAccountTableName}
+        </if>
+        <if test="realAccountType != null">
+            AND real_account_type = #{realAccountType}
+        </if>
+        GROUP BY trade_type;
+    </select>
+
+    <select id="getRecordsByTradeType" resultMap="PlatformAccountsRecordDTO">
+        <![CDATA[
+              SELECT
+                par.id, par.real_account_type, par.bank_account_id, par.bank_card_num, par.sub_account_table_name, par.platform_sub_account_id, par.transfer_amount,
+                par.trade_action, par.trade_sub_action,par.trade_type, par.trade_ref, par.trade_time,par.update_time, par.result_code, par.result_info, par.channel,
+                par.is_real_account_transfer, par.status, par.remark, par.created_by, par.version, par.reserved_field, par.action_ref,ua.real_name
+            FROM
+                platform_accounts_records par
+            LEFT JOIN
+                user_accounts ua ON par.platform_sub_account_id = ua.id
+            WHERE
+               trade_type = #{tradeType} AND sub_account_table_name = #{tableName}
+        ]]>
+        <if test="resultCode == null">
+            AND ( result_code = '0000'  OR result_code = '5550'  OR result_code = '5555' OR result_code = '5551' OR result_code = '5552'  OR result_code = '5553')
+        </if>
+        <if test="resultCode != null">
+            AND result_code = #{resultCode}
+        </if>
+        <if test="startDate != null">
+            AND trade_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND trade_time &lt;= #{endDate}
+        </if>
+        ORDER BY trade_time DESC
+    </select>
+
+    <select id="getProfitRecords" resultMap="PlatformAccountsRecordDTO">
+    <![CDATA[
+              SELECT
+                par.id, par.real_account_type, par.bank_account_id, par.bank_card_num, par.sub_account_table_name, par.platform_sub_account_id, par.transfer_amount,
+                par.trade_action,par.trade_type, par.trade_ref, par.trade_time, par.result_code, par.result_info, par.channel,
+                par.is_real_account_transfer, par.status, par.remark, par.created_by, par.version, par.reserved_field, par.action_ref
+            FROM
+                platform_accounts_records par
+            WHERE
+                sub_account_table_name = 'profit_accounts'  AND result_code = '0000' AND transfer_amount  > 0
+             ]]>
+            <if test="date != null">
+                AND date_format(`trade_time`,'%Y%m')=  #{date}
+            </if>
+          ORDER BY trade_time DESC
+    </select>
+
+    <select id="getProfitRecordsByTime" resultMap="PlatformAccountsRecordDTO">
+        <![CDATA[
+        SELECT trade_type , date_format(`trade_time`,'%Y%m') "yearMonth", SUM(transfer_amount) "totalAmount"
+        FROM platform_accounts_records
+        WHERE sub_account_table_name = #{tableName}  AND result_code = '0000' AND date_format(`trade_time`,'%Y') =  #{year}
+         ]]>
+         <if test="tradeType != null">
+            AND trade_type = #{tradeType}
+        </if>
+        GROUP BY date_format(`trade_time`,'%Y%m'),trade_type ORDER BY yearMonth
+
+    </select>
+
+    <select id="getSumTransferAmountByCriteria" resultType="java.math.BigDecimal">
+        <![CDATA[
+            SELECT SUM(transfer_amount)
+            FROM platform_accounts_records
+            WHERE result_code='0000'
+             ]]>
+        <if test="subAccountTableName != null">
+            AND sub_account_table_name = #{subAccountTableName}
+        </if>
+        <if test="platformSubAccountId != null">
+            AND platform_sub_account_id = #{platformSubAccountId}
+        </if>
+        <if test="realAccountType != null">
+            AND trade_type = #{realAccountType}
+        </if>
+    </select>
+
+    <select id="sumDepositOrWithdrawAmount" resultType="java.math.BigDecimal">
+        SELECT
+          SUM(transfer_amount) AS transfer_amount
+        FROM
+          platform_accounts_records
+        WHERE
+          result_code = '0000'
+          AND DATE_FORMAT(`trade_time`, '%Y-%m-%d') =  #{tradeTime}
+          <if test="channel != null">
+            AND channel = #{channel}
+          </if>
+          <if test="subAccountTableName != null">
+            AND sub_account_table_name = #{subAccountTableName}
+          </if>
+          <if test="tradeType != null">
+            AND trade_type = #{tradeType}
+          </if>
+    </select>
+
+    <select id="getThirdSummaryByCriteria" resultMap="PlatformAccountsRecord">
+        SELECT
+            id, real_account_type, bank_account_id, bank_card_num, sub_account_table_name, platform_sub_account_id, transfer_amount,
+            trade_action, trade_type, trade_ref, trade_time, result_code, result_info, channel,
+            is_real_account_transfer, status, remark, created_by, version, reserved_field, action_ref
+        FROM
+          platform_accounts_records
+        WHERE
+          result_code = '0000'
+          AND DATE_FORMAT(`trade_time`, '%Y-%m-%d') =  #{tradeTime}
+          <if test="subAccountTableName != null">
+            AND sub_account_table_name = #{subAccountTableName}
+          </if>
+          <if test="tradeAction != null">
+            AND trade_action = #{tradeAction}
+          </if>
+          <if test="tradeType != null">
+            AND trade_type = #{tradeType}
+          </if>
+        <if test="platformSubAccountId != null">
+            AND platform_sub_account_id = #{platformSubAccountId}
+        </if>
+    </select>
+
+    <select id="getThirdSummary" resultMap="ThirdSummary">
+        SELECT
+            'y_deposit' AS type,
+            DATE_FORMAT(trade_time, '%Y-%m-%d') AS trade_time,
+            SUM(transfer_amount) AS transfer_amount
+        FROM
+            platform_accounts_records
+        WHERE
+            result_code = '0000'
+        AND channel = '1'
+        AND sub_account_table_name = 'user_accounts'
+        AND trade_type = '101'
+        <if test="startDate != null">
+            AND trade_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND trade_time &lt;= #{endDate}
+        </if>
+        GROUP BY
+            DATE_FORMAT(trade_time, '%Y-%m-%d')
+        UNION
+            SELECT
+                'y_withdraw' AS type,
+                DATE_FORMAT(trade_time, '%Y-%m-%d') AS trade_time,
+                SUM(transfer_amount) AS transfer_amount
+            FROM
+                platform_accounts_records
+            WHERE
+                result_code = '0000'
+            AND channel = '1'
+            AND sub_account_table_name = 'user_accounts'
+            AND trade_type = '102'
+            <if test="startDate != null">
+                AND trade_time &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND trade_time &lt;= #{endDate}
+            </if>
+            GROUP BY
+                DATE_FORMAT(trade_time, '%Y-%m-%d')
+        UNION
+            SELECT
+                'c_deposit' AS type,
+                DATE_FORMAT(trade_time, '%Y-%m-%d') AS trade_time,
+                SUM(transfer_amount) AS transfer_amount
+            FROM
+                platform_accounts_records
+            WHERE
+                result_code = '0000'
+            AND channel = '2'
+            AND sub_account_table_name = 'user_accounts'
+            AND trade_type = '101'
+            <if test="startDate != null">
+                AND trade_time &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND trade_time &lt;= #{endDate}
+            </if>
+            GROUP BY
+                DATE_FORMAT(trade_time, '%Y-%m-%d')
+        UNION
+            SELECT
+                'c_withdraw' AS type,
+                DATE_FORMAT(trade_time, '%Y-%m-%d') AS trade_time,
+                SUM(transfer_amount) AS transfer_amount
+            FROM
+                platform_accounts_records
+            WHERE
+                result_code = '0000'
+            AND channel = '2'
+            AND sub_account_table_name = 'user_accounts'
+            AND trade_type = '102'
+            <if test="startDate != null">
+                AND trade_time &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND trade_time &lt;= #{endDate}
+            </if>
+            GROUP BY
+                DATE_FORMAT(trade_time, '%Y-%m-%d')
+        UNION
+            SELECT
+            'total_deposit' AS type,
+            DATE_FORMAT(trade_time, '%Y-%m-%d') AS trade_time,
+            SUM(transfer_amount) AS transfer_amount
+            FROM
+            platform_accounts_records
+            WHERE
+            result_code = '0000'
+            AND sub_account_table_name = 'user_accounts'
+            AND trade_type = '101'
+            <if test="startDate != null">
+                AND trade_time &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND trade_time &lt;= #{endDate}
+            </if>
+            GROUP BY
+            DATE_FORMAT(trade_time, '%Y-%m-%d')
+        UNION
+            SELECT
+            'total_withdraw' AS type,
+            DATE_FORMAT(trade_time, '%Y-%m-%d') AS trade_time,
+            SUM(transfer_amount) AS transfer_amount
+            FROM
+            platform_accounts_records
+            WHERE
+            result_code = '0000'
+            AND sub_account_table_name = 'user_accounts'
+            AND trade_type = '102'
+            <if test="startDate != null">
+                AND trade_time &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND trade_time &lt;= #{endDate}
+            </if>
+            GROUP BY
+            DATE_FORMAT(trade_time, '%Y-%m-%d')
+        UNION
+            SELECT
+                'invest' AS type,
+                DATE_FORMAT(trade_time, '%Y-%m-%d') AS trade_time,
+                SUM(transfer_amount) AS transfer_amount
+            FROM
+                platform_accounts_records
+            WHERE
+                result_code = '0000'
+            AND sub_account_table_name = 'user_accounts'
+            AND trade_action = '5'
+            AND trade_type = '103'
+            <if test="startDate != null">
+                AND trade_time &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND trade_time &lt;= #{endDate}
+            </if>
+            GROUP BY
+                DATE_FORMAT(trade_time, '%Y-%m-%d')
+        UNION
+            SELECT
+                'full_fill' AS type,
+                DATE_FORMAT(trade_time, '%Y-%m-%d') AS trade_time,
+                SUM(transfer_amount) AS transfer_amount
+            FROM
+                platform_accounts_records
+            WHERE
+                result_code = '0000'
+            AND sub_account_table_name = 'financing_accounts'
+            AND trade_action = '6'
+            <if test="startDate != null">
+                AND trade_time &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND trade_time &lt;= #{endDate}
+            </if>
+            GROUP BY
+                DATE_FORMAT(trade_time, '%Y-%m-%d')
+        UNION
+            SELECT
+                'payback' AS type,
+                DATE_FORMAT(trade_time, '%Y-%m-%d') AS trade_time,
+                SUM(transfer_amount) AS transfer_amount
+            FROM
+                platform_accounts_records
+            WHERE
+                result_code = '0000'
+            AND sub_account_table_name = 'user_accounts'
+            AND trade_action in('9','10')
+            <if test="startDate != null">
+                AND trade_time &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND trade_time &lt;= #{endDate}
+            </if>
+            GROUP BY
+                DATE_FORMAT(trade_time, '%Y-%m-%d')
+    </select>
+
+    <select id="getProcessCount" resultType="java.lang.Integer">
+        SELECT
+            COUNT(id)
+        FROM
+            platform_accounts_records
+        WHERE
+            result_code IN ('5551','5552','5555')
+        AND trade_action IN ('1', '2')
+        AND platform_sub_account_id = #{id}
+    </select>
+
+    <select id="getStartDate" resultType="string">
+        SELECT DATE_FORMAT(`trade_time`,'%Y-%m-%d')
+        FROM platform_accounts_records
+        ORDER BY trade_time ASC LIMIT 1
+    </select>
+
+    <sql id="All_Column">
+        id, real_account_type, bank_account_id, bank_card_num, sub_account_table_name, platform_sub_account_id,transfer_amount,
+        trade_action, trade_type, trade_ref, trade_time, result_code, result_info, channel,
+        is_real_account_transfer,is_sub_account_update, status, remark, created_by, version, reserved_field, action_ref
+    </sql>
+    <sql id="Query_Params">
+        <if test="realAccountType != null">
+            AND real_account_type = #{realAccountType}
+        </if>
+        <if test="subAccountTableName != null">
+            AND sub_account_table_name = #{subAccountTableName}
+        </if>
+        <if test="platformSubAccountId != null">
+            AND platform_sub_account_id = #{platformSubAccountId}
+        </if>
+        <if test="tradeAction != null">
+            AND trade_action = #{tradeAction}
+        </if>
+        <if test="tradeType != null">
+            AND trade_type = #{tradeType}
+        </if>
+        <if test="resultCode != null">
+            AND result_code = #{resultCode}
+        </if>
+        <if test="tradeStartDate != null">
+            AND trade_time &gt;= #{tradeStartDate}
+        </if>
+        <if test="tradeEndDate != null">
+            AND trade_time &lt; #{tradeEndDate}
+        </if>
+    </sql>
+
+    <select id="query" resultMap="PlatformAccountsRecord">
+        SELECT
+        <include refid="All_Column"/>
+        FROM
+        platform_accounts_records
+        <where>
+            <include refid="Query_Params"/>
+        </where>
+        ORDER BY trade_time DESC
+    </select>
+
+</mapper>

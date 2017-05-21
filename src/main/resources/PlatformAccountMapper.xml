@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.fero.backend.payment.dao.PlatformMajorAccountDAO">
+    <resultMap id="PlatformMajorAccount" type="cn.com.fero.commons.entity.accounts.PlatformMajorAccount" autoMapping="true">
+        <id column="id" property="id"/>
+        <result column="platform_id" property="platformId"/>
+        <result column="bank_account_id" property="bankAccountId"/>
+        <result column="user_account_amount" property="userAccountAmount"/>
+        <result column="financing_account_amount" property="financingAccountAmount"/>
+        <result column="pledge_account_amount" property="pledgeAccountAmount"/>
+        <result column="loan_account_amount" property="loanAccountAmount"/>
+        <result column="compensate_debt_account_amount" property="compensateDebtAccountAmount"/>
+        <result column="compensatory_account_amount" property="compensatoryAccountAmount"/>
+        <result column="petty_loan_amount" property="pettyLoanAmount"/>
+        <result column="debt_account_amount" property="debtAccountAmount"/>
+        <result column="profit_account_amount" property="profitAccountAmount"/>
+        <result column="marketing_account_amount" property="marketingAccountAmount"/>
+        <result column="financing_marketing_account_amount" property="financingMarketingAccountAmount"/>
+        <result column="pay_password" property="payPassword"/>
+        <result column="pay_password_salt" property="payPasswordSalt"/>
+        <result column="status" property="status"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="updated_by" property="updatedBy"/>
+        <result column="version" property="version"/>
+        <result column="reserved_field1" property="reservedField1"/>
+        <result column="reserved_field2" property="reservedField2"/>
+        <result column="reserved_field3" property="reservedField3"/>
+    </resultMap>
+
+    <update id="update">
+        <![CDATA[
+            UPDATE  platform_major_accounts
+            SET
+              user_account_amount = #{userAccountAmount},
+              financing_account_amount = #{financingAccountAmount},
+              pledge_account_amount = #{pledgeAccountAmount},
+              loan_account_amount = #{loanAccountAmount},
+              compensate_debt_account_amount = #{compensateDebtAccountAmount},
+              compensatory_account_amount = #{compensatoryAccountAmount},
+              petty_loan_amount = #{pettyLoanAmount},
+              debt_account_amount = #{debtAccountAmount},
+              profit_account_amount = #{profitAccountAmount},
+              marketing_account_amount = #{marketingAccountAmount},
+              financing_marketing_account_amount = #{financingMarketingAccountAmount},
+              updated_at = now(), updated_by = #{updatedBy}, version = #{version} + 1
+            WHERE id = #{id} AND version = #{version}
+        ]]>
+    </update>
+
+    <select id="getById" resultMap="PlatformMajorAccount">
+        <![CDATA[
+            SELECT
+              id,platform_id, bank_account_id, user_account_amount, financing_account_amount, pledge_account_amount, loan_account_amount,
+              compensate_debt_account_amount, compensatory_account_amount, petty_loan_amount, debt_account_amount,
+              profit_account_amount, marketing_account_amount, financing_marketing_account_amount, pay_password,
+              pay_password_salt, status, updated_at, updated_by, version, reserved_field1, reserved_field2, reserved_field3
+            FROM platform_major_accounts
+            WHERE id = #{id}
+        ]]>
+    </select>
+
+    <select id="getAll" resultMap="PlatformMajorAccount">
+        <![CDATA[
+            SELECT
+              id, platform_id, bank_account_id, user_account_amount, financing_account_amount, pledge_account_amount, loan_account_amount,
+              compensate_debt_account_amount, compensatory_account_amount, petty_loan_amount, debt_account_amount,
+              profit_account_amount, marketing_account_amount, financing_marketing_account_amount, pay_password,
+              pay_password_salt, status, updated_at, updated_by, version, reserved_field1, reserved_field2, reserved_field3
+            FROM platform_major_accounts
+        ]]>
+    </select>
+</mapper>
