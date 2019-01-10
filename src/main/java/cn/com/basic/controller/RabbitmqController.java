@@ -19,6 +19,7 @@ public class RabbitmqController {
     @RequestMapping(value = "/mq", method = RequestMethod.GET)
     public String helloWorld1()  {
 
-        return "";
+        return "hello world!!, hahaha, worderful!!";
+
     }
 }
