@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.2//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.basic.dao.HelloWorldDao">
+    <resultMap id="HelloWorldDto" type="cn.com.basic.dto.HelloWorldDto" autoMapping="true">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+
+    </resultMap>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[
+            INSERT INTO hello(
+                name
+            )
+            VALUES (
+                #{name}
+            )
+        ]]>
+    </insert>
+
+    <select id="query" resultMap="HelloWorldDto">
+        <![CDATA[
+            SELECT
+               *
+            FROM hello
+            WHERE id = #{id}
+        ]]>
+    </select>
+    <select id="getAll" resultMap="HelloWorldDto">
+        <![CDATA[
+            SELECT
+               id ,name,  CONCAT("客户---",CAST(id AS CHAR), "---",name) as sex
+            FROM hello
+        ]]>
+    </select>
+
+    <select id="queryList" resultMap="HelloWorldDto">
+        select
+        *
+        from hello where  name =  #{name} and id in
+        <foreach item="item" index="index" collection="ids"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <update id="updateList"  parameterType="java.util.List" >
+
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            update hello
+            <set>
+                name= #{item.name}
+            </set>
+            where id = #{item.id}
+        </foreach>
+
+    </update>
+
+    <update id="update"   >
+            update hello
+            <set>
+                name=#{name}
+            </set>
+            where id = #{id}
+    </update>
+</mapper>
