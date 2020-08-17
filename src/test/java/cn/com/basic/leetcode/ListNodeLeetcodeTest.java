@@ -14,6 +14,80 @@ public class ListNodeLeetcodeTest {
     }
 
     /**
+     * 206. 反转链表
+     *
+     * @param head
+     * @return
+     */
+    public ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        ListNode current = head;
+        while (current != null) {
+            ListNode tem = current.next;
+            current.next = prev;
+            prev = current;
+            current = tem;//别漏了这一句！！
+        }
+        return prev;  //return current;  返回的不是current，而是pre
+    }
+
+    /**
+     * 21. 合并两个有序链表
+     * 实现：遍历、递归
+     *
+     * @param l1
+     * @param l2
+     * @return
+     */
+    @Test
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        return mergeTwoLists_foreach(l1, l2);
+    }
+
+    //遍历
+    public ListNode mergeTwoLists_foreach(ListNode l1, ListNode l2) {
+        //新建一个哨兵节点
+        ListNode preHead = new ListNode(-1);
+        ListNode pre = preHead; // ListNode pre = null;
+        while (!(l1 == null || l2 == null)) {
+            if (l1.val <= l2.val) {
+                pre.next = l1;
+                l1 = l1.next;
+            } else {
+                pre.next = l2;
+                l2 = l2.next;
+            }
+            pre = pre.next;
+        }
+        //别漏了！！ 合并后 l1 和 l2 最多只有一个还未被合并完，我们直接将链表末尾指向未合并完的链表即可
+        pre.next = l1 == null ? l2 : l1;
+        return preHead.next;
+    }
+
+    //递归
+    public ListNode mergeTwoLists_recursion(ListNode l1, ListNode l2) {
+        // 终止条件：两条链表分别名为 l1 和 l2，当 l1 为空或 l2 为空时结束
+        if (l1 == null) {
+            return l2;
+        }
+        if (l2 == null) {
+            return l1;
+        }
+        //本级递归内容：如果 l1 的 val 值更小，则将 l1.next 与排序好的链表头相接，l2 同理
+        if (l1.val < l2.val) {
+            //指向小的值
+            l1.next = mergeTwoLists(l1.next, l2);
+            return l1;
+        } else {
+            //指向小的值
+            l2.next = mergeTwoLists(l1, l2.next);
+            return l2;
+        }
+        //返回值：每一层调用都返回排序好的链表头
+
+    }
+
+    /**
      * 2. 两数相加
      * <p>
      * 题意：

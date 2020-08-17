@@ -2,6 +2,10 @@ package cn.com.basic.leetcode;
 
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
+
 /**
  * Created by zhaijiayi on 2020/5/6.
  */
@@ -11,6 +15,108 @@ public class CharLeetcodeTest {
     @Test
     public void test() throws Exception {
 
+    }
+
+    /**
+     * 3. 无重复字符的最长子串
+     * length = current-left
+     * 用map记录value2index
+     *
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring(String s) {
+        int res = 0;
+        if (s == null) {
+            return res;
+        }
+        int leftIndex = 0;
+        Map<Character, Integer> value2key = new HashMap<>();
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            //判断存在，移动完left指针，取当前index最大的
+            if (value2key.containsKey(chars[i])) {
+                //取重复的后一个index
+                leftIndex = Math.max(value2key.get(chars[i]) + 1, leftIndex);
+            }
+            value2key.put(chars[i], i);
+            res = Math.max(res, i - leftIndex + 1);
+        }
+        return res;
+    }
+
+    /**
+     * 20. 有效的括号
+     * <p>
+     * 栈
+     *
+     * @param s
+     * @return
+     */
+    public boolean isValid(String s) {
+        //将匹配的映射关系存起来,且key设为后符号
+        Map<Character, Character> map = new HashMap();
+        map.put(')', '(');
+        map.put('}', '{');
+        map.put(']', '[');
+        Stack stack = new Stack();
+        for (Character c : s.toCharArray()) {
+            if (stack.isEmpty() || !map.containsKey(c)) {
+                stack.push(c);
+                continue;
+            }
+            if (stack.pop() != map.get(c)) {
+                return false;
+            }
+        }
+        return stack.isEmpty();
+    }
+
+    /**
+     * 33. 搜索旋转排序数组
+     * 思路：二分搜索
+     * 时间复杂度：O(logn)
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int search(int[] nums, int target) {
+        int res = -1;
+        //边界判断
+        if (nums == null || nums.length == 0) return res;
+        if (nums.length == 1) return nums[0] == target ? 0 : res;
+        //设定左右两个指着
+        int l = 0;
+        int r = nums.length - 1;
+        //判断条件包含=
+        while (l <= r) {
+            //中间节点索引计算
+            int mid = l + ((l - r) / 2);
+            //边界当中间节点命中
+            if (nums[mid] == target) return mid;
+            //0到中间是升序
+            if (nums[l] <= nums[mid]) {
+                //target在区间内，将右指针指向中间结点前一个
+                if (nums[0] <= target && target < nums[mid]) {
+                    r = mid - 1;
+                    //target不在区间内，移动左指针
+                } else {
+                    l = mid + 1;
+
+                }
+                //旋转的节点在此区间内中间到结尾  假如这个区间最大值78456
+            } else {
+                if (nums[mid] < target && target < nums[r]) {
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
+                    //target不在区间内，移动左指针
+                }
+            }
+
+        }
+        return res;
     }
 
     /**

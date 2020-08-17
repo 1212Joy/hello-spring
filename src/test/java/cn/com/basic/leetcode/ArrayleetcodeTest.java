@@ -2,9 +2,7 @@ package cn.com.basic.leetcode;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by zhaijiayi on 2020/5/6.
@@ -15,6 +13,123 @@ public class ArrayleetcodeTest {
     @Test
     public void test() throws Exception {
 
+    }
+
+    /**
+     * 1. 两数之和
+     * <p>
+     * 给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> value2index = new HashMap<>();
+        //新数组声明
+        int[] resArray = new int[2];
+        for (int i = 0; i < nums.length; i++) {
+            //判断当前这个值和map中是否存在相加=target
+            if (value2index.containsKey(target - nums[i])) {
+                resArray[0] = value2index.get(target - nums[i]);
+                resArray[1] = i;
+                return resArray;
+            }
+            //还没找到，就每次都value存在key中，value记录索引（返回的是索引）
+            value2index.put(nums[i], i);
+        }
+        return resArray;
+    }
+
+    /**
+     * 15. 三数之和
+     * 排个序，然后首位指针
+     *
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList();
+        for (int i = 0; i < nums.length; i++) {
+            int target = -nums[i];
+            int l = i + 1;
+            int r = nums.length - 1;
+            if (nums[i] > 0)
+                break;
+            //nums[i] != nums[i - 1]  两个重复则返回的为重复值
+            if (i == 0 || nums[i] != nums[i - 1]) {
+                while (l < r) {
+                    //三数相加为0
+                    if (nums[l] + nums[r] == target) {
+                        res.add(Arrays.asList(nums[i], nums[l], nums[r]));
+                        //相等的指针要跳过
+                        while (l < r && nums[l] == nums[l + 1]) l++;//如果两个值相等，左指针向后移，跳过这个
+                        while (l < r && nums[r] == nums[r - 1]) r--;//如果两个值相等，右指针向前移，跳过这个
+                        //左右指针移动
+                        l++;
+                        r--;
+                        //小于0，移动左指针
+                    } else if (nums[l] + nums[r] < target)
+                        l++;
+                        //大于0，移动右指针
+                    else
+                        r--;
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 11. 盛最多水的容器
+     * 双指针
+     * 容量=两个指针指向的数字中较小值∗指针之间的距离
+     */
+    @Test
+    public int maxArea(int[] height) {
+        //遍历数组，记录每次最大的结果
+        int res = 0;
+        //首位两个指针
+        int l = 0;
+        int r = height.length - 1;
+        while (l < r) {
+            int area = Math.min(height[l], height[r]) * (r - l);
+            res = Math.max(area, res);
+            //如果左右两个值比较，l值<r值，则移动左指针，否则移动右指针
+            if (height[l] < height[r]) {
+                l++;
+            } else {
+                r--;
+            }
+        }
+        return res;
+    }
+
+
+    /**
+     * 121. 买卖股票的最佳时机
+     * 题目：整个过程最多一笔交易
+     * todo 原因解释：
+     * 假如计划在第 i 天卖出股票，那么最大利润的差值一定是在[0, i-1] 之间选最低点买入；
+     * 所以遍历数组，依次求每个卖出时机的的最大差值，再从中取最大值。
+     * 时间复杂度：O(n)O(n)，只需要遍历一次。
+     * 空间复杂度：O(1)O(1)，只使用了常数个变量。
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit(int[] prices) {
+        //初始化设置一个最大值
+        int subPrice = Integer.MAX_VALUE;
+        int resProfit = 0;
+        for (int price : prices) {
+            if (price < subPrice)
+                subPrice = price;
+            else if (price - subPrice > resProfit)
+                resProfit = price - subPrice;
+        }
+        return resProfit;
     }
 
     /**
@@ -112,7 +227,7 @@ public class ArrayleetcodeTest {
      * todo 二维数组
      * 思路：先排序，再用栈保存，每次取最后一个元素进行比较
      *
-     * @param intervals  int[n][0]
+     * @param intervals int[n][0]
      * @return
      */
     public int[][] merge(int[][] intervals) {
