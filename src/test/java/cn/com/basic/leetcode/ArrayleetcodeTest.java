@@ -256,4 +256,59 @@ public class ArrayleetcodeTest {
         //!!!方法转换
         return res.toArray(new int[res.size()][]);
     }
+
+
+    /**
+     * todo  322. 零钱兑换  动态规划
+     * 凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。
+     * 自己的思路：先将数组排序，尽量用大面额的去补充
+     * 解题：
+     * 方法1-这就是背包问题啊啊啊，动态规划、最优子结构
+     * 方法2-广度优先
+     *
+     * @param coins
+     * @param amount
+     * @return
+     */
+    public int coinChange(int[] coins, int amount) {
+        return coinChange_1(coins, amount);
+    }
+
+    /**
+     * 背包问题
+     *
+     * @param coins
+     * @param amount
+     * @return
+     */
+    public int coinChange_1(int[] coins, int amount) {
+        //为啥是这是一个二维数组
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, amount + 1);
+        dp[0] = 0;
+
+        for (int coin : coins) {
+            for (int i = coin; i <= amount; i++) {
+                dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+            }
+        }
+
+        if (dp[amount] == amount + 1) {
+            dp[amount] = -1;
+        }
+        return dp[amount];
+    }
+
+    /**
+     * todo 广度优先
+     * 是一个图结构的
+     * 因为是「图」，有回路，所以要设计一个 visited 数组。
+     *
+     * @param coins
+     * @param amount
+     * @return
+     */
+    public int coinChange_2(int[] coins, int amount) {
+        return 0;
+    }
 }
