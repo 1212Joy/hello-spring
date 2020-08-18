@@ -66,7 +66,7 @@ public class TreeLeetcodeTest {
         return res;
     }
 
-    public List<Integer> rightSideView_dfs(TreeNode root) {
+    private List<Integer> rightSideView_dfs(TreeNode root) {
         res = new ArrayList<>();
         // ！！！从根节点开始访问，根节点深度是0
         dfs(root, 0);
@@ -86,6 +86,39 @@ public class TreeLeetcodeTest {
         dfs(root.left, depth);
     }
 
+    /**
+     * 102. 二叉树的层序遍历
+     * 广度优先
+     *
+     * @param root
+     * @return
+     */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) return res;
+        //LinkedList是一种双端队列,和Deque有啥区别
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            List<Integer> currentLevel = new ArrayList<>();
+            Integer currentLevelSize = queue.size();
+            for (int i = 0; i < currentLevelSize; i++) {
+                //取出第一层元素，将左右节点放到当前队列中
+                TreeNode current = queue.poll();
+                currentLevel.add(current.val);
+                if (current.left != null) {
+                    queue.add(current.left);
+                }
+                if (current.right != null) {
+                    queue.add(current.right);
+                }
+            }
+            res.add(currentLevel);
+        }
+
+        return res;
+    }
 
 }
 
@@ -96,5 +129,6 @@ class TreeNode {
 
     TreeNode(int x) {
         val = x;
+
     }
 }

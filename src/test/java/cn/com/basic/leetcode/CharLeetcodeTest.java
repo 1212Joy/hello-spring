@@ -2,9 +2,7 @@ package cn.com.basic.leetcode;
 
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by zhaijiayi on 2020/5/6.
@@ -227,4 +225,130 @@ public class CharLeetcodeTest {
         }
         return s.substring(begin, begin + maxLen);
     }
+
+    /**
+     * todo 93-复原IP地址  (没明白)
+     * 方法1-三层循环+剪枝
+     * 方法2-思路+剪枝：回溯算法
+     * 分析：
+     *
+     * @param s
+     * @return
+     */
+    public List<String> restoreIpAddresses(String s) {
+        return restoreIpAddresses_2(s);
+    }
+
+
+    public List<String> restoreIpAddresses_1(String s) {
+        List<String> answer = new ArrayList<String>();
+        if (s.length() > 12 || s.length() < 4)
+            return answer;
+        StringBuffer ip = new StringBuffer();
+        for (int a = 1; a < 4; a++) {
+            for (int b = 1; b < 4; b++) {
+                for (int c = 1; c < 4; c++) {
+                    int d = s.length() - a - b - c;
+                    if (d > 0 && d < 4) {
+                        int l1 = Integer.parseInt(s.substring(0, a));
+                        int l2 = Integer.parseInt(s.substring(a, a + b));
+                        int l3 = Integer.parseInt(s.substring(a + b, a + b + c));
+                        int l4 = Integer.parseInt(s.substring(a + b + c));
+                        if (l1 <= 255 && l2 <= 255 && l3 <= 255 && l4 <= 255) {
+                            ip.append(l1);
+                            ip.append(".");
+                            ip.append(l2);
+                            ip.append(".");
+                            ip.append(l3);
+                            ip.append(".");
+                            ip.append(l4);
+                            if (ip.length() == s.length() + 3)
+                                answer.add(ip.toString());
+                        }
+                        //ip清空重新来
+                        ip.delete(0, ip.length());
+                    }
+                }
+            }
+        }
+        return answer;
+    }
+
+
+    private boolean f(String s) {
+        if (s.length() == 0) return false;
+        if (s.length() == 1) return true;
+        if (s.length() > 3) return false;
+        if (s.charAt(0) == '0') return false;
+        if (Integer.parseInt(s) <= 255) return true;
+        return false;
+    }
+
+    List<String> results = new ArrayList<>();
+
+    public List<String> restoreIpAddresses_2(String s) {
+        backtrack(s, new ArrayList<>(), 0);
+        return results;
+    }
+
+    private void backtrack(String s, ArrayList<String> segment, int index) {
+        if (segment.size() == 4 && index == s.length()) {
+            results.add(String.join(".", segment));
+            return;
+        }
+        for (int i = 1; i <= 3; i++) {
+            if (index + i > s.length() || segment.size() > 4) break;
+            String curr = s.substring(index, index + i);
+            if ((i == 3 && Integer.parseInt(curr) > 255) || (curr.startsWith("0") && curr.length() > 1)) continue;
+            segment.add(curr);
+            backtrack(s, segment, index + i);
+            segment.remove(segment.size() - 1);
+        }
+    }
+
+    /**
+     * 200. 岛屿数量
+     * 题意：
+     * 给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+     * 每座岛屿只能由水平和/或竖直方向上相邻的陆地连接而成
+     * 解题:
+     * 1.网格结构的 DFS 遍历
+     * 扫描整个二维网格。如果一个位置为 1，则以其为起始节点开始进行深度优先搜索。在深度优先搜索的过程中，每个搜索到的 1 都会被重新标记为 0。
+     * 2.广度优先
+     *
+     * @param grid
+     * @return
+     */
+    public int numIslands(char[][] grid) {
+        return numIslands_dfs(grid);
+    }
+
+    private int numIslands_dfs(char[][] grid) {
+        int count = 0;
+        for (int i = 0; i < grid.length; i++) {
+            //这个二维数组为啥j < grid[0].length
+            for (int j = 0; j < grid[0].length; j++) {
+                //如果遍历到1，就进行dfs
+                if (grid[i][j] == '1') {
+                    dfs(grid, i, j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    private void dfs(char[][] grid, int i, int j) {
+        //到了网格边界或者碰到了0就结束
+        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] == '0') return;
+        //将1重设为0
+        grid[i][j] = '0';
+        //对这个1的上下左右4个方向进行dfs操作
+        dfs(grid, i + 1, j);
+        dfs(grid, i, j + 1);
+        dfs(grid, i - 1, j);
+        dfs(grid, i, j - 1);
+    }
+
+
 }

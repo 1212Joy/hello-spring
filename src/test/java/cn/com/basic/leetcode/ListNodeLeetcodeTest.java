@@ -15,6 +15,8 @@ public class ListNodeLeetcodeTest {
 
     /**
      * 206. 反转链表
+     * 方法1 - 迭代
+     * 方法2 - 递归
      *
      * @param head
      * @return
@@ -30,6 +32,53 @@ public class ListNodeLeetcodeTest {
         }
         return prev;  //return current;  返回的不是current，而是pre
     }
+
+    /**
+     * 92. 反转链表 II
+     * 部分链表反转
+     * 反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。
+     * 1 ≤ m ≤ n ≤ 链表长度。
+     * 解题：
+     * * 方法1 - 迭代
+     * <p>
+     * 时间复杂度: O(N)O(N)。考虑包含 NN 个结点的链表。对每个节点最多会处理
+     * （第 nn 个结点之后的结点不处理）。
+     * 空间复杂度: O(1)O(1)。我们仅仅在原有链表的基础上调整了一些指针，只使用了 O(1)O(1) 的额外存储空间来获得结果。
+     * <p>
+     * <p>
+     * * 方法2 - 递归
+     *
+     * @param head
+     * @param m
+     * @param n
+     * @return
+     */
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        ListNode dummyHead = new ListNode(0);
+        dummyHead.next = head;
+
+        ListNode g = dummyHead;
+        ListNode p = dummyHead.next;
+
+        int step = 0;
+
+        while (step < m - 1) {
+            g = g.next;
+            p = p.next;
+            step++;
+        }
+
+        for (int i = 0; i < n - m; i++) {
+            ListNode removed = p.next;
+            p.next = p.next.next;
+
+            removed.next = g.next;
+            g.next = removed;
+        }
+
+        return dummyHead.next;
+    }
+
 
     /**
      * 21. 合并两个有序链表
@@ -140,6 +189,97 @@ public class ListNodeLeetcodeTest {
         }
         return pre.next;
 
+    }
+
+    /**
+     * 148. 排序链表
+     * todo 把双路归并和 cut 断链的代码
+     * 想到二分法，从而联想到归并排序
+     * <p>
+     * 在 O(n log n) 时间复杂度和常数级空间复杂度下，对链表进行排序。
+     * 解题：
+     * 1.归并排序（递归法）
+     * 2.归并排序（从底至顶直接合并）
+     *
+     * @param head
+     * @return
+     */
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null)
+            return head;
+        ListNode fast = head.next, slow = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode tmp = slow.next;
+        slow.next = null;
+        ListNode left = sortList(head);
+        ListNode right = sortList(tmp);
+        ListNode h = new ListNode(0);
+        ListNode res = h;
+        while (left != null && right != null) {
+            if (left.val < right.val) {
+                h.next = left;
+                left = left.next;
+            } else {
+                h.next = right;
+                right = right.next;
+            }
+            h = h.next;
+        }
+        h.next = left != null ? left : right;
+        return res.next;
+    }
+
+    /**
+     * 19. 删除链表的倒数第N个节点
+     * 解题：
+     * 两个指针、添加一个哨兵
+     *
+     * @param head
+     * @param n
+     * @return
+     */
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode preHead = new ListNode(-1);
+        preHead.next = head;
+        ListNode slow = preHead;
+        ListNode fast = preHead;//n最小是0，所以从哨兵结点开始
+        for (int i = 0; i <= n; i++) {//<=n
+            fast = fast.next;
+        }
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        //倒数第n-1个结点=当前slow
+        ListNode beforeNNode = slow;
+        beforeNNode.next = slow.next.next;//两个next
+        return preHead.next;
+    }
+
+    /**
+     * 24. 两两交换链表中的节点
+     * 递归
+     *
+     * @param head
+     * @return
+     */
+    public ListNode swapPairs(ListNode head) {
+
+        //停止退出条件
+        if (head == null || head.next == null) {
+            return head;
+        }
+        //调用递归，传递给当前。返回舱
+        ListNode newHead = head.next;
+        //返回交换后的列表头结点
+        head.next = swapPairs(newHead.next);
+        //第一个点和newNext替换
+        newHead.next = head;
+        //?整个心链表的第一个点咋返回=》想一下栈的最上层
+        return newHead;
     }
 
 }

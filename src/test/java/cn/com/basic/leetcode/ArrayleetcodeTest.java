@@ -19,6 +19,8 @@ public class ArrayleetcodeTest {
      * 1. 两数之和
      * <p>
      * 给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
+     * <p>
+     * 思路：用hash
      *
      * @param nums
      * @param target
@@ -43,7 +45,7 @@ public class ArrayleetcodeTest {
 
     /**
      * 15. 三数之和
-     * 排个序，然后首位指针
+     * 排个序，然后首尾指针
      *
      * @param nums
      * @return
@@ -256,4 +258,230 @@ public class ArrayleetcodeTest {
         //!!!方法转换
         return res.toArray(new int[res.size()][]);
     }
+
+
+    /**
+     * todo 46. 全排列  没明白
+     * 题目：给定一个 没有重复 数字的序列，返回其所有可能的全排列。
+     * 思路：回溯算法
+     * 其实回溯算法关键在于:不合适就退回上一步
+     * 然后通过约束条件, 减少时间复杂度.
+     * <p>
+     * 参考：https://leetcode-cn.com/problems/permutations/solution/quan-pai-lie-di-gui-hui-su-fa-jian-dan-yi-dong-by-/
+     *
+     * @param nums
+     * @return
+     */
+    List<List<Integer>> resArray = new LinkedList<>();
+
+    public List<List<Integer>> permute(int[] nums) {
+        // 双端列表 记录「路径」
+        LinkedList<Integer> track = new LinkedList<>();
+        backtrack(nums, track);
+        return resArray;
+    }
+
+    // 路径：记录在 track 中
+// 选择列表：nums 中不存在于 track 的那些元素
+// 结束条件：nums 中的元素全都在 track 中出现
+    private void backtrack(int[] nums, LinkedList<Integer> track) {
+        // 触发结束条件
+        if (track.size() == nums.length) {
+            resArray.add(new LinkedList(track));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            // 这个数被选过了
+            if (track.contains(nums[i]))
+                continue;
+            // 当前位做选择
+            track.add(nums[i]);
+            // 继续对下一位选择
+            backtrack(nums, track);
+            // 递归结束，下一位无法选择递归返回了且没满足结束条件
+            // 说明当前位的选择导致了下一位无论怎么选都不能到达结束条件
+            // 所以当前位的选择是错误的，撤销当前位选择
+            track.removeLast();
+        }
+
+    }
+
+    /**
+     * 215. 数组中的第K个最大元素 （和703一样）
+     * <p>
+     * 方法1 - 先排序在返回第k大哥元素   时间复杂度=O(logN)
+     * 方法2 - 维护一个小顶堆，保存前k大个元素
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int findKthLargest(int[] nums, int k) {
+        return findKthLargest_method2(nums, k);
+    }
+
+    private int findKthLargest_method1(int[] nums, int k) {
+        Arrays.sort(nums);
+        return nums[nums.length - k];
+    }
+
+    private int findKthLargest_method2(int[] nums, int k) {
+        PriorityQueue<Integer> res = new PriorityQueue(k);
+        for (int num : nums) {
+            //不到k个值
+            if (res.size() < k) {
+                res.offer(num);
+                //大于第k个
+            } else if (num > res.peek()) {
+                res.poll();
+                res.offer(num);
+            }
+        }
+        return res.peek();
+    }
+
+    /**
+     * todo 31. 下一个排列  (看不懂)
+     * 时间复杂度：O(n)，在最坏的情况下，只需要对整个数组进行两次扫描。
+     * <p>
+     * 空间复杂度：O(1)，没有使用额外的空间，原地替换足以做到。
+     *
+     * @param nums
+     */
+    public void nextPermutation(int[] nums) {
+        int i = nums.length - 2;
+        while (i >= 0 && nums[i + 1] <= nums[i]) {
+            i--;
+        }
+        if (i >= 0) {
+            int j = nums.length - 1;
+            while (j >= 0 && nums[j] <= nums[i]) {
+                j--;
+            }
+            swap(nums, i, j);
+        }
+        reverse(nums, i + 1);
+    }
+
+    private void reverse(int[] nums, int start) {
+        int i = start, j = nums.length - 1;
+        while (i < j) {
+            swap(nums, i, j);
+            i++;
+            j--;
+        }
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    /**
+     * 54. 螺旋矩阵
+     * 给定一个包含 m x n 个元素的矩阵（m 行, n 列），请按照顺时针螺旋顺序，返回矩阵中的所有元素。
+     * <p>
+     * 解题：
+     *
+     * @param matrix
+     * @return
+     */
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> list = new ArrayList<Integer>();
+        if (matrix == null || matrix.length == 0)
+            return list;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int i = 0;
+
+        //需要打印的层数 一层时count=0，统计矩阵从外向内的层数，如果矩阵非空，那么它的层数至少为1层
+        int count = (Math.min(m, n) + 1) / 2;
+        //从外部向内部遍历，逐层打印数据
+        while (i < count) {
+            //左->右
+            for (int j = i; j < n - i; j++) {
+                list.add(matrix[i][j]);
+            }
+            //上到下
+            for (int j = i + 1; j < m - i; j++) {
+                list.add(matrix[j][(n - 1) - i]);
+            }
+            //右到左
+            for (int j = (n - 1) - (i + 1); j >= i && (m - 1 - i != i); j--) {
+                list.add(matrix[(m - 1) - i][j]);
+            }
+            //下到上
+            for (int j = (m - 1) - (i + 1); j >= i + 1 && (n - 1 - i) != i; j--) {
+                list.add(matrix[j][i]);
+            }
+            i++;
+        }
+        return list;
+
+    }
+
+    /**
+     * todo 560. 和为K的子数组 （没看懂啥叫前缀和）
+     * 给定一个整数数组和一个整数 k，你需要找到该数组中和为 k 的连续的子数组的个数。
+     * 解题思路：
+     * 方法1- 前缀和、前缀和优化
+     * 时间复杂度：O(N^2)
+     * 空间复杂度：O(N)
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int subarraySum_1(int[] nums, int k) {
+        int len = nums.length;
+        // 计算前缀和数组
+        int[] preSum = new int[len + 1];
+        preSum[0] = 0;
+        for (int i = 0; i < len; i++) {
+            preSum[i + 1] = preSum[i] + nums[i];
+        }
+
+        int count = 0;
+        for (int left = 0; left < len; left++) {
+            for (int right = left; right < len; right++) {
+                // 区间和 [left..right]，注意下标偏移
+                if (preSum[right + 1] - preSum[left] == k) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     * 方法2 -前缀和 + 哈希表优化
+     * * 时间复杂度：O(N)
+     * * 空间复杂度：O(N)
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int subarraySum_2(int[] nums, int k) {
+        int sum = 0;
+        int n = nums.length;
+        int[] preixSum = new int[n];
+        preixSum[0] = nums[0];
+        for (int i = 1; i < n; i++) {
+            preixSum[i] = preixSum[i - 1] + nums[i];
+        }
+
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        hashMap.put(0, 1);//当i-1<0时，前缀和数组越界，(0,1)表示此时减去的是0
+        for (int preixsum : preixSum) {
+            if (hashMap.containsKey(preixsum - k)) {
+                sum += hashMap.get(preixsum - k);
+            }
+            hashMap.put(preixsum, hashMap.getOrDefault(preixsum, 0) + 1);
+        }
+        return sum;
+    }
+
+
 }
