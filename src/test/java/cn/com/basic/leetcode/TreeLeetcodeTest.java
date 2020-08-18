@@ -2,10 +2,7 @@ package cn.com.basic.leetcode;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Created by zhaijiayi on 2020/5/6.
