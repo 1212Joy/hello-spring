@@ -23,7 +23,7 @@ public class JavaTest {
     @Test
     public void Thread() throws Exception {
 
-        ThreadPoolExecutor myPool = new ThreadPoolExecutor(new MyRunnable());
+  //      ThreadPoolExecutor myPool = new ThreadPoolExecutor(new MyRunnable());
     }
 
 }
