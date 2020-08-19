@@ -350,5 +350,65 @@ public class CharLeetcodeTest {
         dfs(grid, i, j - 1);
     }
 
+    /**
+     * todo 14. 最长公共前缀
+     * <p>
 
+     *
+     * @param strs
+     * @return
+     */
+    public String longestCommonPrefix(String[] strs) {
+        if (strs.length == 0) {
+            return "";
+        }
+        String prefix = strs[0];
+        // 字符串可以被自身匹配，所以从第二个开始匹配。
+        for (int i = 1; i < strs.length; i++) {
+            // 如果匹配串不在要匹配字符串的开头，则表示不是要匹配字符串的前缀。
+            while (strs[i].indexOf(prefix) != 0) {
+                prefix = prefix.substring(0, prefix.length() - 1);
+                if (prefix.isEmpty()) {
+                    return "";
+                }
+            }
+        }
+        return prefix;
+    }
+
+    /**
+     * todo 647. 列举全部回文子串
+
+     * 方法2-动态规划
+     *
+     * @param s
+     * @return
+     */
+    public int countSubstrings(String s) {
+        if(s == null || s.equals("")){
+            return 0;
+        }
+        int n = s.length();
+        boolean[][] dp = new boolean[n][n];
+        int result = s.length();
+        for(int i = 0; i<n; i++) dp[i][i] = true;
+        for(int i = n-1; i>=0; i--){
+            for(int j = i+1; j<n; j++){
+                if(s.charAt(i) == s.charAt(j)) {
+                    if(j-i == 1){
+                        dp[i][j] = true;
+                    }
+                    else{
+                        dp[i][j] = dp[i+1][j-1];
+                    }
+                }else{
+                    dp[i][j] = false;
+                }
+                if(dp[i][j]){
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
 }

@@ -538,5 +538,75 @@ public class ArrayleetcodeTest {
         return sum;
     }
 
+    /**
+     * 88. 合并两个有序数组
+     * <p>
+     * m、n是啥意思？这道题啥意思？
+     * <p>
+     * 解题：
+     * 方法、双指针、
+     * * p1指向nums1有效尾部即m-1，p2指向nums2尾部即n-1，p3指向nums1尾部（nums1和nums2合并后尾部）即m+n-1
+     * * 由于num1空间足够大，同时从有效尾部遍历num1和num2，比较大小，然后放在num1最后面
+     * * 注意循环条件，nums2全部合并到nums1中，也就是p2>=0
+     *
+     * @param nums1
+     * @param m
+     * @param nums2
+     * @param n
+     */
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int p1 = m - 1, p2 = n - 1, p3 = m + n - 1;
+        while (p2 >= 0) {
+            if (p1 >= 0 && nums1[p1] > nums2[p2]) {
+                nums1[p3--] = nums1[p1--];
+            } else {
+                nums1[p3--] = nums2[p2--];
+            }
+        }
+    }
+
+    /**
+     * 198. 打家劫舍
+     * <p>
+     * 1.滚动数组
+     * 2.动态规划
+     *
+     * @param nums
+     * @return
+     */
+    public int rob(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int length = nums.length;
+        if (length == 1) {
+            return nums[0];
+        }
+        int first = nums[0], second = Math.max(nums[0], nums[1]);
+        for (int i = 2; i < length; i++) {
+            int temp = second;
+            second = Math.max(first + nums[i], second);
+            first = temp;
+        }
+        return second;
+
+    }
+
+    public int rob_1(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int length = nums.length;
+        if (length == 1) {
+            return nums[0];
+        }
+        int first = nums[0], second = Math.max(nums[0], nums[1]);
+        for (int i = 2; i < length; i++) {
+            int temp = second;
+            second = Math.max(first + nums[i], second);
+            first = temp;
+        }
+        return second;
+    }
 
 }

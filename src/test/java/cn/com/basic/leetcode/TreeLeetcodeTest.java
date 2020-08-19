@@ -116,6 +116,7 @@ public class TreeLeetcodeTest {
 
         return res;
     }
+
     /**
      * 103. 二叉树的锯齿形层次遍历
      * 遍历顺序：先左到右，再右到左
@@ -246,6 +247,36 @@ public class TreeLeetcodeTest {
         return root;
 
     }
+
+    /**
+     * 94. 二叉树的中序遍历
+     * 中序遍历： [左][根][右]
+     * 解题：递归
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        //递归调用
+        inorderTraversal_helper(root, res);
+        return res;
+    }
+
+    public void inorderTraversal_helper(TreeNode root, List<Integer> res) {
+        if(root==null) return;
+        //先添加全部左节点
+        if(root.left!=null){
+            inorderTraversal_helper(root.left,res);
+        }
+        //！！！添加根节点的值
+        res.add(root.val);
+        //添加右节点
+        if(root.right!=null){
+            inorderTraversal_helper(root.right,res);
+        }
+    }
+
 }
 
 class TreeNode {
