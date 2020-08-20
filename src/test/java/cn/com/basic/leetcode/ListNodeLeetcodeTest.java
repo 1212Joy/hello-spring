@@ -2,6 +2,9 @@ package cn.com.basic.leetcode;
 
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by zhaijiayi on 2020/5/6.
  */
@@ -32,6 +35,7 @@ public class ListNodeLeetcodeTest {
         }
         return prev;  //return current;  返回的不是current，而是pre
     }
+
 
     /**
      * 92. 反转链表 II
@@ -280,6 +284,92 @@ public class ListNodeLeetcodeTest {
         newHead.next = head;
         //?整个心链表的第一个点咋返回=》想一下栈的最上层
         return newHead;
+    }
+
+    /**
+     * 143. 重排链表
+     * 给定一个单链表 L：L0→L1→…→Ln-1→Ln ，
+     * 将其重新排列后变为： L0→Ln→L1→Ln-1→L2→Ln-2→…
+     * <p>
+     * 思路：找到中间节点，再reverse一下，在合并
+     *
+     * @param head
+     */
+    public void reorderList(ListNode head) {
+        if (head == null || head.next == null || head.next.next == null) {
+            return;
+        }
+        //找中点，链表分成两个
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        ListNode newHead = slow.next;
+        slow.next = null;
+
+        //第二个链表倒置
+        newHead = reverseList(newHead);
+
+        //链表节点依次连接
+        while (newHead != null) {
+            ListNode temp = newHead.next;
+            newHead.next = head.next;
+            head.next = newHead;
+            head = newHead.next;
+            newHead = temp;
+        }
+
+    }
+
+    /**
+     * 83. 删除排序链表中的重复元素
+     * 连续重复？？ 要是非连续的咋办？
+     * <p>
+     * 双指针
+     *
+     * @param head
+     * @return
+     */
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null)
+            return head;
+        ListNode pre = head;//指向第一个不重复的节点
+        ListNode cur = head.next;//当前节点
+        while (cur != null) {
+            if (cur.val != pre.val) {//找到了一个新的不重复节点，则把pre指向cur，更新pre
+                pre.next = cur;
+                pre = cur;
+            }
+            cur = cur.next;//更新cur
+        }
+        pre.next = null;//切断pre与剩余重复元素的联系
+        return head;
+    }
+
+    /**
+     * 82. 删除排序链表中的重复元素 II
+     * https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/solution/javashuang-zhi-zhen-dai-ma-jiao-duan-rong-yi-li-ji/
+     * 直接找不重复的值。基本思路就是每一次区间[l,r)（左闭右开）中的数字相同，然后判断该区间的长度是否为1，若长度为1则通过尾插法插入到答案中
+     * 尾插法双指针的巧妙结合
+     * @param head
+     * @return
+     */
+    public ListNode deleteDuplicates_II(ListNode head) {
+        if (head == null) return head;  // 若head为空则直接返回null
+        ListNode dummy = new ListNode(-1);  // 建立一个虚拟头结点
+        ListNode tail = dummy;  // 定义一个尾巴，用于尾插法。
+        for (ListNode l = head, r = head; l != null; l = r) {
+            while (r != null && r.val == l.val) r = r.next;  // 只要r不为空并且与l的值相等则一直向后移动
+            if (l.next == r) {  // 若长度为1，则通过尾插法加入。
+                tail.next = l;  // 基本的尾插法
+                tail = l;
+                tail.next = null;  // 这里记得将尾部的后面置为null，不然可能后面会带着一些其他的节点。
+            }
+        }
+        return dummy.next;
     }
 
 }

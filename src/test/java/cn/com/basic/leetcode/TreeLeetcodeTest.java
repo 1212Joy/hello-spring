@@ -264,16 +264,67 @@ public class TreeLeetcodeTest {
     }
 
     public void inorderTraversal_helper(TreeNode root, List<Integer> res) {
-        if(root==null) return;
+        if (root == null) return;
         //先添加全部左节点
-        if(root.left!=null){
-            inorderTraversal_helper(root.left,res);
+        if (root.left != null) {
+            inorderTraversal_helper(root.left, res);
         }
         //！！！添加根节点的值
         res.add(root.val);
         //添加右节点
-        if(root.right!=null){
-            inorderTraversal_helper(root.right,res);
+        if (root.right != null) {
+            inorderTraversal_helper(root.right, res);
+        }
+    }
+
+    /**
+     * 112. 路径总和
+     * <p>
+     * 1:深度优先、递归
+     *
+     * @param root
+     * @param sum
+     * @return
+     */
+    public boolean hasPathSum(TreeNode root, int sum) {
+        return hasPathSum_dfs(root, sum);
+    }
+
+    boolean hasPathSum_dfs(TreeNode root, int sum) {
+        if (root == null) {
+            return false;
+        }
+        // 到达叶子节点时，递归终止，判断 sum 是否符合条件。
+        if (root.left == null && root.right == null) {
+            return root.val == sum;
+        }
+        // 递归地判断root节点的左孩子和右孩子。
+        return hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val);
+    }
+
+    /**
+     * 144. 二叉树的前序遍历
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        preorderTraversal(root, res);
+        return res;
+
+
+    }
+
+    public void preorderTraversal(TreeNode root, List<Integer> res) {
+        if (root != null) {
+            res.add(root.val);
+            if (root.left != null) {
+                preorderTraversal(root.left, res);
+            }
+            if (root.right != null) {
+                preorderTraversal(root.right, res);
+            }
         }
     }
 
