@@ -17,7 +17,7 @@ public class IntLeetcodeTest {
     @Test
     public void test() throws Exception {
         int[][] aaa = {{2}, {3, 4}, {6, 5, 7}, {4, 1, 8, 3}};
-        System.out.println(minimumTotal(aaa));
+       // System.out.println(minimumTotal(aaa));
 
     }
 
@@ -202,33 +202,5 @@ public class IntLeetcodeTest {
         // 由于处于中位的数字不影响回文（它总是与自己相等），所以我们可以简单地将其去除。
         return x == revertedNumber || x == revertedNumber / 10;
     }
-
-    /**
-     * 120. 三角形最小路径和
-     * 动态规划，自底向上计算，算到顶点结束
-     * 每一个层=
-     *
-     * @param triangle
-     * @return
-     */
-    public int minimumTotal(int[][] triangle) {
-        if (triangle == null || triangle.length == 0) return 0;
-        //只用了一维数组，因为从低向向上，底层数量最多，且只会使用一次
-        int[] dp =  triangle[triangle.length - 1];
-        //最底层是没有节点可去的，所以遍历从倒数第二层开始一直遍历到0
-        for (int i = triangle.length - 2; i >= 0; i--) {
-            //开始遍历每一个节点
-            for (int j = 0; j < triangle[i].length; j++) {
-                //当前节点的最小路径公式=下一层最小值+当前值，在 dp[j]被重新赋值前都是下一层的对应位置的值。j只会和j和j+1产生关系
-                dp[j] = triangle[i][j] + Math.min(dp[j], dp[j + 1]);
-            }
-        }
-        return dp[0];
-    }
-
-    public int[][] minimumTotal(List<List<Integer>> triangle) {
-        return (int[][])triangle.toArray(new int[0][]);
-    }
-
 
 }

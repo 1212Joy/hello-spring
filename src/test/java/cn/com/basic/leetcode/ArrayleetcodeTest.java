@@ -637,4 +637,42 @@ public class ArrayleetcodeTest {
 
     }
 
+
+    /**
+     * 120. 三角形最小路径和
+     * 动态规划，自底向上计算，算到顶点结束
+     * 每一个层=
+     *
+     * @param triangle
+     * @return
+     */
+    public int minimumTotal(int[][] triangle) {
+        if (triangle == null || triangle.length == 0) return 0;
+        //只用了一维数组，因为从低向向上，底层数量最多，且只会使用一次
+        int[] dp = triangle[triangle.length - 1];
+        //最底层是没有节点可去的，所以遍历从倒数第二层开始一直遍历到0
+        for (int i = triangle.length - 2; i >= 0; i--) {
+            //开始遍历每一个节点
+            for (int j = 0; j < triangle[i].length; j++) {
+                //当前节点的最小路径公式=下一层最小值+当前值，在 dp[j]被重新赋值前都是下一层的对应位置的值。j只会和j和j+1产生关系
+                dp[j] = triangle[i][j] + Math.min(dp[j], dp[j + 1]);
+            }
+        }
+        return dp[0];
+    }
+
+
+    /**
+     * todo 152. 乘积最大子数组
+     * 题目:连续的子数组
+     * 思路：动态递推
+     *
+     * @param nums
+     * @return
+     */
+    public int maxProduct(int[] nums) {
+        return 0;
+    }
+
+
 }
