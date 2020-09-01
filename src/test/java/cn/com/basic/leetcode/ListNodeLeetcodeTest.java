@@ -2,8 +2,7 @@ package cn.com.basic.leetcode;
 
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by zhaijiayi on 2020/5/6.
@@ -25,6 +24,11 @@ public class ListNodeLeetcodeTest {
      * @return
      */
     public ListNode reverseList(ListNode head) {
+        return null;
+    }
+
+    //遍历方式
+    private ListNode reverseList_foreach(ListNode head) {
         ListNode prev = null;
         ListNode current = head;
         while (current != null) {
@@ -36,6 +40,16 @@ public class ListNodeLeetcodeTest {
         return prev;  //return current;  返回的不是current，而是pre
     }
 
+    //递归方式
+    private ListNode reverseList_recursion(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode prev = reverseList_recursion(head.next);
+        head.next.next = head;//head.next.next=prev;   错的地方
+        head.next = null;
+        return prev;
+    }
 
     /**
      * 92. 反转链表 II
@@ -83,6 +97,84 @@ public class ListNodeLeetcodeTest {
         return dummyHead.next;
     }
 
+    /**
+     * 25. K 个一组翻转链表
+     * <p>
+     * <p>
+     * 时间复杂度为 O(n*K)O(n∗K) 最好的情况为 O(n)O(n) 最差的情况未 O(n^2)O(n
+     * 2
+     * )
+     * 空间复杂度为 O(1)O(1) 除了几个必须的节点指针外，我们并没有占用其他空间
+     *
+     * @param head
+     * @param k
+     * @return
+     */
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        //定义一个假的节点。
+        ListNode dummy = new ListNode(0);
+        //假节点的next指向head。
+        // dummy->1->2->3->4->5
+        dummy.next = head;
+        //初始化pre和end都指向dummy。pre指每次要翻转的链表的头结点的上一个节点。end指每次要翻转的链表的尾节点
+        ListNode start = dummy;
+        ListNode end = dummy;
+
+        while (end.next != null) {
+            //循环k次，找到需要翻转的链表的结尾,这里每次循环要判断end是否等于空,因为如果为空，end.next会报空指针异常。
+            //dummy->1->2->3->4->5 若k为2，循环2次，end指向2
+            for (int i = 0; i < k && end != null; i++) {
+                end = end.next;
+            }
+            //如果end==null，即需要翻转的链表的节点数小于k，不执行翻转。
+            if (end == null) {
+                break;
+            }
+            //先记录下end.next,方便后面链接链表
+            ListNode next = end.next;
+            //然后断开链表
+            end.next = null;
+            //记录下要翻转链表的头节点
+            ListNode temp = start.next;
+            //翻转链表,pre.next指向翻转后的链表。1->2 变成2->1。 dummy->2->1
+            start.next = reverse(temp);
+            //翻转后头节点变到最后。通过.next把断开的链表重新链接。
+            temp.next = next;
+            //将pre换成下次要翻转的链表的头结点的上一个节点。即start
+            start = temp;
+            //翻转结束，将end置为下次要翻转的链表的头结点的上一个节点。即start
+            end = temp;
+        }
+        return dummy.next;
+
+
+    }
+
+    //链表翻转
+    // 例子：   head： 1->2->3->4
+    public ListNode reverse(ListNode head) {
+        //单链表为空或只有一个节点，直接返回原单链表
+        if (head == null || head.next == null) {
+            return head;
+        }
+        //前一个节点指针
+        ListNode preNode = null;
+        //当前节点指针
+        ListNode curNode = head;
+        //下一个节点指针
+        ListNode nextNode = null;
+        while (curNode != null) {
+            nextNode = curNode.next;//nextNode 指向下一个节点,保存当前节点后面的链表。
+            curNode.next = preNode;//将当前节点next域指向前一个节点   null<-1<-2<-3<-4
+            preNode = curNode;//preNode 指针向后移动。preNode指向当前节点。
+            curNode = nextNode;//curNode指针向后移动。下一个节点变成当前节点
+        }
+        return preNode;
+
+    }
 
     /**
      * 21. 合并两个有序链表
@@ -98,7 +190,7 @@ public class ListNodeLeetcodeTest {
     }
 
     //遍历
-    public ListNode mergeTwoLists_foreach(ListNode l1, ListNode l2) {
+    private ListNode mergeTwoLists_foreach(ListNode l1, ListNode l2) {
         //新建一个哨兵节点
         ListNode preHead = new ListNode(-1);
         ListNode pre = preHead; // ListNode pre = null;
@@ -137,6 +229,78 @@ public class ListNodeLeetcodeTest {
             return l2;
         }
         //返回值：每一层调用都返回排序好的链表头
+
+    }
+
+    /**
+     * 23. 合并K个升序链表
+     * 优先队列,先全部排序，再主意构建链表
+     * <p>
+     * 每次 O(logK)O(logK) 比较 K个指针求 min, 时间复杂度：O(NlogK)O(NlogK)
+     *
+     * @param lists
+     * @return
+     */
+    public ListNode mergeKLists_Queue(ListNode[] lists) {
+        //构造函数添加比较器 从小到大
+        Queue<ListNode> pq = new PriorityQueue<>((v1, v2) -> v1.val - v2.val);
+        //初始化全部头节点
+        for (ListNode node : lists) {
+            if (node != null) {
+                pq.offer(node);
+            }
+        }
+
+        ListNode dummyHead = new ListNode(0);
+        //每次指向当前最大的
+        ListNode tail = dummyHead;
+        while (!pq.isEmpty()) {
+            //取出找到当前最小的的，添加到队列
+            ListNode minNode = pq.poll();
+            tail.next = minNode;
+            tail = minNode;
+            if (minNode.next != null) {
+                //添加新一轮的数据
+                pq.offer(minNode.next);
+            }
+        }
+
+        return dummyHead.next;
+    }
+
+    /**
+     * 每次 O(K)O(K) 比较 K个指针求 min, 时间复杂度：O(NK)O(NK)
+     *
+     * @param lists
+     * @return
+     */
+    public ListNode mergeKLists_2(ListNode[] lists) {
+        int k = lists.length;
+        ListNode dummyHead = new ListNode(0);
+        ListNode tail = dummyHead;
+        while (true) {
+            //比较 K个指针求 min   node值
+            ListNode minNode = null;
+            //最小值
+            int minPointer = -1;
+            //每个节点的筛选，都需要遍历全部k个节点
+            for (int i = 0; i < k; i++) {
+                if (lists[i] == null) {
+                    continue;
+                }
+                if (minNode == null || lists[i].val < minNode.val) {
+                    minNode = lists[i];
+                    minPointer = i;
+                }
+            }
+            if (minPointer == -1) {
+                break;
+            }
+            tail.next = minNode;
+            tail = tail.next;
+            lists[minPointer] = lists[minPointer].next;
+        }
+        return dummyHead.next;
 
     }
 
@@ -194,6 +358,47 @@ public class ListNodeLeetcodeTest {
         return pre.next;
 
     }
+
+    /**
+     * 445. 两数相加 II
+     * 链表存储的顺序是从高位到低位，两数相加的话我们就需要从低位开始计算到高位。所以这里存在着相反的顺序关系。
+     * <p>
+     * 这种需要用到逆序的思路可以用栈的特性来解决此类问题
+     * 此外还需要注意的点有：
+     * 1. 题目要求输入链表不能修改，所以这里增加2个引用来存储两个链表。
+     * <p>
+     * O(max(M,N))
+     *
+     * @param l1
+     * @param l2
+     * @return
+     */
+    public ListNode addTwoNumbers_II(ListNode l1, ListNode l2) {
+
+        ListNode head = new ListNode(-1);
+        ListNode p = l1, q = l2;
+        Stack<Integer> stack1 = new Stack<>();
+        Stack<Integer> stack2 = new Stack<>();
+        while (p != null) {
+            stack1.push(p.val);
+            p = p.next;
+        }
+        while (q != null) {
+            stack2.push(q.val);
+            q = q.next;
+        }
+        int carry = 0;
+        while (!stack1.empty() || !stack2.empty() || carry != 0) {
+            int data1 = stack1.empty() ? 0 : stack1.pop();
+            int data2 = stack2.empty() ? 0 : stack2.pop();
+            ListNode node = new ListNode((carry + data1 + data2) % 10);
+            carry = (carry + data1 + data2) / 10;
+            node.next = head.next;
+            head.next = node;
+        }
+        return head.next;
+    }
+
 
     /**
      * 148. 排序链表
@@ -326,12 +531,12 @@ public class ListNodeLeetcodeTest {
 
     /**
      * 83. 删除排序链表中的重复元素
-     * 连续重复？？ 要是非连续的咋办？
+     * 简单的
      * <p>
      * 双指针
      *
      * @param head
-     * @return
+     * @return  返回去掉重复的值（与82返回值不同）
      */
     public ListNode deleteDuplicates(ListNode head) {
         if (head == null)
@@ -351,25 +556,108 @@ public class ListNodeLeetcodeTest {
 
     /**
      * 82. 删除排序链表中的重复元素 II
+     * <p>
+     * 链表是排序的，所以重复的总是连续的
+     * <p>
      * https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/solution/javashuang-zhi-zhen-dai-ma-jiao-duan-rong-yi-li-ji/
      * 直接找不重复的值。基本思路就是每一次区间[l,r)（左闭右开）中的数字相同，然后判断该区间的长度是否为1，若长度为1则通过尾插法插入到答案中
      * 尾插法双指针的巧妙结合
+     *
      * @param head
-     * @return
+     * @return  返回不重复的值
      */
     public ListNode deleteDuplicates_II(ListNode head) {
         if (head == null) return head;  // 若head为空则直接返回null
         ListNode dummy = new ListNode(-1);  // 建立一个虚拟头结点
-        ListNode tail = dummy;  // 定义一个尾巴，用于尾插法。
+        // 定义一个尾巴，用于尾插法。一直指向链表的尾部
+        ListNode tail = dummy;
         for (ListNode l = head, r = head; l != null; l = r) {
-            while (r != null && r.val == l.val) r = r.next;  // 只要r不为空并且与l的值相等则一直向后移动
-            if (l.next == r) {  // 若长度为1，则通过尾插法加入。
+            // 只要r不为空并且与l的值相等则一直向后移动
+            while (r != null && r.val == l.val)
+                r = r.next;
+            //若长度为1，则通过尾插法加入。
+            if (l.next == r) {
                 tail.next = l;  // 基本的尾插法
                 tail = l;
                 tail.next = null;  // 这里记得将尾部的后面置为null，不然可能后面会带着一些其他的节点。
             }
         }
         return dummy.next;
+    }
+
+    /**
+     * 141. 环形链表
+     *
+     * @param head
+     * @return
+     */
+    public boolean hasCycle(ListNode head) {
+
+        //定义两个不同速度的指针
+        ListNode fast = head;
+        ListNode slow = head;
+        //为空链表、到达链表的尾部退出
+        while (!(slow == null || fast == null || fast.next == null)) {//别漏了！ fast.next==null
+            //怎么标识步长
+            slow = slow.next;
+            fast = fast.next.next;
+            //如果遇到，则是环
+            if (fast == slow) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    /**
+     * 142. 环形链表 II
+     * O(n)
+     * a（头->相遇的节点）+b（环内的节点）
+     * <p>
+     * 第二次相遇分析：
+     * slow指针 位置不变 ，将fast指针重新 指向链表头部节点 ；slow和fast同时每轮向前走 11 步；
+     * TIPS：此时 f = 0f=0，s = nbs=nb ；
+     * <p>
+     * 当 fast 指针走到f = af=a 步时，slow 指针走到步s = a+nbs=a+nb，此时 两指针重合，并同时指向链表环入口 。
+     *
+     * @param head
+     * @return https://leetcode-cn.com/problems/linked-list-cycle-ii/solution/linked-list-cycle-ii-kuai-man-zhi-zhen-shuang-zhi-/
+     */
+    public ListNode detectCycle(ListNode head) {
+        ListNode fast = head, slow = head;
+        while (true) {
+            if (fast == null || fast.next == null) return null;
+            fast = fast.next.next;
+            slow = slow.next;
+            //此时，fast比slow多走nb步
+            if (fast == slow) break;
+        }
+        //此时fast从头走a步就会和slow相遇在第一个节点？？为啥
+        fast = head;
+        while (slow != fast) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return fast;
+
+    }
+
+    /**
+     * todo 160. 相交链表  看不懂
+     *
+     * @param headA
+     * @param headB
+     * @return
+     */
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+
+        ListNode ha = headA, hb = headB;
+        while (ha != hb) {
+            ha = ha != null ? ha.next : headB;
+            hb = hb != null ? hb.next : headA;
+        }
+        return ha;
     }
 
 }

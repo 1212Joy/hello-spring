@@ -12,8 +12,7 @@ public class ArrayleetcodeTest {
 
     @Test
     public void test() throws Exception {
-        int[] array = {10, 9, 2, 5, 3, 7, 101, 18};
-        lengthOfLIS(array);
+        int[] array = {2, 3, -2, 4};
     }
 
     /**
@@ -82,95 +81,6 @@ public class ArrayleetcodeTest {
             }
         }
         return res;
-    }
-
-    /**
-     * 11. 盛最多水的容器
-     * 双指针
-     * 容量=两个指针指向的数字中较小值∗指针之间的距离
-     */
-    @Test
-    public int maxArea(int[] height) {
-        //遍历数组，记录每次最大的结果
-        int res = 0;
-        //首位两个指针
-        int l = 0;
-        int r = height.length - 1;
-        while (l < r) {
-            int area = Math.min(height[l], height[r]) * (r - l);
-            res = Math.max(area, res);
-            //如果左右两个值比较，l值<r值，则移动左指针，否则移动右指针
-            if (height[l] < height[r]) {
-                l++;
-            } else {
-                r--;
-            }
-        }
-        return res;
-    }
-
-
-    /**
-     * 121. 买卖股票的最佳时机
-     * 题目：整个过程最多一笔交易
-     * todo 原因解释：
-     * 假如计划在第 i 天卖出股票，那么最大利润的差值一定是在[0, i-1] 之间选最低点买入；
-     * 所以遍历数组，依次求每个卖出时机的的最大差值，再从中取最大值。
-     * 时间复杂度：O(n)O(n)，只需要遍历一次。
-     * 空间复杂度：O(1)O(1)，只使用了常数个变量。
-     *
-     * @param prices
-     * @return
-     */
-    public int maxProfit(int[] prices) {
-        //初始化设置一个最大值
-        int subPrice = Integer.MAX_VALUE;
-        int resProfit = 0;
-        for (int price : prices) {
-            if (price < subPrice)
-                subPrice = price;
-            else if (price - subPrice > resProfit)
-                resProfit = price - subPrice;
-        }
-        return resProfit;
-    }
-
-    /**
-     * 53. 最大子序和
-     * <p>
-     * 动态规划：
-     * 通俗来讲这个问题就变成了，第i个子组合可以通过第i-1个子组合的最大值和第i个数字获得，如果第i-1个子组合的最大值没法给第i个数字带来正增益，我们就抛弃掉前面的子组合，自己就是最大的了。
-     * <p>
-     * 如果Max(i−1)>0,Max(i)=Max(i−1)+Nums(i)
-     * 如果Max(i−1)<=0,Max(i)=Nums(i)
-     * <p>
-     * 斐波拉契数列
-     * ​
-     *
-     * @param nums
-     * @return
-     */
-    public int maxSubArray(int[] nums) {
-        if (nums == null) {
-            return 0;
-        }
-
-        int max = nums[0];    // 全局最大值
-        int subMax = nums[0];  // 前一个子组合的最大值
-        //sub从0开始，遍历则从1开始
-        for (int i = 1; i < nums.length; i++) {
-            if (subMax > 0) {
-                // 前一个子组合最大值大于0，正增益
-                subMax = subMax + nums[i];
-            } else {
-                // 前一个子组合最大值小于0，抛弃前面的结果
-                subMax = nums[i];
-            }
-            // 计算全局最大值
-            max = Math.max(max, subMax);
-        }
-
-        return max;
     }
 
 
@@ -262,59 +172,420 @@ public class ArrayleetcodeTest {
 
 
     /**
-     * todo  322. 零钱兑换  动态规划
-     * 凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。
-     * 自己的思路：先将数组排序，尽量用大面额的去补充
-     * 解题：
-     * 方法1-这就是背包问题啊啊啊，动态规划、最优子结构
-     * 方法2-广度优先
+     * 215. 数组中的第K个最大元素 （和703一样）
+     * <p>
+     * 方法1 - 先排序在返回第k大哥元素   时间复杂度=O(logN)
+     * 方法2 - 维护一个小顶堆，保存前k大个元素
      *
-     * @param coins
-     * @param amount
+     * @param nums
+     * @param k
      * @return
      */
-    public int coinChange(int[] coins, int amount) {
-        return coinChange_1(coins, amount);
+    public int findKthLargest(int[] nums, int k) {
+        return findKthLargest_method2(nums, k);
     }
 
-    /**
-     * 背包问题
-     *
-     * @param coins
-     * @param amount
-     * @return
-     */
-    public int coinChange_1(int[] coins, int amount) {
-        //为啥是这是一个二维数组
-        int[] dp = new int[amount + 1];
-        Arrays.fill(dp, amount + 1);
-        dp[0] = 0;
+    private int findKthLargest_method1(int[] nums, int k) {
+        Arrays.sort(nums);
+        return nums[nums.length - k];
+    }
 
-        for (int coin : coins) {
-            for (int i = coin; i <= amount; i++) {
-                dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+    private int findKthLargest_method2(int[] nums, int k) {
+        PriorityQueue<Integer> res = new PriorityQueue(k);
+        for (int num : nums) {
+            //不到k个值
+            if (res.size() < k) {
+                res.offer(num);
+                //大于第k个
+            } else if (num > res.peek()) {
+                res.poll();
+                res.offer(num);
             }
         }
+        return res.peek();
+    }
 
-        if (dp[amount] == amount + 1) {
-            dp[amount] = -1;
+
+    /**
+     * 54. 螺旋矩阵
+     * 给定一个包含 m x n 个元素的矩阵（m 行, n 列），请按照顺时针螺旋顺序，返回矩阵中的所有元素。
+     * <p>
+     * 解题：
+     * 时间复杂度：O(mn)
+     *
+     * @param matrix
+     * @return
+     */
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> list = new ArrayList<Integer>();
+        if (matrix == null || matrix.length == 0)
+            return list;
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int i = 0;
+
+        //需要打印的层数 一层时count=0，统计矩阵从外向内的层数，如果矩阵非空，那么它的层数至少为1层
+        int count = (Math.min(m, n) + 1) / 2;
+        //从外部向内部遍历，逐层打印数据
+        while (i < count) {
+            //左->右
+            for (int j = i; j < n - i; j++) {
+                list.add(matrix[i][j]);
+            }
+            //上到下
+            for (int j = i + 1; j < m - i; j++) {
+                list.add(matrix[j][(n - 1) - i]);
+            }
+            //右到左
+            for (int j = (n - 1) - (i + 1); j >= i && (m - 1 - i != i); j--) {
+                list.add(matrix[(m - 1) - i][j]);
+            }
+            //下到上
+            for (int j = (m - 1) - (i + 1); j >= i + 1 && (n - 1 - i) != i; j--) {
+                list.add(matrix[j][i]);
+            }
+            i++;
         }
-        return dp[amount];
+        return list;
+
+    }
+
+
+    /**
+     * 88. 合并两个有序数组
+     * <p>
+     * m、n是啥意思？这道题啥意思？
+     * <p>
+     * 解题：
+     * 方法、双指针、
+     * * p1指向nums1有效尾部即m-1，p2指向nums2尾部即n-1，p3指向nums1尾部（nums1和nums2合并后尾部）即m+n-1
+     * * 由于num1空间足够大，同时从有效尾部遍历num1和num2，比较大小，然后放在num1最后面
+     * * 注意循环条件，nums2全部合并到nums1中，也就是p2>=0
+     *
+     * @param nums1
+     * @param m
+     * @param nums2
+     * @param n
+     */
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int p1 = m - 1, p2 = n - 1, p3 = m + n - 1;
+        while (p2 >= 0) {
+            if (p1 >= 0 && nums1[p1] > nums2[p2]) {
+                nums1[p3--] = nums1[p1--];
+            } else {
+                nums1[p3--] = nums2[p2--];
+            }
+        }
+    }
+
+
+    /**
+     * 1470. 重新排列数组
+     *
+     * @param nums
+     * @param n
+     * @return
+     */
+    public int[] shuffle(int[] nums, int n) {
+        int temp[] = new int[nums.length];
+        int index = 0;
+        for (int i = 0; i < n; i++) {
+            temp[index++] = nums[i];
+            temp[index++] = nums[i + n];
+        }
+        return temp;
+    }
+
+
+    /**
+     * todo 31. 下一个排列  (看不懂)
+     * 时间复杂度：O(n)，在最坏的情况下，只需要对整个数组进行两次扫描。
+     * <p>
+     * 空间复杂度：O(1)，没有使用额外的空间，原地替换足以做到。
+     *
+     * @param nums
+     */
+    public void nextPermutation(int[] nums) {
+        int i = nums.length - 2;
+        while (i >= 0 && nums[i + 1] <= nums[i]) {
+            i--;
+        }
+        if (i >= 0) {
+            int j = nums.length - 1;
+            while (j >= 0 && nums[j] <= nums[i]) {
+                j--;
+            }
+            swap(nums, i, j);
+        }
+        reverse(nums, i + 1);
+    }
+
+    private void reverse(int[] nums, int start) {
+        int i = start, j = nums.length - 1;
+        while (i < j) {
+            swap(nums, i, j);
+            i++;
+            j--;
+        }
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 
     /**
-     * todo 广度优先
-     * 是一个图结构的
-     * 因为是「图」，有回路，所以要设计一个 visited 数组。
+     * 252. 会议室
+     * <p>
+     * 题目：
+     * 请你判断一个人是否能够参加这里面的全部会议。
+     * <p>
+     * 思路：
+     * 思路是按照开始时间对会议进行排序。接着依次遍历会议，检查它是否在下个会议开始前结束。
+     * nlogn
      *
-     * @param coins
-     * @param amount
+     * @param intervals
      * @return
      */
-    public int coinChange_2(int[] coins, int amount) {
-        return 0;
+    public boolean canAttendMeetings(int[][] intervals) {
+        //按照开始时间排序
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            public int compare(int[] i1, int[] i2) {
+                return i1[0] - i2[0];
+            }
+        });
+
+        for (int i = 0; i < intervals.length - 1; i++) {
+            //接着依次遍历会议，检查它是否在下个会议开始前结束
+            if (intervals[i][1] > intervals[i + 1][0])
+                return false;
+        }
+        return true;
+
     }
 
+    /**
+     * 253. 会议室 II
+     * 0 - 开始
+     * 1- 结束
+     * 分别将开始和结束时间放到两个数组中，然后进行排序，虽然会打乱一个会议[开始，结束]
+     * 但可行的原因是：当我们遇到“会议结束”事件时，意味着一些较早开始的会议已经结束。我们并不关心到底是哪个会议结束。我们所需要的只是 一些 会议结束,从而提供一个空房间。
+     * <p>
+     * 执行过程：两个指标从头比较，当开始<结束时，开始向后移动，否则开始和结束都向后移动
+     * NlogN
+     *
+     * @param intervals
+     * @return 请你计算至少需要多少间会议室，才能满足这些会议安排。
+     */
+    public int minMeetingRooms(int[][] intervals) {
+
+        // Check for the base case. If there are no intervals, return 0
+        if (intervals.length == 0) {
+            return 0;
+        }
+
+        Integer[] start = new Integer[intervals.length];
+        Integer[] end = new Integer[intervals.length];
+
+        for (int i = 0; i < intervals.length; i++) {
+            start[i] = intervals[i][0];
+            end[i] = intervals[i][1];
+        }
+
+        // Sort the intervals by end time
+        Arrays.sort(
+                end,
+                new Comparator<Integer>() {
+                    public int compare(Integer a, Integer b) {
+                        return a - b;
+                    }
+                });
+
+        // Sort the intervals by start time
+        Arrays.sort(
+                start, new Comparator<Integer>() {
+                    public int compare(Integer a, Integer b) {
+                        return a - b;
+                    }
+                });
+
+        // The two pointers in the algorithm: e_ptr and s_ptr.
+        int startPointer = 0, endPointer = 0;
+
+        // Variables to keep track of maximum number of rooms used.
+        int usedRooms = 0;
+
+        // Iterate over intervals.
+        while (startPointer < intervals.length) {
+
+            //意味着有结束的了，所以有会议室了，end可以移动
+            if (start[startPointer] >= end[endPointer]) {
+                endPointer += 1;
+            } else {
+                //否则没有可用的会议室+1
+                usedRooms += 1;
+            }
+            startPointer += 1;
+        }
+
+        return usedRooms;
+    }
+
+    /**
+     * todo 动态方程没看懂  375. 猜数字大小 II
+     * <p>
+     * 给定 n ≥ 1，计算你至少需要拥有多少现金才能确保你能赢得这个游戏。
+     * <p>
+     * 至少
+     * <p>
+     * 方法1：动态规划  - n^3
+     *
+     * @param n
+     * @return
+     */
+    public int getMoneyAmount_1(int n) {
+        //从i到j猜数字，猜出任意最小值
+        int[][] dp = new int[n + 1][n + 1];
+        //n的个数，
+        for (int len = 2; len <= n; len++) {
+            //从1
+            for (int i = 1; i + len - 1 <= n; i++) {
+                int j = i + len - 1;
+                //附一个最大值
+                dp[i][j] = Integer.MAX_VALUE;
+                //从i到j
+                for (int k = i; k <= j; k++) {
+                    // todo 没看懂
+                    // 如何写出相应的代码更新dp矩阵, 递推式dp[i][j] = max(max(dp[i][x-1], dp[x+1][j]) + x), x~[i:j], 可以画出矩阵图协助理解, 可以发现
+                    //        dp[i][x-1]始终在dp[i][j]的左部, dp[x+1][j]始终在dp[i][j]的下部, 所以更新dp矩阵时i的次序应当遵循bottom到top的规则, j则相反, 由于
+                    //        i肯定小于等于j, 所以我们只需要遍历更新矩阵的一半即可(下半矩阵)
+                    dp[i][j] = Math.min(dp[i][j], k +
+                            Math.max(k <= 1 ? 0 : dp[i][k - 1], k + 1 > j ? 0 : dp[k + 1][j]));
+                }
+            }
+        }
+        //返回从1到n的最小结果
+        return dp[1][n];
+    }
+
+    /**
+     * 374. 猜数字大小
+     * 二分法返回结果
+     *
+     * @param n
+     * @return
+     */
+    public int guessNumber(int n) {
+//        int low = 1;
+//        int high = n;
+//        while (low <= high) {
+//            int mid = low + (high - low) / 2;
+//            int res = guess(mid);
+//            if (res == 0)
+//                return mid;
+//            else if (res < 0)
+//                high = mid - 1;
+//            else
+//                low = mid + 1;
+//        }
+        return -1;
+    }
+
+    /**
+     * 200. 岛屿数量
+     * 题意：
+     * 给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+     * 每座岛屿只能由水平和/或竖直方向上相邻的陆地连接而成
+     * 解题:
+     * 1.网格结构的 DFS 遍历
+     * 扫描整个二维网格。如果一个位置为 1，则以其为起始节点开始进行深度优先搜索。在深度优先搜索的过程中，每个搜索到的 1 都会被重新标记为 0。
+     * 2.广度优先
+     *
+     * @param grid
+     * @return 岛屿数量
+     */
+    public int numIslands(int[][] grid) {
+        return numIslands_dfs(grid);
+    }
+
+    private int numIslands_dfs(int[][] grid) {
+        int count = 0;
+        for (int i = 0; i < grid.length; i++) {
+            //这个二维数组为啥j < grid[0].length
+            for (int j = 0; j < grid[0].length; j++) {
+                //如果遍历到1，就进行dfs
+                if (grid[i][j] == '1') {
+                    dfs(grid, i, j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    private void dfs(int[][] grid, int i, int j) {
+        //到了网格边界或者碰到了0就结束
+        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] == '0') return;
+        //将1重设为0
+        grid[i][j] = '0';
+        //对这个1的上下左右4个方向进行dfs操作
+        dfs(grid, i + 1, j);
+        dfs(grid, i, j + 1);
+        dfs(grid, i - 1, j);
+        dfs(grid, i, j - 1);
+    }
+
+
+    /**
+     * todo 695. 岛屿的最大面积
+     * <p>
+     * 思路：DFS解法
+     *
+     * @param grid
+     * @return 岛屿面积
+     */
+    public int maxAreaOfIsland(int[][] grid) {
+        int res = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == 1) {
+                    res = Math.max(res, dfs(i, j, grid));
+                }
+            }
+        }
+        return res;
+    }
+
+    // 每次调用的时候默认num为1，进入后判断如果不是岛屿，则直接返回0，就可以避免预防错误的情况。
+    // 每次找到岛屿，则直接把找到的岛屿改成0，这是传说中的沉岛思想，就是遇到岛屿就把他和周围的全部沉默。
+    // ps：如果能用沉岛思想，那么自然可以用朋友圈思想。有兴趣的朋友可以去尝试。
+    private int dfs(int i, int j, int[][] grid) {
+        if (i < 0 || j < 0 || i >= grid.length || j >= grid[i].length || grid[i][j] == 0) {
+            return 0;
+        }
+        //沉岛
+        grid[i][j] = 0;
+        int num = 1;
+        //上下左右
+        num += dfs(i + 1, j, grid);
+        num += dfs(i - 1, j, grid);
+        num += dfs(i, j + 1, grid);
+        num += dfs(i, j - 1, grid);
+        return num;
+
+    }
+    /*---------------------------------------*/
+
+/*
+回溯专题
+39. 组合总和
+40. 组合总和 II
+46. 全排列
+47. 全排列 II
+78. 子集 （不含重复）
+90. 子集 II （包含重复的）
+*/
 
     /**
      * todo 46. 全排列  没明白
@@ -363,315 +634,35 @@ public class ArrayleetcodeTest {
     }
 
     /**
-     * 215. 数组中的第K个最大元素 （和703一样）
+     * 78. 子集
      * <p>
-     * 方法1 - 先排序在返回第k大哥元素   时间复杂度=O(logN)
-     * 方法2 - 维护一个小顶堆，保存前k大个元素
-     *
-     * @param nums
-     * @param k
-     * @return
-     */
-    public int findKthLargest(int[] nums, int k) {
-        return findKthLargest_method2(nums, k);
-    }
-
-    private int findKthLargest_method1(int[] nums, int k) {
-        Arrays.sort(nums);
-        return nums[nums.length - k];
-    }
-
-    private int findKthLargest_method2(int[] nums, int k) {
-        PriorityQueue<Integer> res = new PriorityQueue(k);
-        for (int num : nums) {
-            //不到k个值
-            if (res.size() < k) {
-                res.offer(num);
-                //大于第k个
-            } else if (num > res.peek()) {
-                res.poll();
-                res.offer(num);
-            }
-        }
-        return res.peek();
-    }
-
-    /**
-     * todo 31. 下一个排列  (看不懂)
-     * 时间复杂度：O(n)，在最坏的情况下，只需要对整个数组进行两次扫描。
-     * <p>
-     * 空间复杂度：O(1)，没有使用额外的空间，原地替换足以做到。
-     *
-     * @param nums
-     */
-    public void nextPermutation(int[] nums) {
-        int i = nums.length - 2;
-        while (i >= 0 && nums[i + 1] <= nums[i]) {
-            i--;
-        }
-        if (i >= 0) {
-            int j = nums.length - 1;
-            while (j >= 0 && nums[j] <= nums[i]) {
-                j--;
-            }
-            swap(nums, i, j);
-        }
-        reverse(nums, i + 1);
-    }
-
-    private void reverse(int[] nums, int start) {
-        int i = start, j = nums.length - 1;
-        while (i < j) {
-            swap(nums, i, j);
-            i++;
-            j--;
-        }
-    }
-
-    private void swap(int[] nums, int i, int j) {
-        int temp = nums[i];
-        nums[i] = nums[j];
-        nums[j] = temp;
-    }
-
-    /**
-     * 54. 螺旋矩阵
-     * 给定一个包含 m x n 个元素的矩阵（m 行, n 列），请按照顺时针螺旋顺序，返回矩阵中的所有元素。
-     * <p>
-     * 解题：
-     *
-     * @param matrix
-     * @return
-     */
-    public List<Integer> spiralOrder(int[][] matrix) {
-        List<Integer> list = new ArrayList<Integer>();
-        if (matrix == null || matrix.length == 0)
-            return list;
-        int m = matrix.length;
-        int n = matrix[0].length;
-        int i = 0;
-
-        //需要打印的层数 一层时count=0，统计矩阵从外向内的层数，如果矩阵非空，那么它的层数至少为1层
-        int count = (Math.min(m, n) + 1) / 2;
-        //从外部向内部遍历，逐层打印数据
-        while (i < count) {
-            //左->右
-            for (int j = i; j < n - i; j++) {
-                list.add(matrix[i][j]);
-            }
-            //上到下
-            for (int j = i + 1; j < m - i; j++) {
-                list.add(matrix[j][(n - 1) - i]);
-            }
-            //右到左
-            for (int j = (n - 1) - (i + 1); j >= i && (m - 1 - i != i); j--) {
-                list.add(matrix[(m - 1) - i][j]);
-            }
-            //下到上
-            for (int j = (m - 1) - (i + 1); j >= i + 1 && (n - 1 - i) != i; j--) {
-                list.add(matrix[j][i]);
-            }
-            i++;
-        }
-        return list;
-
-    }
-
-    /**
-     * todo 560. 和为K的子数组 （没看懂啥叫前缀和）
-     * 给定一个整数数组和一个整数 k，你需要找到该数组中和为 k 的连续的子数组的个数。
-     * 解题思路：
-     * 方法1- 前缀和、前缀和优化
-     * 时间复杂度：O(N^2)
-     * 空间复杂度：O(N)
-     *
-     * @param nums
-     * @param k
-     * @return
-     */
-    public int subarraySum_1(int[] nums, int k) {
-        int len = nums.length;
-        // 计算前缀和数组
-        int[] preSum = new int[len + 1];
-        preSum[0] = 0;
-        for (int i = 0; i < len; i++) {
-            preSum[i + 1] = preSum[i] + nums[i];
-        }
-
-        int count = 0;
-        for (int left = 0; left < len; left++) {
-            for (int right = left; right < len; right++) {
-                // 区间和 [left..right]，注意下标偏移
-                if (preSum[right + 1] - preSum[left] == k) {
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-
-    /**
-     * 方法2 -前缀和 + 哈希表优化
-     * * 时间复杂度：O(N)
-     * * 空间复杂度：O(N)
-     *
-     * @param nums
-     * @param k
-     * @return
-     */
-    public int subarraySum_2(int[] nums, int k) {
-        int sum = 0;
-        int n = nums.length;
-        int[] preixSum = new int[n];
-        preixSum[0] = nums[0];
-        for (int i = 1; i < n; i++) {
-            preixSum[i] = preixSum[i - 1] + nums[i];
-        }
-
-        HashMap<Integer, Integer> hashMap = new HashMap<>();
-        hashMap.put(0, 1);//当i-1<0时，前缀和数组越界，(0,1)表示此时减去的是0
-        for (int preixsum : preixSum) {
-            if (hashMap.containsKey(preixsum - k)) {
-                sum += hashMap.get(preixsum - k);
-            }
-            hashMap.put(preixsum, hashMap.getOrDefault(preixsum, 0) + 1);
-        }
-        return sum;
-    }
-
-    /**
-     * 88. 合并两个有序数组
-     * <p>
-     * m、n是啥意思？这道题啥意思？
-     * <p>
-     * 解题：
-     * 方法、双指针、
-     * * p1指向nums1有效尾部即m-1，p2指向nums2尾部即n-1，p3指向nums1尾部（nums1和nums2合并后尾部）即m+n-1
-     * * 由于num1空间足够大，同时从有效尾部遍历num1和num2，比较大小，然后放在num1最后面
-     * * 注意循环条件，nums2全部合并到nums1中，也就是p2>=0
-     *
-     * @param nums1
-     * @param m
-     * @param nums2
-     * @param n
-     */
-    public void merge(int[] nums1, int m, int[] nums2, int n) {
-        int p1 = m - 1, p2 = n - 1, p3 = m + n - 1;
-        while (p2 >= 0) {
-            if (p1 >= 0 && nums1[p1] > nums2[p2]) {
-                nums1[p3--] = nums1[p1--];
-            } else {
-                nums1[p3--] = nums2[p2--];
-            }
-        }
-    }
-
-    /**
-     * 198. 打家劫舍
-     * <p>
-     * 1.滚动数组
-     * 2.动态规划
+     * 方法2： 回溯
      *
      * @param nums
      * @return
      */
-    public int rob(int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return 0;
-        }
-        int length = nums.length;
-        if (length == 1) {
-            return nums[0];
-        }
-        int first = nums[0], second = Math.max(nums[0], nums[1]);
-        for (int i = 2; i < length; i++) {
-            int temp = second;
-            second = Math.max(first + nums[i], second);
-            first = temp;
-        }
-        return second;
-
-    }
-
-    public int rob_1(int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return 0;
-        }
-        int length = nums.length;
-        if (length == 1) {
-            return nums[0];
-        }
-        int first = nums[0], second = Math.max(nums[0], nums[1]);
-        for (int i = 2; i < length; i++) {
-            int temp = second;
-            second = Math.max(first + nums[i], second);
-            first = temp;
-        }
-        return second;
-    }
-
-    /**
-     * todo 300. 最长上升子序列
-     * 暴利求解： O(n2) - 动态规划
-     * 优化算法：O(n log n) - 动态规划 + 二分查找
-     *
-     * @param nums
-     * @return
-     */
-    public int lengthOfLIS(int[] nums) {
-        if (nums.length == 0) return 0;
-        int[] dp = new int[nums.length];
-        int res = 0;
-        //这个方法啥意思，将dp数组内的每一个索引位置都 设置成1，但是为啥都是1呢？
-        Arrays.fill(dp, 1);
-        for (int i = 0; i < nums.length; i++) {
-            for (int j = 0; j < i; j++) {
-                //todo 这块为啥啊啊啊
-                if (nums[j] < nums[i]) {
-                    dp[i] = Math.max(dp[i], dp[j] + 1);
-                }
-            }
-            res = Math.max(res, dp[i]);
-        }
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        backtrack(0, nums, res, new ArrayList<Integer>());
         return res;
 
     }
 
-
     /**
-     * 120. 三角形最小路径和
-     * 动态规划，自底向上计算，算到顶点结束
-     * 每一个层=
+     * tmp为什么tmp这样
      *
-     * @param triangle
-     * @return
-     */
-    public int minimumTotal(int[][] triangle) {
-        if (triangle == null || triangle.length == 0) return 0;
-        //只用了一维数组，因为从低向向上，底层数量最多，且只会使用一次
-        int[] dp = triangle[triangle.length - 1];
-        //最底层是没有节点可去的，所以遍历从倒数第二层开始一直遍历到0
-        for (int i = triangle.length - 2; i >= 0; i--) {
-            //开始遍历每一个节点
-            for (int j = 0; j < triangle[i].length; j++) {
-                //当前节点的最小路径公式=下一层最小值+当前值，在 dp[j]被重新赋值前都是下一层的对应位置的值。j只会和j和j+1产生关系
-                dp[j] = triangle[i][j] + Math.min(dp[j], dp[j + 1]);
-            }
-        }
-        return dp[0];
-    }
-
-
-    /**
-     * todo 152. 乘积最大子数组
-     * 题目:连续的子数组
-     * 思路：动态递推
-     *
+     * @param i
      * @param nums
-     * @return
+     * @param res
+     * @param tmp
      */
-    public int maxProduct(int[] nums) {
-        return 0;
+    private void backtrack(int i, int[] nums, List<List<Integer>> res, ArrayList<Integer> tmp) {
+        res.add(new ArrayList<>(tmp));
+        for (int j = i; j < nums.length; j++) {
+            tmp.add(nums[j]);
+            backtrack(j + 1, nums, res, tmp);
+            tmp.remove(tmp.size() - 1);
+        }
     }
 
 

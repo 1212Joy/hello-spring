@@ -1,5 +1,6 @@
 package cn.com.basic.leetcode;
 
+import cn.com.basic.Leetcode;
 import org.junit.Test;
 
 import java.util.*;
@@ -33,7 +34,7 @@ public class TreeLeetcodeTest {
         return res;
     }
 
-    public List<Integer> rightSideView_bfs(TreeNode root) {
+    private List<Integer> rightSideView_bfs(TreeNode root) {
         res = new ArrayList<>();
         if (root == null) return res;
         //从右到左每一排打印然后只记录最右边得值
@@ -147,7 +148,7 @@ public class TreeLeetcodeTest {
                 if (node.right != null) {
                     queue.add(node.right);
                 }
-                //！！！收尾别放饭了
+                //！！！收尾别放反了
                 if (left2right) {
                     current.addLast(node.val);
                 } else {
@@ -185,7 +186,7 @@ public class TreeLeetcodeTest {
 
     private Map<Integer, Integer> indexMap;
 
-    public TreeNode buildTree_1(int[] preorder, int[] inorder) {
+    private TreeNode buildTree_1(int[] preorder, int[] inorder) {
         int n = preorder.length;
         // 构造哈希映射，帮助我们快速定位根节点
         indexMap = new HashMap<Integer, Integer>();
@@ -196,7 +197,7 @@ public class TreeLeetcodeTest {
 
     }
 
-    public TreeNode myBuildTree(int[] preorder, int[] inorder, int preorder_left, int preorder_right, int inorder_left, int inorder_right) {
+    private TreeNode myBuildTree(int[] preorder, int[] inorder, int preorder_left, int preorder_right, int inorder_left, int inorder_right) {
         if (preorder_left > preorder_right) {
             return null;
         }
@@ -220,7 +221,7 @@ public class TreeLeetcodeTest {
     }
 
 
-    public TreeNode buildTree_2(int[] preorder, int[] inorder) {
+    private TreeNode buildTree_2(int[] preorder, int[] inorder) {
         if (preorder == null || preorder.length == 0) {
             return null;
         }
@@ -263,7 +264,7 @@ public class TreeLeetcodeTest {
         return res;
     }
 
-    public void inorderTraversal_helper(TreeNode root, List<Integer> res) {
+    private void inorderTraversal_helper(TreeNode root, List<Integer> res) {
         if (root == null) return;
         //先添加全部左节点
         if (root.left != null) {
@@ -316,7 +317,7 @@ public class TreeLeetcodeTest {
 
     }
 
-    public void preorderTraversal(TreeNode root, List<Integer> res) {
+    private void preorderTraversal(TreeNode root, List<Integer> res) {
         if (root != null) {
             res.add(root.val);
             if (root.left != null) {
@@ -328,6 +329,145 @@ public class TreeLeetcodeTest {
         }
     }
 
+    /**
+     * 543. 二叉树的直径
+     * 任意两个节点的最边数
+     * 这条路径可能穿过也可能不穿过根结点
+     * 思路：
+     * 最大值不一定包含根节点，但是一定是：经过一个节点，该节点左右子树的最大深度之和 +1（二叉树的根节点深度为 0）
+     * 深度优先。自下而上，使用 DFS，找出所有节点的最大直径，在取出最大值 res.
+     * https://leetcode-cn.com/problems/diameter-of-binary-tree/solution/java-shen-du-you-xian-bian-li-dfs-by-sugar-31/
+     * <p>
+     * 二叉树的直径：二叉树中从一个结点到另一个节点最长的路径，叫做二叉树的直径
+     * 采用分治和递归的思想：
+     * - 根节点为root的二叉树的直径 = max(root->left的直径，root->right的直径，root->left的最大深度+root->right的最大深度+1)
+     * <p>
+     * 作者：sammy-4
+     * 链接：https://leetcode-cn.com/problems/diameter-of-binary-tree/solution/hot-100-9er-cha-shu-de-zhi-jing-python3-di-gui-ye-/
+     *
+     * @param root
+     * @return
+     */
+    int resDiameter = 0;
+
+    public int diameterOfBinaryTree(TreeNode root) {
+
+        dfs(root);
+        return resDiameter;
+    }
+
+    // 函数dfs的作用是：找到以root为根节点的二叉树的最大深度
+    private int dfs(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int leftDepth = dfs(root.left);
+        int rigthDepth = dfs(root.right);
+        //   '''每个结点都要去判断左子树+右子树的高度是否大于self.max，更新最大值'''
+        resDiameter = Math.max(resDiameter, leftDepth + rigthDepth);
+        //返回的root的高度=最大高度+1
+        return Math.max(leftDepth, rigthDepth) + 1;
+    }
+
+    /**
+     * 101. 对称二叉树
+     * 递归：
+     * 迭代：使用双端队列来存、或者栈
+     * 都是O(n)
+     *
+     * @param root
+     * @return
+     */
+    public boolean isSymmetric(TreeNode root) {
+        return isSymmetric_recursion(root, root);
+    }
+
+    public boolean isSymmetric_recursion(TreeNode t1, TreeNode t2) {
+        //都为空则相等
+        if (t1 == null && t2 == null) return true;
+        if (t1 == null || t2 == null) return false;
+        return (t1.val == t2.val)
+                //对称，则是
+                && isSymmetric_recursion(t1.right, t2.left)
+                && isSymmetric_recursion(t1.left, t2.right);
+    }
+
+    public boolean isSymmetric_foreach(TreeNode u, TreeNode v) {
+        Stack<TreeNode> q = new Stack<TreeNode>();
+        q.add(u);
+        q.add(v);
+        while (!q.isEmpty()) {
+            //取出元素校验
+            u = q.pop();
+            v = q.pop();
+            if (u == null && v == null) {
+                continue;
+            }
+            if ((u == null || v == null) || (u.val != v.val)) {
+                return false;
+            }
+            //添加元素
+            q.add(u.left);
+            q.add(v.right);
+
+            q.add(u.right);
+            q.add(v.left);
+        }
+        return true;
+    }
+
+
+    /**
+     * 104-二叉树的最大深度
+     *
+     * @param root
+     * @return
+     */
+    public int maxDepth(TreeNode root) {
+        if (root == null) return 0;
+        return Math.max(maxDepth(root.right), maxDepth(root.left)) + 1;
+    }
+
+    /**
+     * 236. 二叉树的最近公共祖先
+     *
+     * @param root
+     * @param p
+     * @param q
+     * @return
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        //如果遍历到叶子节点就返回，或者遍历到目标节点
+        if (root == null || root == p || root == q) return root;
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        if (left != null && right != null) {
+            return root;
+        }
+        return left == null ? right : left;
+    }
+
+    /**
+     * 98. 验证二叉搜索树
+     *
+     * @param root
+     * @return
+     */
+    public boolean isValidBST(TreeNode root) {
+        return isValidBST(root, null, null);
+
+    }
+
+    private boolean isValidBST(TreeNode root, Integer min, Integer max) {
+        if (root == null) return true;
+        if (min != null && root.val <= min) return false;
+        if (max != null && root.val >= max) return false;
+        //保证左子树的值都小于
+        if (!isValidBST(root.left, min, root.val)) return false;
+        //保证右子树的值都大于
+        if (!isValidBST(root.right, root.val, max)) return false;
+        return true;
+    }
 }
 
 class TreeNode {

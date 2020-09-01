@@ -68,10 +68,7 @@ public class Leetcode {
         return depth - 1;
     }
 
-    public int maxDepth(TreeNode root) {
-        if (root == null) return 0;
-        return Math.max(maxDepth(root.right), maxDepth(root.left)) + 1;
-    }
+
 
     public class TreeNode {
         int val;
@@ -183,16 +180,7 @@ public class Leetcode {
         return nums[nums.length / 2];
     }
 
-    public double myPow(double x, int n) {
-        if (n == 0 || x == 1) {
-            return 1;
-        }
-        //n小于0
-        if (n < 0) return 1 / myPow(x, -n);
-        //奇数个
-        if (n % 2 == 1) return x * myPow(x, n - 1);
-        return myPow(x * x, n / 2);
-    }
+
 
     public List<List<Integer>> threeSumBySort(int[] nums) {
         List<List<Integer>> threeSumArray = new ArrayList<>();

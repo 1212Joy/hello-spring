@@ -17,7 +17,7 @@ public class IntLeetcodeTest {
     @Test
     public void test() throws Exception {
         int[][] aaa = {{2}, {3, 4}, {6, 5, 7}, {4, 1, 8, 3}};
-       // System.out.println(minimumTotal(aaa));
+        // System.out.println(minimumTotal(aaa));
 
     }
 
@@ -51,66 +51,6 @@ public class IntLeetcodeTest {
         return res;
     }
 
-    /**
-     * 70. 爬楼梯（没看懂）
-     * 每次你可以爬 1 或 2 个台阶
-     * <p>
-     * 通项公式、动态规划
-     * 斐波拉契数列：爬到n层等于爬到前两个楼梯和f（n）=f（n-1）+f（n-2）
-     * //自下向上递推，0，1，2这三种情况是固定的
-     *
-     * @param n
-     * @return
-     */
-    public int climbStairs(int n) {
-        if (n == 0 || n == 1) return n;
-        int[] stair2num = new int[n];
-        //1层只有2种
-        stair2num[0] = 1;
-        stair2num[1] = 1;
-        //大于两层就等于斐波拉契数列，循环从2开始
-        for (int i = 2; i < n; i++) {
-            stair2num[i] = stair2num[i - 1] + stair2num[i - 2];
-        }
-        return stair2num[n - 1] + stair2num[n - 2];
-    }
-
-    /**
-     * 方法1 -动态规划
-     * f(x)=f(x−1)+f(x−2)
-     * 时间复杂度：循环执行 nn 次，每次花费常数的时间代价，故渐进时间复杂度为 O(n)O(n)。
-     * 空间复杂度：这里只用了常数个变量作为辅助空间，故渐进空间复杂度为 O(1)O(1)。
-     *
-     * @param n
-     * @return
-     */
-    private int climbStairs_1(int n) {
-        int p = 0;
-        int q = 0;
-        int r = 1;
-        //至少从1楼开始
-        for (int i = 1; i <= n; i++) {
-            p = q;
-            q = r;
-            r = p + q;
-        }
-        return r;
-
-    }
-
-    /**
-     * 方法2 -通项公式（斐波拉契数列）
-     * 时间复杂度：O(logn)，pow 方法将会用去 O(logn) 的时间。
-     * 空间复杂度：O(1)。
-     *
-     * @param n
-     * @return
-     */
-    public int climbStairs_2(int n) {
-        double sqrt5 = Math.sqrt(5);
-        double fibn = Math.pow((1 + sqrt5) / 2, n + 1) - Math.pow((1 - sqrt5) / 2, n + 1);
-        return (int) (fibn / sqrt5);
-    }
 
     /**
      * 22-有效括号生成  指定数量
@@ -201,6 +141,58 @@ public class IntLeetcodeTest {
         // 例如，当输入为 12321 时，在 while 循环的末尾我们可以得到 x = 12，revertedNumber = 123，
         // 由于处于中位的数字不影响回文（它总是与自己相等），所以我们可以简单地将其去除。
         return x == revertedNumber || x == revertedNumber / 10;
+    }
+
+    /**
+     * 50. Pow(x, n)
+     * <p>
+     * 即计算 x 的 n 次幂函数。
+     *
+     * @param x
+     * @param n
+     * @return
+     */
+    public double myPow(double x, int n) {
+        if (n == 0 || x == 1) {
+            return 1;
+        }
+        //n小于0
+        if (n < 0) return 1 / myPow(x, -n);
+        //奇数个
+        if (n % 2 == 1) {
+            return x * myPow(x, n - 1);
+            //偶数个
+        } else {
+            return myPow(x * x, n / 2);
+        }
+
+    }
+
+    /**
+     * 69. x 的平方根
+     * 二分法
+     * <p>
+     * 二分查找的下界为 0，上界可以粗略地设定为 x。在二分查找的每一步中，我们只需要比较中间元素 mid 的平方与 x 的大小关系，并通过比较的结果调整上下界的范围。
+     * 由于我们所有的运算都是整数运算，不会存在误差，因此在得到最终的答案 ans 后，也就不需要再去尝试 ans+1 了。
+     *
+     * @param x
+     * @return
+     */
+    public int mySqrt(int x) {
+        //l,r为上下界
+        int l = 0, r = x, ans = -1;
+        while (l <= r) {
+            //为啥是r-l
+            int mid = l + (r - l) / 2;
+            //用long防止int越界
+            if ((long) mid * mid <= x) {
+                ans = mid;
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+        return ans;
     }
 
 }

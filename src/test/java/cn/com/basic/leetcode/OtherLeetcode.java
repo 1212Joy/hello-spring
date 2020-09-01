@@ -3,6 +3,7 @@ package cn.com.basic.leetcode;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class OtherLeetcode {
@@ -23,13 +24,15 @@ public class OtherLeetcode {
 //        System.out.println(lruCache.get(3));
 //        System.out.println(lruCache.get(4));
     }
-
+//    public List<List<Integer>> findSolution(CustomFunction customfunction, int z) {
+//
+//    }
 
 }
 
 /**
  * #146 - LRU缓存机制
- *
+ * <p>
  * 数据结构：哈希+双端列表
  * 思路：a.存在、不存在 b.超出size
  */
@@ -131,6 +134,23 @@ class LRUCache {
         }
 
     }
+
+
+    /**
+     * 176. 第二高的薪水
+     */
+    public void sql_() {
+//        SELECT
+//        IFNULL(
+//                (SELECT DISTINCT Salary
+//                FROM Employee
+//                ORDER BY Salary DESC
+//                LIMIT 1 OFFSET 1),
+//                NULL) AS SecondHighestSalary
+
+
+    }
+
 }
 
 class LinkListNode {
@@ -147,4 +167,6 @@ class LinkListNode {
         this.key = key;
         this.val = val;
     }
+
+
 }
