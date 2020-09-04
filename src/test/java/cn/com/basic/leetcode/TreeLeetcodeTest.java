@@ -1,6 +1,5 @@
 package cn.com.basic.leetcode;
 
-import cn.com.basic.Leetcode;
 import org.junit.Test;
 
 import java.util.*;
@@ -429,6 +428,42 @@ public class TreeLeetcodeTest {
     }
 
     /**
+     * @param root
+     * @return
+     */
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        if (root.left == null && root.right == null) {
+            return 1;
+        }
+
+        int min_depth = Integer.MAX_VALUE;
+        if (root.left != null) {
+            min_depth = Math.min(minDepth(root.left), min_depth);
+        }
+        if (root.right != null) {
+            min_depth = Math.min(minDepth(root.right), min_depth);
+        }
+
+        return min_depth + 1;
+    }
+
+    /**
+     * 二叉搜索的最近公共祖先
+     *
+     * @param root
+     * @param p
+     * @param q
+     * @return
+     */
+    public TreeNode lowestCommonAncestor_bts(TreeNode root, TreeNode p, TreeNode q) {
+        return  null;
+    }
+
+    /**
      * 236. 二叉树的最近公共祖先
      *
      * @param root
@@ -439,6 +474,7 @@ public class TreeLeetcodeTest {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         //如果遍历到叶子节点就返回，或者遍历到目标节点
         if (root == null || root == p || root == q) return root;
+        //同一侧就返回不为null的，不同侧就返回父节点
         TreeNode left = lowestCommonAncestor(root.left, p, q);
         TreeNode right = lowestCommonAncestor(root.right, p, q);
         if (left != null && right != null) {

@@ -27,7 +27,7 @@ public class ListNodeLeetcodeTest {
         return null;
     }
 
-    //遍历方式
+    //遍历方式 - 维护一个pre、current
     private ListNode reverseList_foreach(ListNode head) {
         ListNode prev = null;
         ListNode current = head;
@@ -423,9 +423,12 @@ public class ListNodeLeetcodeTest {
         }
         ListNode tmp = slow.next;
         slow.next = null;
+        //找到中间节点，进行左右分别递归排序，再合并返回
         ListNode left = sortList(head);
         ListNode right = sortList(tmp);
+        //将内部排序
         ListNode h = new ListNode(0);
+        //这个值必须有
         ListNode res = h;
         while (left != null && right != null) {
             if (left.val < right.val) {
@@ -531,7 +534,7 @@ public class ListNodeLeetcodeTest {
 
     /**
      * 83. 删除排序链表中的重复元素
-     * 简单的
+     * 简单的，重复的元素保留一个
      * <p>
      * 双指针
      *
@@ -556,6 +559,8 @@ public class ListNodeLeetcodeTest {
 
     /**
      * 82. 删除排序链表中的重复元素 II
+     *
+     * 重复的元素都去掉
      * <p>
      * 链表是排序的，所以重复的总是连续的
      * <p>

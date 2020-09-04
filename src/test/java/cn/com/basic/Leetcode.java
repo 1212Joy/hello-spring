@@ -160,25 +160,6 @@ public class Leetcode {
     }
 
 
-    public int majorityElementVote(int[] nums) {
-        int chosen = nums[0];
-        int count = 1;
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i] == nums[i - 1]) {
-                count++;
-            } else count--;
-            if (count == 0) {
-                chosen = nums[i];
-            }
-
-        }
-        return chosen;
-    }
-
-    public int majorityElement(int[] nums) {
-        Arrays.sort(nums);
-        return nums[nums.length / 2];
-    }
 
 
 
@@ -254,25 +235,6 @@ public class Leetcode {
         return new int[0];
     }
 
-    public boolean isAnagram(String s, String t) {
-        if (s.length() != t.length()) {
-            return false;
-        }
-        int length = t.length();
-        Map<Character, Integer> char2count = new HashMap();
-        for (int i = 0; i < length; i++) {
-            char2count.put(s.charAt(i), char2count.getOrDefault(s.charAt(i), 0) + 1);
-            char2count.put(t.charAt(i), char2count.getOrDefault(t.charAt(i), 0) - 1);
-        }
-        Iterator<Integer> val = char2count.values().iterator();
-        while (val.hasNext()) {
-            if (val.next() != 0) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     //滑动窗口-双端队列
     public int[] maxSlidingWindowByDeque(int[] nums, int k) {
@@ -303,31 +265,7 @@ public class Leetcode {
     }
 
 
-    //滑动窗口
-    public int[] maxSlidingWindow(int[] nums, int k) {
-        if (nums.length == 0 || nums.length == 1) {
-            return nums;
-        }
-        PriorityQueue<Integer> priorityQueue = new PriorityQueue(k, Comparator.reverseOrder());
-        int[] maxArray = new int[nums.length - k + 1];
-        int index = 0;
-        for (int i = 0; i < nums.length; i++) {
 
-            if (priorityQueue.isEmpty() || i < k - 1) {
-                priorityQueue.offer(nums[i]);
-                continue;
-            }
-            //当队列有k个值得时候就可以开始往返回数组填充值了
-            else if (nums[i] > priorityQueue.peek()) {
-                //大于队列里的最小值需要替换，先移除再添加
-                priorityQueue.poll();
-                priorityQueue.offer(nums[i]);
-            }
-            maxArray[index] = priorityQueue.peek();
-            index++;
-        }
-        return maxArray;
-    }
 
 }
 

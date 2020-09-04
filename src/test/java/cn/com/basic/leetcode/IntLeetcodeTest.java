@@ -2,11 +2,7 @@ package cn.com.basic.leetcode;
 
 import org.junit.Test;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by zhaijiayi on 2020/5/6.
@@ -88,65 +84,11 @@ public class IntLeetcodeTest {
     }
 
     /**
-     * 9. 回文数
-     * 判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。
-     * 1.转换成String，然后两个指针解决
-     * 2.数学法 - O(\log n)
-     *
-     * @param x
-     * @return
-     */
-    public boolean isPalindrome_1(int x) {
-        if (x < 0) return false;
-        if (x == 0) return true;
-        //
-        String target = String.valueOf(x);
-        char[] tarChars = target.toCharArray();
-        int left = 0;
-        int right = tarChars.length - 1;
-        while (left <= right) {
-            if (tarChars[left] != tarChars[right]) {
-                return false;
-            }
-            left++;
-            right--;
-
-        }
-        return true;
-    }
-
-    /**
-     * todo 看不懂
-     *
-     * @param x
-     * @return
-     */
-    public boolean isPalindrome_2(int x) {
-        // 特殊情况：
-        // 如上所述，当 x < 0 时，x 不是回文数。
-        // 同样地，如果数字的最后一位是 0，为了使该数字为回文，
-        // 则其第一位数字也应该是 0
-        // 只有 0 满足这一属性
-        if (x < 0 || (x % 10 == 0 && x != 0)) {
-            return false;
-        }
-
-        int revertedNumber = 0;
-        while (x > revertedNumber) {
-            revertedNumber = revertedNumber * 10 + x % 10;
-            x /= 10;
-        }
-
-        // 当数字长度为奇数时，我们可以通过 revertedNumber/10 去除处于中位的数字。
-        // 例如，当输入为 12321 时，在 while 循环的末尾我们可以得到 x = 12，revertedNumber = 123，
-        // 由于处于中位的数字不影响回文（它总是与自己相等），所以我们可以简单地将其去除。
-        return x == revertedNumber || x == revertedNumber / 10;
-    }
-
-    /**
      * 50. Pow(x, n)
      * <p>
-     * 即计算 x 的 n 次幂函数。
+     * 即计算 x 的 n 次幂函数
+     * <p>
+     * 分治。
      *
      * @param x
      * @param n
@@ -193,6 +135,72 @@ public class IntLeetcodeTest {
             }
         }
         return ans;
+    }
+
+    /**
+     * 239. 滑动窗口最大值
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    //滑动窗口
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums.length == 0 || nums.length == 1) {
+            return nums;
+        }
+        //小顶堆，
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue(k, Comparator.reverseOrder());
+        int[] maxArray = new int[nums.length - k + 1];
+        int index = 0;
+        for (int i = 0; i < nums.length; i++) {
+
+            if (priorityQueue.isEmpty() || i < k - 1) {
+                priorityQueue.offer(nums[i]);
+                continue;
+            }
+            //当队列有k个值得时候就可以开始往返回数组填充值了
+            else if (nums[i] > priorityQueue.peek()) {
+                //大于队列里的最小值需要替换，先移除再添加
+                priorityQueue.poll();
+                priorityQueue.offer(nums[i]);
+            }
+            maxArray[index] = priorityQueue.peek();
+            index++;
+        }
+        return maxArray;
+    }
+
+
+    /**
+     * 169. 多数元素
+     * <p>
+     * 多数元素是指在数组中出现次数大于 ⌊ n/2 ⌋ 的元素。
+     * <p>
+     * 投票方法
+     *
+     * @param nums
+     * @return
+     */
+    public int majorityElementVote(int[] nums) {
+        int chosen = nums[0];
+        int count = 1;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == nums[i - 1]) {
+                count++;
+            } else count--;
+            //代表抵消了了，重选选现在这个对象
+            if (count == 0) {
+                chosen = nums[i];
+            }
+
+        }
+        return chosen;
+    }
+
+    public int majorityElement(int[] nums) {
+        Arrays.sort(nums);
+        return nums[nums.length / 2];
     }
 
 }

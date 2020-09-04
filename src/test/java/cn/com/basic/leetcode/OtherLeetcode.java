@@ -60,12 +60,13 @@ class LRUCache {
     public int get(int key) {
         int res = -1;
         LinkListNode node = key2node.get(key);
-        //不存在
+        //不存在 直接返回，需要存下来么
         if (node == null) {
             return res;
-            //存在
+            //存在  将已有的放到队列头部
         } else {
             res = node.val;
+            //更新原有node值，并移动到头部
             move2head(node, node.val);
         }
         return res;
@@ -73,10 +74,10 @@ class LRUCache {
 
     public void put(int key, int value) {
         LinkListNode node = key2node.get(key);
-        //不存在
+        //不存在 添加到头部
         if (node == null) {
             add2head(new LinkListNode(key, value));
-            //存在
+            //存在  移动到头部
         } else {
             move2head(node, value);
         }
@@ -87,13 +88,13 @@ class LRUCache {
      * @param newValue 替换场景需要  ！！！
      */
     private void move2head(LinkListNode oldNode, int newValue) {
-        //移除当前
+        //移除原来所在位置，再添加到头部
         removeNode(oldNode);
         //移动到head
         add2head(new LinkListNode(oldNode.key, newValue));
     }
 
-    //添加到head
+    //添加到head，超过最大容量需要进行末尾元素删除
     private void add2head(LinkListNode node) {
         //先设置next
         LinkListNode temHead = head.next;
@@ -104,8 +105,10 @@ class LRUCache {
         temHead.pre = node; //!!!  最后的就因为这个
         //map重新添加
         key2node.put(node.key, node);
+
+        //超过最大容量,删除尾部
         if (key2node.size() > capacity) {
-            //超过最大容量,删除尾部
+
             removeTail();
         }
     }

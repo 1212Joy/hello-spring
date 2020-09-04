@@ -221,9 +221,10 @@ public class DPLeetcodeTest {
         int[] preixSum = new int[n];
         for (int i = 0; i < n; i++) {
             preixSum[i] = i == 0 ? nums[0] : preixSum[i - 1] + nums[i];
-            //存在相加等于k的前缀和
+            //用map存，存在相加等于k的前缀和
             if (sumValue2Index.containsKey(preixSum[i] - k)) {
                 Integer idx = sumValue2Index.get(preixSum[i] - k);
+                //最长的保存
                 res = Math.max(res, i - idx);
             }
             // 这里放的时候要注意，如果两个地方的前缀和一样，也就是之前放过，那我们就不要再放进去了，因为我们要最长的子数组
@@ -261,22 +262,7 @@ public class DPLeetcodeTest {
 
     }
 
-    public int rob_1(int[] nums) {
-        if (nums == null || nums.length == 0) {
-            return 0;
-        }
-        int length = nums.length;
-        if (length == 1) {
-            return nums[0];
-        }
-        int first = nums[0], second = Math.max(nums[0], nums[1]);
-        for (int i = 2; i < length; i++) {
-            int temp = second;
-            second = Math.max(first + nums[i], second);
-            first = temp;
-        }
-        return second;
-    }
+
 
     /**
      * 300. 最长上升子序列
@@ -354,32 +340,6 @@ public class DPLeetcodeTest {
     }
 
 
-    /**
-     * 股票买卖系列 - 121、122、123、309、188、714（最难用三维数组表示状态）
-     * <p>
-     * 121. 买卖股票的最佳时机
-     * 题目：整个过程最多一笔交易
-     * todo 原因解释：
-     * 假如计划在第 i 天卖出股票，那么最大利润的差值一定是在[0, i-1] 之间选最低点买入；
-     * 所以遍历数组，依次求每个卖出时机的的最大差值，再从中取最大值。
-     * 时间复杂度：O(n)O(n)，只需要遍历一次。
-     * 空间复杂度：O(1)O(1)，只使用了常数个变量。
-     *
-     * @param prices
-     * @return
-     */
-    public int maxProfit(int[] prices) {
-        //初始化设置一个最大值
-        int subPrice = Integer.MAX_VALUE;
-        int resProfit = 0;
-        for (int price : prices) {
-            if (price < subPrice)
-                subPrice = price;
-            else if (price - subPrice > resProfit)
-                resProfit = price - subPrice;
-        }
-        return resProfit;
-    }
 
     /**
      * 221-最大正方形
@@ -387,7 +347,7 @@ public class DPLeetcodeTest {
      * 疑问：正方形怎么保证.,
      * <p>
      * 状态定义：用 dp(i, j)dp(i,j) 表示以 (i, j)(i,j) 为右下角，且只包含 1 的正方形的边长最大值
-     * 方程定义：dp(i,j)=min(dp(i−1,j),dp(i−1,j−1),dp(i,j−1))+1  该位置的值是 11，则 dp(i, j)dp(i,j) 的值由其上方、左方和左上方的三个相邻位置的 dpdp 值决定
+     * 方程定义：dp(i,j)=min(dp(i−1,j),dp(i−1,j−1),dp(i,j−1))+1  该位置的值是 1，则 dp(i,j) 的值由其上方、左方和左上方的三个相邻位置的 dp值决定
      * 边界：
      * 如果 i 和 j 中至少有一个为 0，则以位置 (i, j) 为右下角的最大正方形的边长只能是 1，因此 dp(i, j) = 1。
      * <p>
@@ -408,14 +368,15 @@ public class DPLeetcodeTest {
             for (int j = 0; j < columns; j++) {
                 //可以当正方形的边
                 if (matrix[i][j] == '1') {
-                    //边界
+                    //边界。i 和 j 中至少有一个为 0，则以位置 (i, j) 为右下角的最大正方形的边长只能是 1，因此 dp(i, j) = 1
                     if (i == 0 || j == 0) {
                         dp[i][j] = 1;
                         //内部
                     } else {
-                        //变长+1
+                        //变长+1，取三者最小值
                         dp[i][j] = Math.min(Math.min(dp[i - 1][j], dp[i][j - 1]), dp[i - 1][j - 1]) + 1;
                     }
+                    //全局维护
                     maxSide = Math.max(maxSide, dp[i][j]);
                 }
             }
@@ -427,6 +388,8 @@ public class DPLeetcodeTest {
 
     /**
      * 1277. 统计全为 1 的正方形子矩阵
+     *
+     * 重写了matrix，但由于不会再重复了所以也ok
      *
      * @param matrix
      * @return
@@ -485,6 +448,67 @@ public class DPLeetcodeTest {
         //返回右下角的值
         return dp[rows - 1][columns - 1];
 
+    }
+
+
+    /**
+     * todo 动态方程没看懂  375. 猜数字大小 II
+     * <p>
+     * 给定 n ≥ 1，计算你至少需要拥有多少现金才能确保你能赢得这个游戏。
+     * <p>
+     * 至少
+     * <p>
+     * 方法1：动态规划  - n^3
+     *
+     * @param n
+     * @return
+     */
+    public int getMoneyAmount_1(int n) {
+        //从i到j猜数字，猜出任意最小值
+        int[][] dp = new int[n + 1][n + 1];
+        //n的个数，
+        for (int len = 2; len <= n; len++) {
+            //从1
+            for (int i = 1; i + len - 1 <= n; i++) {
+                int j = i + len - 1;
+                //附一个最大值
+                dp[i][j] = Integer.MAX_VALUE;
+                //从i到j
+                for (int k = i; k <= j; k++) {
+                    // todo 没看懂
+                    // 如何写出相应的代码更新dp矩阵, 递推式dp[i][j] = max(max(dp[i][x-1], dp[x+1][j]) + x), x~[i:j], 可以画出矩阵图协助理解, 可以发现
+                    //        dp[i][x-1]始终在dp[i][j]的左部, dp[x+1][j]始终在dp[i][j]的下部, 所以更新dp矩阵时i的次序应当遵循bottom到top的规则, j则相反, 由于
+                    //        i肯定小于等于j, 所以我们只需要遍历更新矩阵的一半即可(下半矩阵)
+                    dp[i][j] = Math.min(dp[i][j], k +
+                            Math.max(k <= 1 ? 0 : dp[i][k - 1], k + 1 > j ? 0 : dp[k + 1][j]));
+                }
+            }
+        }
+        //返回从1到n的最小结果
+        return dp[1][n];
+    }
+
+    /**
+     * 374. 猜数字大小
+     * 二分法返回结果
+     *
+     * @param n
+     * @return
+     */
+    public int guessNumber(int n) {
+//        int low = 1;
+//        int high = n;
+//        while (low <= high) {
+//            int mid = low + (high - low) / 2;
+//            int res = guess(mid);
+//            if (res == 0)
+//                return mid;
+//            else if (res < 0)
+//                high = mid - 1;
+//            else
+//                low = mid + 1;
+//        }
+       return -1;
     }
 
 }
