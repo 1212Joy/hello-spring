@@ -2,7 +2,9 @@ package cn.com.basic.leetcode;
 
 import org.junit.Test;
 
-import java.util.*;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Stack;
 
 /**
  * Created by zhaijiayi on 2020/5/6.
@@ -24,7 +26,7 @@ public class ListNodeLeetcodeTest {
      * @return
      */
     public ListNode reverseList(ListNode head) {
-        return null;
+        return reverseList_foreach(head);
     }
 
     //遍历方式 - 维护一个pre、current
@@ -243,7 +245,7 @@ public class ListNodeLeetcodeTest {
      */
     public ListNode mergeKLists_Queue(ListNode[] lists) {
         //构造函数添加比较器 从小到大
-        Queue<ListNode> pq = new PriorityQueue<>((v1, v2) -> v1.val - v2.val);
+        Queue<ListNode> pq = new PriorityQueue<>((v1, v2) -> (v1.val - v2.val));
         //初始化全部头节点
         for (ListNode node : lists) {
             if (node != null) {
@@ -305,7 +307,7 @@ public class ListNodeLeetcodeTest {
     }
 
     /**
-     * 2. 两数相加
+     * 2. 两数相加（逆序）
      * <p>
      * 题意：
      * 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
@@ -360,7 +362,7 @@ public class ListNodeLeetcodeTest {
     }
 
     /**
-     * 445. 两数相加 II
+     * 445. 两数相加 II （正序）
      * 链表存储的顺序是从高位到低位，两数相加的话我们就需要从低位开始计算到高位。所以这里存在着相反的顺序关系。
      * <p>
      * 这种需要用到逆序的思路可以用栈的特性来解决此类问题
@@ -539,7 +541,7 @@ public class ListNodeLeetcodeTest {
      * 双指针
      *
      * @param head
-     * @return  返回去掉重复的值（与82返回值不同）
+     * @return 返回去掉重复的值（与82返回值不同）
      */
     public ListNode deleteDuplicates(ListNode head) {
         if (head == null)
@@ -559,7 +561,7 @@ public class ListNodeLeetcodeTest {
 
     /**
      * 82. 删除排序链表中的重复元素 II
-     *
+     * <p>
      * 重复的元素都去掉
      * <p>
      * 链表是排序的，所以重复的总是连续的
@@ -569,7 +571,7 @@ public class ListNodeLeetcodeTest {
      * 尾插法双指针的巧妙结合
      *
      * @param head
-     * @return  返回不重复的值
+     * @return 返回不重复的值
      */
     public ListNode deleteDuplicates_II(ListNode head) {
         if (head == null) return head;  // 若head为空则直接返回null
@@ -650,6 +652,8 @@ public class ListNodeLeetcodeTest {
 
     /**
      * todo 160. 相交链表  看不懂
+     *
+     *  O(n) 时间复杂度，且仅用 O(1)
      *
      * @param headA
      * @param headB

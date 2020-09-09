@@ -72,52 +72,7 @@ public class CharLeetcodeTest {
         return stack.isEmpty();
     }
 
-    /**
-     * 33. 搜索旋转排序数组
-     * 思路：二分搜索
-     * 时间复杂度：O(logn)
-     *
-     * @param nums
-     * @param target
-     * @return
-     */
-    public int search(int[] nums, int target) {
-        int res = -1;
-        //边界判断
-        if (nums == null || nums.length == 0) return res;
-        if (nums.length == 1) return nums[0] == target ? 0 : res;
-        //设定左右两个指着
-        int l = 0;
-        int r = nums.length - 1;
-        //判断条件包含=
-        while (l <= r) {
-            //中间节点索引计算
-            int mid = l + ((l - r) / 2);
-            //边界当中间节点命中
-            if (nums[mid] == target) return mid;
-            //0到中间是升序
-            if (nums[l] <= nums[mid]) {
-                //target在区间内，将右指针指向中间结点前一个
-                if (nums[0] <= target && target < nums[mid]) {
-                    r = mid - 1;
-                    //target不在区间内，移动左指针
-                } else {
-                    l = mid + 1;
 
-                }
-                //旋转的节点在此区间内中间到结尾  假如这个区间最大值78456
-            } else {
-                if (nums[mid] < target && target < nums[r]) {
-                    l = mid + 1;
-                } else {
-                    r = mid - 1;
-                    //target不在区间内，移动左指针
-                }
-            }
-
-        }
-        return res;
-    }
 
 
     /**
@@ -216,7 +171,6 @@ public class CharLeetcodeTest {
         // 字符串可以被自身匹配，所以从第二个开始匹配。
         for (int i = 1; i < strs.length; i++) {
             // 如果匹配串不在要匹配字符串的开头，则表示不是要匹配字符串的前缀。indexOf这个啥意思
-
             while (strs[i].indexOf(prefix) != 0) {
                 prefix = prefix.substring(0, prefix.length() - 1);
                 if (prefix.isEmpty()) {
