@@ -66,6 +66,33 @@ public class DPLeetcodeTest {
         return max;
     }
 
+    public List<Integer> maxSubArray_printSub(int[] nums) {
+        List<Integer> resList = new ArrayList<>();
+        if (nums == null) {
+            return resList;
+        }
+
+        int max = nums[0];    // 全局最大值
+        int subMax = nums[0];  // 前一个子组合的最大值
+        //sub从0开始，遍历则从1开始
+        for (int i = 1; i < nums.length; i++) {
+            if (subMax > 0) {
+                // 前一个子组合最大值大于0，正增益
+                subMax = subMax + nums[i];
+                resList.add(nums[i]);
+            } else {
+                // 前一个子组合最大值小于0，抛弃前面的结果
+                subMax = nums[i];
+                resList.clear();
+                resList.add(nums[i]);
+            }
+            // 计算全局最大值
+            max = Math.max(max, subMax);
+        }
+
+        return resList;
+    }
+
     /**
      * 152. 乘积最大子数组
      * 题目:连续的子数组
@@ -133,7 +160,6 @@ public class DPLeetcodeTest {
 
         return dp[amount] > amount ? -1 : dp[amount];
     }
-
 
     /**
      * 560 和为K的子数组
@@ -210,6 +236,7 @@ public class DPLeetcodeTest {
      * @param k
      * @return
      */
+
     public int maxSubArrayLen(int[] nums, int k) {
         int n = nums.length;
         // 值和下标
@@ -237,6 +264,11 @@ public class DPLeetcodeTest {
 
     /**
      * 198. 打家劫舍
+     *
+     * 如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+     *
+     * 给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。
+     *
      * <p>
      * 1.滚动数组
      * 2.动态规划
@@ -261,7 +293,6 @@ public class DPLeetcodeTest {
         return second;
 
     }
-
 
 
     /**
@@ -340,7 +371,6 @@ public class DPLeetcodeTest {
     }
 
 
-
     /**
      * 221-最大正方形
      * 思路：动态规划
@@ -388,7 +418,7 @@ public class DPLeetcodeTest {
 
     /**
      * 1277. 统计全为 1 的正方形子矩阵
-     *
+     * <p>
      * 重写了matrix，但由于不会再重复了所以也ok
      *
      * @param matrix
@@ -508,7 +538,7 @@ public class DPLeetcodeTest {
 //            else
 //                low = mid + 1;
 //        }
-       return -1;
+        return -1;
     }
 
 }
